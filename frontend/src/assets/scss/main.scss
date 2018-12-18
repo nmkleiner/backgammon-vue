@@ -1,0 +1,9 @@
+@import '_helpers.scss';
+@import '_vars.scss';
+@import '_game-board.scss';
+
+body{
+    background: url('../../../public/img/bg/backgammon.jpg');
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
