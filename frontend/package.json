@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --dest ../backend/public",
-    "deploy": "node ./node_modules/vue-gh-pages/index.js"
+    "build": "vue-cli-service build --dest ../backend/public"
   },
   "homepage": "https://github.com/myusername/my-app",
   "dependencies": {

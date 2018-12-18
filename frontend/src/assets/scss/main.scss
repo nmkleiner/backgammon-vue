@@ -1,9 +1,17 @@
+@import "./reset.scss";
+@import "./base.scss";
+
 @import '_helpers.scss';
 @import '_vars.scss';
 @import '_game-board.scss';
 
+
+html {
+    height: 100vh;
+}
 body{
-    background: url('../../../public/img/bg/backgammon.jpg');
+    background: url('/img/bg/backgammon.jpg');
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: cover;
+    height: 100%;
 }
