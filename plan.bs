@@ -1,0 +1,11 @@
+cells [0(black outside),    1-24{triangles}, 25(white outside)    ,26(white eaten, top row),27{black eaten, bot row}]
+
+cell {id , isHouseOf (white/black/false), isPossibleMove (true/false), middle(true/false),outside(true/false)}
+
+soldier {color, isEaten, isOutside, isLastInCell, possibleMoves: []}
+
+dices {num1:small num num2:big num doubleCount:0}
+dices when double {num1:num num2:null doubleCount:4,3,2,1} => make num1 null when doublecount reaches 0
+
+
+possibleMoves [{soldierId: moves: [1,2,3,4]},{},...]
