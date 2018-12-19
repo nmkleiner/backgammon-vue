@@ -10,7 +10,7 @@
     header,footer {
         display: none;
         @media (min-width: 850px) {
-            display: block;
+            display: flex;
         }
     }
     
@@ -24,8 +24,9 @@
                 @media (min-width: 850px) {
                     border-top: 20px solid black;
                     border-left: 20px solid black;
+                    border-right: 10px solid black;
                 }
-                border-right: 20px solid black;
+                border-right: 10px solid black;
                 border-left: 10px solid black;
             }
         }
@@ -40,9 +41,10 @@
                 @media (min-width: 850px) {
                     border-bottom: 20px solid black;
                     border-left: 20px solid black;
+                    border-right: 20px solid black;
                 }
                 border-left: 10px solid black;
-                border-right: 20px solid black;
+                border-right: 10px solid black;
                 flex-direction: row-reverse;
                 align-items: flex-end;
             }
@@ -96,7 +98,7 @@
             height: 2vw!important;
         }
     }
-
+    
     .triangle-up {
         position: absolute;
         border-left: 3vw solid transparent;
@@ -108,8 +110,12 @@
     }
     .exit-cell {
         position: absolute;
-        width: 7vw;
-        height: calc(34vh + 20px);
+        @media (min-width: 850px) {
+            width: 5vw;
+            height: calc(34vh + 20px);
+        }
+        width: calc(12vw - 29px);
+        height: 50vh;
         transition: 0.3s;
         &:hover, &.triangle-green {
             background-color: darken($board-blue, 50%);

@@ -8,14 +8,19 @@
 
         <dice :rolling="rolling" :num="dices.num1ToShow"></dice>
         <dice :rolling="rolling" :num="dices.num2ToShow"></dice>
+        <div class="soldier-section capitalize text-center">current turn:</div>
+        <soldier :color="currTurn"></soldier>
     </section>
 </template>
 
 <script>
 import dice from './dice.vue'
+import soldier from './soldier'
+
 export default {
     components: {
-        dice
+        dice,
+        soldier
     },
     data() {
         return {
@@ -37,6 +42,9 @@ export default {
         },
         duringTurn() {
             return this.$store.getters.duringTurn
+        },
+        currTurn() {
+            return this.$store.getters.currTurn
         }
     }
 }
@@ -44,7 +52,10 @@ export default {
 <style lang="scss" scoped>
 .dices-section {
     background-color: black;
-    width: 8vw;
+    @media (min-width: 850px) {
+        width: 8vw;
+    }
+    width: calc(8vw + 10px);
     color: white;
     font-weight: bold;
     .dice-text {
@@ -60,6 +71,14 @@ export default {
         @media (min-width: 850px) {
             font-size: 22px;
         }
+        font-size: 12px;
+    }
+    .soldier-section {
+        @media (min-width: 850px) {
+            display: none;
+        }
+        display: block;
+        margin-top: 3vh;
         font-size: 12px;
     }
 }
