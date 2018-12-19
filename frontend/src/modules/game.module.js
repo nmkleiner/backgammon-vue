@@ -80,7 +80,7 @@ export default ({
             }
         },
         setSoldiers(state) {
-            // regular
+            // regular board
             var boardMap = {
                 '1': {amount: 2, color: 'white'},
                 '6': {amount: 5, color: 'black'},
@@ -112,14 +112,22 @@ export default ({
             //     '3': {amount: 5, color: 'black'},
             //     '1': {amount: 2, color: 'black'}
             // }
+            // var boardMap = {
+            //     '26': {amount: 2, color: 'white'},
+            //     '4': {amount: 5, color: 'black'},
+            //     '2': {amount: 3, color: 'black'},
+            //     '25': {amount: 14, color: 'white'},
+            //     '3': {amount: 5, color: 'black'},
+            //     '1': {amount: 2, color: 'black'}
+            // }
             for (var cell in boardMap){
                 state.cells[cell].soldiers.push(...gameService.createSoldiers(boardMap[cell].amount,boardMap[cell].color))
             }
             state.soldiers = gameService.getAllSoldiers(state.cells)
             gameService.updateCells(state.cells)
         },
-        showPossibleMoves(state,{possibleMoves}) {
-            if (!state.selectedSoldier) {
+        showPossibleMoves(state,{possibleMoves, soldier}) {
+            if (!state.selectedSoldier && soldier.color === state.currTurn) {
                 state.cells.filter(cell => possibleMoves.includes(cell.id))
                 .forEach(cell => cell.isPossibleMove = true);
             }

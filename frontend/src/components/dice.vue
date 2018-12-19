@@ -52,9 +52,13 @@ export default {
     width: 5vw;
     height: 5vw;
     z-index: 1;
-    border-radius: 10px; 
+    @media (min-width: 850px) {
+        border-radius: 10px; 
+        margin: 15px 0;
+    }
+    border-radius: 5px; 
     border: 1px solid black;
-    margin: 15px 0;
+    margin: 15px 0 10px 0;
     &:hover{
         animation-name: pulses;
         animation-duration: 0.7s;
@@ -67,8 +71,12 @@ export default {
     }
     .dot {
         background-color: black;
-        width: 8px;
-        height: 8px;
+        @media (min-width: 850px) {
+            width: 8px;
+            height: 8px;
+        }
+        width: 4px;
+        height: 4px;
         border-radius: 50%;
         visibility: hidden;
         &.show{

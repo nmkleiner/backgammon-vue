@@ -54,10 +54,13 @@ export default {
         background-color: white;
         color: black;
         border: none;
-        width: 100%;
+        width: 8vw;
         cursor: pointer;
-        padding: 0 0 20px 0;
-        font-size: 22px;
+        // padding: 0 0 20px 0;
+        @media (min-width: 850px) {
+            font-size: 22px;
+        }
+        font-size: 12px;
     }
 }
 </style>

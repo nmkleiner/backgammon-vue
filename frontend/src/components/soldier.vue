@@ -30,8 +30,12 @@ export default {
     z-index: 1;
     .soldier {
         align-self: center;
-        height: 4.9vh;
-        width: 4.9vh;
+        height: 5.9vh;
+        width: 5.9vh;
+        @media (min-width: 850px) {
+            height: 4.9vh;
+            width: 4.9vh;
+        }
         border-radius: 50%;
         &.black{
             background-color: black;

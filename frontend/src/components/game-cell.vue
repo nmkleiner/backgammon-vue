@@ -41,7 +41,7 @@ export default {
         onSoldierClick(soldier) {
             this.$store.commit('unselectSoldiers')
             this.$store.commit('showNoPossibleMoves')
-            this.$store.commit({type: 'showPossibleMoves',possibleMoves: soldier.possibleMoves})
+            this.$store.commit({type: 'showPossibleMoves',possibleMoves: soldier.possibleMoves, soldier})
             this.$store.commit({type: 'selectSoldier',soldierId: soldier.id})
         },
         onSoldierDblClick() {
@@ -49,7 +49,7 @@ export default {
         },
         onSoldierHover(soldier) {
             if (soldier.possibleMoves.length) {
-                this.$store.commit({type: 'showPossibleMoves',possibleMoves: soldier.possibleMoves})
+                this.$store.commit({type: 'showPossibleMoves',possibleMoves: soldier.possibleMoves, soldier})
             }
         },
         onSoldierOut() {

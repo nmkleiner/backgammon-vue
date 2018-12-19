@@ -10,8 +10,11 @@ html {
     height: 100vh;
 }
 body{
-    background: url('/img/bg/backgammon.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
+    @media (min-width: 850px) {
+        background: url('/img/bg/backgammon.jpg');
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
     height: 100%;
 }

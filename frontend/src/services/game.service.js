@@ -87,8 +87,8 @@ function updateCell(cell) {
     var whiteCount = 0
     var blackCount = 0
     cell.soldiers.forEach((soldier,idx) => {
-        soldier.isLastInCell = false
-        if (idx === cell.soldiers.length - 1) soldier.isLastInCell = true
+        soldier.possibleMoves = []
+        soldier.isLastInCell = (idx === cell.soldiers.length - 1)
 
         if (soldier.color === 'white') whiteCount++
         else if (soldier.color === 'black') blackCount++
@@ -129,6 +129,8 @@ function isMiddleCell(srcCell) {
 function throwDices(dices) {
     dices.num1 = utilService.getRandomInt(1,7)
     dices.num2 = utilService.getRandomInt(1,7)
+    // dices.num1 = 1
+    // dices.num2 = 5
     // doubles!!!
     // dices.num2 = dices.num1
     if (dices.num1 > dices.num2) {
@@ -185,12 +187,18 @@ function calcPossibleMoves(dices,currTurn,cells,soldiers) {
     soldiers.forEach(soldier => {
         const srcCell = getCellBySoldierId(cells,soldier.id)
         var moves = calcSoldierMoves(dices,srcCell,direction)
+        console.log('moves1',moves)
         moves = removeSrcCellMoves(srcCell,moves)
+        console.log('moves2',moves)
         moves = removeHousesMoves(cells,moves,currTurn)
+        console.log('moves3',moves)
         moves = removeBasedOnHousesMoves(dices,moves)
+        console.log('moves4',moves)
         moves = removeBasedOnOutsideMoves(moves)
+        console.log('moves5',moves)
         if (!canExit(cells,currTurn)) {
             moves = removeExitMoves(moves,currTurn)
+            console.log('moves6',moves)
         }
         soldier.possibleMoves = moves
         possibleMoves.push({soldierId: soldier.id, moves})
@@ -214,16 +222,24 @@ function getPossibleSoldiers(cells,soldiers,currTurn) {
 function calcSoldierMoves(dices,srcCell,direction) {
     var moves = []
     var srcCellId = srcCell.id
+    var isGettingOut = true
     if (srcCellId === 26) srcCellId = 0
     else if (srcCellId === 27) srcCellId = 25
+    else isGettingOut = false
     if (!dices.doubleCount) {
         if (!dices.num1 && !dices.num2) {
             moves = []
-        }else {
+        }else if (!isGettingOut) {
             moves = [
                 srcCellId + direction*dices.num1,
                 srcCellId + direction*dices.num2,
                 srcCellId + direction*(dices.num1 + dices.num2)
+            ]
+        } else {
+            moves = [
+                srcCellId + direction*dices.num1,
+                srcCellId + direction*dices.num2,
+                null
             ]
         }
     } else {
@@ -234,7 +250,10 @@ function calcSoldierMoves(dices,srcCell,direction) {
     return moves
 }
 function removeSrcCellMoves(srcCell,moves) {
-    return moves.map(move => (move === srcCell.id)? null : move)
+    var srcCellId = srcCell.id
+    if (srcCell.id === 27) srcCellId = 25
+    else if (srcCell.id === 26) srcCellId = 0
+    return moves.map(move => (move === srcCellId)? null : move)
 }
 function removeHousesMoves(cells,moves,currTurn) {
     cells = moves.map(move => getCellById(cells,move))
@@ -274,9 +293,9 @@ function removeBasedOnOutsideMoves(moves) {
 }
 function removeExitMoves(moves,currTurn) {
     if (currTurn === 'white') {
-        return moves.map(move => (move >= 25)? null : move)
+        return moves.map(move => (move >= 25 || move === 0)? null : move)
     } else {
-        return moves.map(move => (move <= 0)? null : move)
+        return moves.map(move => (move === 0 || move >= 25)? null : move)
     }
 }
 

@@ -2,9 +2,17 @@
     background-color: $board-blue;
     display: flex;
     flex-direction: column;
-    padding: 0 5vw 0 0;
-    margin-top: 15px;
     
+    @media (min-width: 850px) {
+        padding: 0 5vw 0 0;
+        margin-top: 15px;
+    }
+    header,footer {
+        display: none;
+        @media (min-width: 850px) {
+            display: block;
+        }
+    }
     
     .game-board{
         .board-cells {
@@ -13,9 +21,12 @@
         
         .top-row{
             .board-cells {
-                border-top: 20px solid black;
+                @media (min-width: 850px) {
+                    border-top: 20px solid black;
+                    border-left: 20px solid black;
+                }
                 border-right: 20px solid black;
-                border-left: 20px solid black;
+                border-left: 10px solid black;
             }
         }
         
@@ -26,9 +37,12 @@
             flex-direction: row-reverse;
             align-items: flex-end;
             .board-cells {
-                border-bottom: 20px solid black;
+                @media (min-width: 850px) {
+                    border-bottom: 20px solid black;
+                    border-left: 20px solid black;
+                }
+                border-left: 10px solid black;
                 border-right: 20px solid black;
-                border-left: 20px solid black;
                 flex-direction: row-reverse;
                 align-items: flex-end;
             }
@@ -58,8 +72,12 @@
 .game-cell {
     background-color: transparent;
     flex-wrap: wrap;
-    width: 6vw;
-    height: 34vh;
+    width: 6.4vw;
+    height: calc(50vh);
+    @media (min-width: 850px) {
+        width: 6vw;
+        height: 34vh;
+    }
     transition: .3s;
     &.middle{
         background-color: darkgoldenrod;
@@ -68,7 +86,10 @@
     &.exit{
         background-color: transparent;
         opacity: 0.7;
-        width: 5vw;
+        width: calc(12vw - 29px);
+        @media (min-width: 850px) {
+            width: 5vw;
+        }
         height: calc(34vh + 20px);
         .soldier {
             width: 2vw!important;
@@ -80,7 +101,10 @@
         position: absolute;
         border-left: 3vw solid transparent;
         border-right: 3vw solid transparent;
-        border-bottom: 26vh solid black;
+        border-bottom: 32vh solid black;
+        @media (min-width: 850px) {
+            border-bottom: 26vh solid black;
+        }
     }
     .exit-cell {
         position: absolute;
@@ -90,13 +114,18 @@
         &:hover, &.triangle-green {
             background-color: darken($board-blue, 50%);
         }
-
+        
     }
     .triangle-down {
         position: absolute;
         border-left: 3vw solid transparent;
         border-right: 3vw solid transparent;
-        border-top: 26vh solid black;
+        border-top: 32vh solid black;
+        @media (min-width: 850px) {
+            border-left: 3vw solid transparent;
+            border-right: 3vw solid transparent;
+            border-top: 26vh solid black;
+        }
     }
     .triangle-black {
         border-bottom-color: rgb(30,30,30);
