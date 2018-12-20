@@ -8,7 +8,7 @@ export default {
     updateCells,
     updateCell,
     isPossibleMove,
-    toggleTurn,
+    passTurn,
     checkIsEating,
     hasEatenSoldiers,
     isMiddleCell,
@@ -17,9 +17,10 @@ export default {
     updateDices,
     getMiddleCell,
     isEndGame,
-    nullDices
+    nullDices,
+    clearCells
 }
-
+var soldierId = 0
 function createSoldiers(amount,color) {
     var res = []
     for (var i = 0; i < amount; i++) {
@@ -31,7 +32,7 @@ function createSoldiers(amount,color) {
 function createSoldier(color) {
     var soldier = {
         color: color,
-        id: utilService.makeId(),
+        id: soldierId++,
         possibleMoves: [],
         isEaten: false,
         isOut: false,
@@ -68,7 +69,9 @@ function getCellById(cells,cellId) {
 }
 function getCellBySoldierId(cells,soldierId) {
     return cells.find(cell => {
-        return cell.soldiers.find((soldier) => soldier.id === soldierId)
+        return cell.soldiers.find((soldier) => {
+            return soldier.id === soldierId
+        })
     })
 }
 
@@ -109,7 +112,7 @@ function isPossibleMove(targetCellId,selectedSoldier) {
     return (selectedSoldier.possibleMoves.find(move => move === targetCellId) !== undefined)? true : false
 }
 
-function toggleTurn(currTurn) {
+function passTurn(currTurn) {
     return (currTurn === 'white')? 'black' : 'white'
 }
 
@@ -181,24 +184,25 @@ function nullDices(dices) {
 
 function calcPossibleMoves(dices,currTurn,cells,soldiers) {
     soldiers = getPossibleSoldiers(cells,soldiers,currTurn)    
+    console.log('soldiers',soldiers)
     var direction = (currTurn === 'white')? 1 : -1
 
     var possibleMoves = []
     soldiers.forEach(soldier => {
         const srcCell = getCellBySoldierId(cells,soldier.id)
         var moves = calcSoldierMoves(dices,srcCell,direction)
-        console.log('moves1',moves)
+        // console.log(1,moves)
         moves = removeSrcCellMoves(srcCell,moves)
-        console.log('moves2',moves)
+        // console.log(2,moves)
         moves = removeHousesMoves(cells,moves,currTurn)
-        console.log('moves3',moves)
+        // console.log(3,moves)
         moves = removeBasedOnHousesMoves(dices,moves)
-        console.log('moves4',moves)
+        // console.log(4,moves)
         moves = removeBasedOnOutsideMoves(moves)
-        console.log('moves5',moves)
+        // console.log(5,moves)
         if (!canExit(cells,currTurn)) {
             moves = removeExitMoves(moves,currTurn)
-            console.log('moves6',moves)
+            // console.log(6,moves)
         }
         soldier.possibleMoves = moves
         possibleMoves.push({soldierId: soldier.id, moves})
@@ -322,4 +326,11 @@ function canExit(cells,currTurn){
 function isEndGame(cells,currTurn) {
     var count = (currTurn === 'white')? cells[25].soldiers.length : cells[0].soldiers.length
     return (count === 15)? true : false
+}
+
+function clearCells(cells) {
+    cells.forEach(cell => {
+        cell.soldiers = []
+    })
+    return cells
 }

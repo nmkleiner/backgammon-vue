@@ -7,6 +7,7 @@
         padding: 0 5vw 0 0;
         margin-top: 15px;
     }
+    
     header,footer {
         display: none;
         @media (min-width: 850px) {
@@ -41,7 +42,7 @@
                 @media (min-width: 850px) {
                     border-bottom: 20px solid black;
                     border-left: 20px solid black;
-                    border-right: 20px solid black;
+                    border-right: 10px solid black;
                 }
                 border-left: 10px solid black;
                 border-right: 10px solid black;
@@ -59,16 +60,11 @@
             font-size: 2.3rem;
         }
     }
+
     footer{
       width: 100%;
       height: 70px;
     }
-}
-
-
-
-
-.exit {
 }
 
 .game-cell {
@@ -108,6 +104,7 @@
             border-bottom: 26vh solid black;
         }
     }
+
     .exit-cell {
         position: absolute;
         @media (min-width: 850px) {
@@ -122,6 +119,7 @@
         }
         
     }
+
     .triangle-down {
         position: absolute;
         border-left: 3vw solid transparent;
@@ -133,16 +131,17 @@
             border-top: 26vh solid black;
         }
     }
+
     .triangle-black {
         border-bottom-color: rgb(30,30,30);
         border-top-color: rgb(30,30,30);
     }
 
-
     .triangle-red {
         border-bottom-color: red;
         border-top-color: red;
     }
+
     .triangle-green {
         border-bottom-color: teal;
         border-top-color: teal;

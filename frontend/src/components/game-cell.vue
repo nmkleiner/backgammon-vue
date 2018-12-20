@@ -21,6 +21,8 @@
 
 <script>
 import soldier from './soldier.vue'
+import ioClient from "socket.io-client";
+
 export default {
     props: {
         cell: Object,
@@ -34,9 +36,12 @@ export default {
         onCellClick() {
             if (this.selectedSoldier) {
                 this.$store.commit('showNoPossibleMoves')
-                this.$store.commit({type: 'moveSoldier', targetCell: this.cell})
-                this.$store.commit('unselectSoldiers')
+                this.$store.dispatch({type: 'moveSoldier', targetCell: this.cell})
             }
+            this.$store.commit('unselectSoldiers')
+            const cells = this.$store.getters.cells
+            this.$socket.emit('soldierMoved',cells)
+
         },
         onSoldierClick(soldier) {
             this.$store.commit('unselectSoldiers')
@@ -45,7 +50,6 @@ export default {
             this.$store.commit({type: 'selectSoldier',soldierId: soldier.id})
         },
         onSoldierDblClick() {
-            console.log('dbl click')
         },
         onSoldierHover(soldier) {
             if (soldier.possibleMoves.length) {
