@@ -1,5 +1,5 @@
 <template>
-    <section class="game-board" @click="unselect">
+    <section class="game-board" :class="{'flipped-board': userColor === 'black'}" @click="unselect">
         <div class="flex flex-column">
 
             <div class="board-row top-row flex space-between">
@@ -41,6 +41,9 @@ export default {
     computed: {
         winner() {
             return this.$store.getters.winner
+        },
+        userColor() {
+            return this.$store.getters.loggedInUserColor
         }
     }
 }

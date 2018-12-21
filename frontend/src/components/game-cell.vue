@@ -40,7 +40,8 @@ export default {
             }
             this.$store.commit('unselectSoldiers')
             const cells = this.$store.getters.cells
-            this.$socket.emit('soldierMoved',cells)
+            const room = 1
+            this.$socket.emit('soldierMoved',cells,room)
 
         },
         onSoldierClick(soldier) {

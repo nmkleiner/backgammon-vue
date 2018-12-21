@@ -1,14 +1,14 @@
 <template>
-    <div class="nav-bar flex space-between">
+    <div class="nav-bar flex space-between" v-if="!isLoggedInUser">
         <router-link class="logo" to="/">backGammon</router-link>
         <div class="links">
           <el-button round @click="goEdit" v-if="isLoggedInUser" to="/event/edit">
             Create <i class="fas fa-plus"></i>
           </el-button>
           <img v-if="loggedInUser" @click="goProfile" class="circle-icon-sm" :src="loggedInUser.pic"/>
-          <router-link class="" v-if="isLoggedInUser" :to="'/user/' + loggedInUser._id">
-            Profile
-          </router-link>
+          <a v-if="isLoggedInUser" href="#">
+            {{(userColor)}}
+          </a>
           <a v-if="isLoggedInUser" @click="logout">Logout</a>
           <router-link v-else to="/login">Login</router-link>
         </div>
@@ -70,7 +70,10 @@ export default {
       },
       loggedInUser() {
         return this.$store.getters.loggedInUser
-      }
+      },
+      userColor() {
+        return this.$store.getters.loggedInUserColor
+      },
     }
 };
 </script>

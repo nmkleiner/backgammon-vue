@@ -7,7 +7,7 @@ export default ({
         soldiers: [],
         selectedSoldier: null,
         currTurn: 'white',
-        dices: {num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0},
+        dices: {num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false},
         possibleMoves: [],
         winner: false,
         duringTurn: false,
@@ -16,22 +16,20 @@ export default ({
     },
     mutations: {
         setLoggedInUser(state, { user }) {
-            state.loggedInUser = user;
-        },
-        throwDices(state) {
-            state.duringTurn = true
-            gameService.throwDices(state.dices)
-            const soldiers = gameService.getAllSoldiers(state.cells)
-            state.possibleMoves = gameService.calcPossibleMoves(state.dices,state.currTurn,state.cells,soldiers)
-
-            if (!state.possibleMoves.length) {
-                setTimeout(() => {
-                    state.duringTurn = false
-                    state.dices = gameService.nullDices(state.dices)
-                    state.currTurn = gameService.toggleTurn(state.currTurn)
-                },2000)
+            state.loggedInUser = {
+                name: user.name,
+                _id: user._id,
+                pic: user.pic,
+                color: 'white'
             }
         },
+        logOutUser(state) {
+            state.loggedInUser = '';
+        },
+        changeMyColor(state) {
+            state.loggedInUser.color = 'black'
+        },
+        
         unselectSoldiers(state){
             const soldiers = gameService.getAllSoldiers(state.cells)
             soldiers.forEach(soldier => soldier.selected = false)
@@ -81,43 +79,79 @@ export default ({
                 state.cells.filter(cell => possibleMoves.includes(cell.id))
                 .forEach(cell => cell.isPossibleMove = true);
             }
-          },
-          showNoPossibleMoves(state) {
+        },
+        showNoPossibleMoves(state) {
             state.cells.forEach(cell => cell.isPossibleMove = false);
-          },
-          selectedSoldierNotEaten(state) {
+        },
+        selectedSoldierNotEaten(state) {
             state.selectedSoldier.isEaten = false
-          },
-          updateDices(state,{srcCell,targetCell}) {
+        },
+        updateDices(state,{srcCell,targetCell}) {
             state.dices = gameService.updateDices(state.dices,srcCell,targetCell)
-          },
-          calcPossibleMoves(state) {
+        },
+        calcPossibleMoves(state) {
             const soldiers = gameService.getAllSoldiers(state.cells)
             state.possibleMoves = gameService.calcPossibleMoves(state.dices,state.currTurn,state.cells,soldiers)
-          },
-          checkWinner(state) {
+        },
+        checkWinner(state) {
             state.winner = (gameService.isEndGame(state.cells,state.currTurn))? state.currTurn : false
-          },
-          endTurn(state) {
+        },
+        startTurn(state) {
+            state.duringTurn = true
+        },
+        endTurn(state) {
             state.duringTurn = false
             state.dices = gameService.nullDices(state.dices)
             state.currTurn = gameService.passTurn(state.currTurn)
-          },
-          clearBoard(state) {
-              state.cells = gameService.clearCells(state.cells)
-            },
-          setNewSoldiers(state,{cells}) {
-                state.cells = cells
-          },
-          updateCells(state) {
+        },
+        endGame(state,{winner}) {
+            state.winner = winner
+        },
+        clearBoard(state) {
+            state.cells = gameService.clearCells(state.cells)
+        },
+        setNewSoldiers(state,{cells}) {
+            state.cells = cells
+        },
+        updateCells(state) {
             gameService.updateCells(state.cells)
-          }
+        },
+        rollDices(state) {
+            state.dices.rolling = true
+        },
+        unrollDices(state) {
+            state.dices.rolling = false
+        },
+        throwDices(state) {
+            gameService.throwDices(state.dices)
+        },
+        dicesRes(state, {dices}) {
+            state.dices.num1ToShow = dices.num1ToShow
+            state.dices.num2ToShow = dices.num2ToShow
+        }
           
     },
     actions: {
+        async throwDices({commit,state}) {
+            commit('startTurn')
+            commit('throwDices')
+            commit('calcPossibleMoves')
+            
+            await setTimeout(() => {
+                commit('unrollDices')
+            },1000)
+                            
+            if (!state.possibleMoves.length) {
+                await setTimeout(() => {
+                    commit('endTurn')
+                },2000)
+            }
+            return state.dices
+
+        },
         getLoggedInUser({ commit }) {
             userService.getLoggedInUser().then(loggedInUser => {
-            commit({ type: 'setLoggedInUser', user: loggedInUser })
+            commit({ type: 'setLoggedInUser', user: loggedInUser})
         })
         },
         login({ commit }, { loginData }) {
@@ -127,6 +161,11 @@ export default ({
             }
             return user
         })
+        },
+        logout({ commit }) {
+            userService.logout();
+            commit('logOutUser');
+            return Promise.resolve();
         },
         setBoard({commit},{cells}) {
             if (!cells) {
@@ -181,8 +220,10 @@ export default ({
         currTurn: state => state.currTurn,
         duringTurn: state => state.duringTurn,
         loggedInUser: state => state.loggedInUser,
+        dicesRolling: state => state.dices.rolling,
         isLoggedInUser: state => !!state.loggedInUser,
         selectedSoldier: state => state.selectedSoldier,
+        loggedInUserColor: state => state.loggedInUser.color
     }
   })
   

@@ -1,6 +1,6 @@
 <template>
     <section class="dices-section flex flex-column align-center">
-        <button v-if="!duringTurn" @click.stop="throwDices" class="bold capitalize">click to throw dices</button>
+        <button v-if="showButton" @click.stop="throwDices" class="bold capitalize">click to throw dices</button>
         <span class="dice-text" v-if="duringTurn && !dices.doubleCount && dices.num1 && dices.num2">{{dices.num1}} + {{dices.num2}} = {{dices.num1 + dices.num2}}</span>
         <span class="dice-text" v-if="duringTurn && !dices.doubleCount && !dices.num1">{{dices.num2}}</span>
         <span class="dice-text" v-if="duringTurn && !dices.doubleCount && !dices.num2">{{dices.num1}}</span>
@@ -24,17 +24,34 @@ export default {
     },
     data() {
         return {
-            rolling: false,
         }
     },
     methods: {
-        throwDices() {
-            this.rolling = true
-            setTimeout(() => {
-                this.$store.commit('throwDices')
-                this.rolling = false
+        async throwDices() {
+            this.$store.commit('rollDices')
+            const room = 1
+            this.$socket.emit("rollDices", room)
+            await setTimeout(() => {
+                this.$store.dispatch('throwDices')
+                this.$socket.emit("dicesRes", room, this.dices)
             },1000)
+            console.log(this.dices)
         }
+    },
+    sockets: {
+        dicesRolling() {
+            this.$store.commit('rollDices')
+
+        },
+        dicesUnrolling(dices) {
+            this.$store.commit('unrollDices')
+            this.$store.commit({type: 'dicesRes', dices})
+
+        },
+        turnEnded() {
+            this.$store.commit('endTurn')
+        }
+        
     },
     computed: {
         dices() {
@@ -45,6 +62,23 @@ export default {
         },
         currTurn() {
             return this.$store.getters.currTurn
+        },
+        userColor() {
+            return this.$store.getters.loggedInUserColor
+        },
+        showButton() {
+            return !this.duringTurn && !this.rolling && this.currTurn === this.userColor
+        },
+        rolling() {
+            return this.$store.getters.dicesRolling
+        }
+    },
+    watch: {
+        duringTurn: function(newVal, oldVal) {
+            if (newVal === false) {
+                const room = 1
+                this.$socket.emit('endTurn',room)
+            }
         }
     }
 }

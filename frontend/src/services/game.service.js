@@ -184,7 +184,7 @@ function nullDices(dices) {
 
 function calcPossibleMoves(dices,currTurn,cells,soldiers) {
     soldiers = getPossibleSoldiers(cells,soldiers,currTurn)    
-    console.log('soldiers',soldiers)
+    // console.log('soldiers',soldiers)
     var direction = (currTurn === 'white')? 1 : -1
 
     var possibleMoves = []
