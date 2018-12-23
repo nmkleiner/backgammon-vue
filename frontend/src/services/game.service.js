@@ -14,11 +14,12 @@ export default {
     isMiddleCell,
     calcPossibleMoves,
     throwDices,
+    throwStartDice,
     updateDices,
     getMiddleCell,
     isEndGame,
     nullDices,
-    clearCells
+    clearCells,
 }
 var soldierId = 0
 function createSoldiers(amount,color) {
@@ -152,6 +153,11 @@ function throwDices(dices) {
     }
 }
 
+function throwStartDice(dices) {
+    dices.num1ToShow = utilService.getRandomInt(1,7)
+    return dices.num1ToShow
+}
+
 
 function updateDices(dices,srcCell,targetCell) {
     var srcCellId = srcCell.id
@@ -223,6 +229,7 @@ function getPossibleSoldiers(cells,soldiers,currTurn) {
         [getCellById(cells,27).soldiers[getCellById(cells,27).soldiers.length -1]]
     }
 }
+
 function calcSoldierMoves(dices,srcCell,direction) {
     var moves = []
     var srcCellId = srcCell.id
@@ -253,12 +260,14 @@ function calcSoldierMoves(dices,srcCell,direction) {
     }
     return moves
 }
+// when dice is null soldiers get their srcCell as possibleMove
 function removeSrcCellMoves(srcCell,moves) {
     var srcCellId = srcCell.id
     if (srcCell.id === 27) srcCellId = 25
     else if (srcCell.id === 26) srcCellId = 0
     return moves.map(move => (move === srcCellId)? null : move)
 }
+// remove moves that step on enemy's houses
 function removeHousesMoves(cells,moves,currTurn) {
     cells = moves.map(move => getCellById(cells,move))
     cells.forEach((cell,idx) => {
@@ -269,7 +278,8 @@ function removeHousesMoves(cells,moves,currTurn) {
     })
     return moves
 }
-
+// remove steps that are based on sum of both dices, when both moves are
+// stepping on enemy's houses 
 function removeBasedOnHousesMoves(dices,moves){
     if (!dices.doubleCount) {
         if (moves[0] === null && moves[1] === null) moves[2] = null
@@ -282,6 +292,7 @@ function removeBasedOnHousesMoves(dices,moves){
         return moves
     }
 }
+// remove unneeded moves outside of board
 function removeBasedOnOutsideMoves(moves) {
     moves = moves.map(move => {
         if (move > 25) return 25 
@@ -295,6 +306,7 @@ function removeBasedOnOutsideMoves(moves) {
     }
     return moves
 }
+// remove all moves outside of board when exiting is not allowed
 function removeExitMoves(moves,currTurn) {
     if (currTurn === 'white') {
         return moves.map(move => (move >= 25 || move === 0)? null : move)

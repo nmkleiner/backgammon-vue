@@ -12,6 +12,11 @@ export default ({
         winner: false,
         duringTurn: false,
         loggedInUser: {},
+        isGameOn: false,
+        startDice: {
+            white : null,
+            black : null
+        }
 
     },
     mutations: {
@@ -29,7 +34,12 @@ export default ({
         changeMyColor(state) {
             state.loggedInUser.color = 'black'
         },
-        
+        setStartDice(state) {
+            state.startDice[state.loggedInUser.color] = gameService.throwStartDice(state.dices)
+        },
+        gameOn(state) {
+            state.isGameOn = true
+        },
         unselectSoldiers(state){
             const soldiers = gameService.getAllSoldiers(state.cells)
             soldiers.forEach(soldier => soldier.selected = false)
@@ -128,6 +138,10 @@ export default ({
         dicesRes(state, {dices}) {
             state.dices.num1ToShow = dices.num1ToShow
             state.dices.num2ToShow = dices.num2ToShow
+        },
+        diceRes(state, {dice}) {
+            const color = (state.loggedInUser.color === 'white')? 'black' : 'white'
+            state.startDice[color] = dice
         }
           
     },
@@ -140,14 +154,21 @@ export default ({
             await setTimeout(() => {
                 commit('unrollDices')
             },1000)
-                            
+            
             if (!state.possibleMoves.length) {
                 await setTimeout(() => {
                     commit('endTurn')
                 },2000)
             }
             return state.dices
-
+            
+        },
+        async throwStartDice({commit}) {
+            commit('setStartDice')
+            
+            await setTimeout(() => {
+                commit('unrollDices')
+            },1000)
         },
         getLoggedInUser({ commit }) {
             userService.getLoggedInUser().then(loggedInUser => {
@@ -217,13 +238,15 @@ export default ({
         cells: state => state.cells,
         dices: state => state.dices,
         winner: state => state.winner,
+        isGameOn: state => state.isGameOn,
         currTurn: state => state.currTurn,
+        startDice: state => state.startDice,
         duringTurn: state => state.duringTurn,
         loggedInUser: state => state.loggedInUser,
         dicesRolling: state => state.dices.rolling,
         isLoggedInUser: state => !!state.loggedInUser,
         selectedSoldier: state => state.selectedSoldier,
-        loggedInUserColor: state => state.loggedInUser.color
+        loggedInUserColor: state => state.loggedInUser.color,
     }
   })
   

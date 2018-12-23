@@ -1,13 +1,14 @@
 <template>
     <section class="dices-section flex flex-column align-center">
+        <button v-if="!isGameOn && !alreadyThrown" @click.stop="decideWhoStarts" class="bold capitalize">click to decide who starts</button>
         <button v-if="showButton" @click.stop="throwDices" class="bold capitalize">click to throw dices</button>
         <span class="dice-text" v-if="duringTurn && !dices.doubleCount && dices.num1 && dices.num2">{{dices.num1}} + {{dices.num2}} = {{dices.num1 + dices.num2}}</span>
         <span class="dice-text" v-if="duringTurn && !dices.doubleCount && !dices.num1">{{dices.num2}}</span>
         <span class="dice-text" v-if="duringTurn && !dices.doubleCount && !dices.num2">{{dices.num1}}</span>
         <span class="dice-text" v-if="duringTurn && dices.doubleCount">{{dices.num1}} * {{dices.doubleCount}} = {{dices.num1 * dices.doubleCount}}</span>
-
+        <pre v-if="!isGameOn">{{startDice}}</pre>
         <dice :rolling="rolling" :num="dices.num1ToShow"></dice>
-        <dice :rolling="rolling" :num="dices.num2ToShow"></dice>
+        <dice v-if="isGameOn" :rolling="rolling" :num="dices.num2ToShow"></dice>
         <div class="soldier-section capitalize text-center">current turn:</div>
         <soldier :color="currTurn"></soldier>
     </section>
@@ -24,6 +25,7 @@ export default {
     },
     data() {
         return {
+            alreadyThrown: false
         }
     },
     methods: {
@@ -31,11 +33,16 @@ export default {
             this.$store.commit('rollDices')
             const room = 1
             this.$socket.emit("rollDices", room)
-            await setTimeout(() => {
-                this.$store.dispatch('throwDices')
-                this.$socket.emit("dicesRes", room, this.dices)
-            },1000)
-            console.log(this.dices)
+            this.$store.dispatch('throwDices')
+            this.$socket.emit("dicesRes", room, this.dices)
+        },
+        async decideWhoStarts() {
+            this.$store.commit('rollDices')
+            const room = 1
+            this.$socket.emit("rollDices", room)
+            await this.$store.dispatch('throwStartDice')
+            this.alreadyThrown = true
+            this.$socket.emit("startDiceRes", room, this.diceToShow)
         }
     },
     sockets: {
@@ -46,6 +53,11 @@ export default {
         dicesUnrolling(dices) {
             this.$store.commit('unrollDices')
             this.$store.commit({type: 'dicesRes', dices})
+
+        },
+        diceUnrolling(dice) {
+            this.$store.commit('unrollDices')
+            this.$store.commit({type: 'diceRes', dice})
 
         },
         turnEnded() {
@@ -67,11 +79,21 @@ export default {
             return this.$store.getters.loggedInUserColor
         },
         showButton() {
-            return !this.duringTurn && !this.rolling && this.currTurn === this.userColor
+            return this.isGameOn && !this.duringTurn && !this.rolling && this.currTurn === this.userColor
         },
         rolling() {
             return this.$store.getters.dicesRolling
+        },
+        isGameOn() {
+            return this.$store.getters.isGameOn
+        },
+        startDice() {
+            return this.$store.getters.startDice
+        },
+        diceToShow() {
+            return this.$store.getters.startDice[this.userColor]
         }
+
     },
     watch: {
         duringTurn: function(newVal, oldVal) {
@@ -79,7 +101,17 @@ export default {
                 const room = 1
                 this.$socket.emit('endTurn',room)
             }
-        }
+        },
+        'startDice.white': function(newVals, oldVals) {
+            if (this.startDice.black && this.startDice.white) {
+                console.log('great success')
+            }
+        },
+        'startDice.black': function(newVals, oldVals) {
+            if (this.startDice.black && this.startDice.white) {
+                console.log('great success')
+            }
+        },
     }
 }
 </script>
