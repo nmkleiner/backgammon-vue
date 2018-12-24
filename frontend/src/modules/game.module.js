@@ -6,18 +6,12 @@ export default ({
         cells: [],
         soldiers: [],
         selectedSoldier: null,
-        currTurn: 'white',
-        dices: {num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false},
+        currTurn: null,
+        dices: { num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false },
         possibleMoves: [],
         winner: false,
         duringTurn: false,
         loggedInUser: {},
-        isGameOn: false,
-        startDice: {
-            white : null,
-            black : null
-        }
-
     },
     mutations: {
         setLoggedInUser(state, { user }) {
@@ -34,43 +28,37 @@ export default ({
         changeMyColor(state) {
             state.loggedInUser.color = 'black'
         },
-        setStartDice(state) {
-            state.startDice[state.loggedInUser.color] = gameService.throwStartDice(state.dices)
-        },
-        gameOn(state) {
-            state.isGameOn = true
-        },
-        unselectSoldiers(state){
+        unselectSoldiers(state) {
             const soldiers = gameService.getAllSoldiers(state.cells)
             soldiers.forEach(soldier => soldier.selected = false)
             state.selectedSoldier = null
         },
-        selectSoldier(state,{soldierId}){
-            const soldier = gameService.getSoldierById(state.cells,soldierId)
+        selectSoldier(state, { soldierId }) {
+            const soldier = gameService.getSoldierById(state.cells, soldierId)
             const soldiers = gameService.getAllSoldiers(state.cells)
             if (soldier.color !== state.currTurn ||
-                 !soldier.isLastInCell ||
-                 gameService.hasEatenSoldiers(state.currTurn,soldiers) && !soldier.isEaten) return;
+                !soldier.isLastInCell ||
+                gameService.hasEatenSoldiers(state.currTurn, soldiers) && !soldier.isEaten) return;
 
             soldier.selected = true
             state.selectedSoldier = soldier
         },
-        setCells(state){
-            for (var i = 0; i <= 27; i++){
-                state.cells.push({id: i, soldiers: [], isHouseOf: false, isPossibleMove: false}) 
+        setCells(state) {
+            for (var i = 0; i <= 27; i++) {
+                state.cells.push({ id: i, soldiers: [], isHouseOf: false, isPossibleMove: false })
             }
         },
         setSoldiers(state) {
             // regular board
             const boardMap = {
-                '1': {amount: 2, color: 'white'},
-                '6': {amount: 5, color: 'black'},
-                '8': {amount: 3, color: 'black'},
-                '12': {amount: 5, color: 'white'},
-                '13': {amount: 5, color: 'black'},
-                '17': {amount: 3, color: 'white'},
-                '19': {amount: 5, color: 'white'},
-                '24': {amount: 2, color: 'black'}
+                '1': { amount: 2, color: 'white' },
+                '6': { amount: 5, color: 'black' },
+                '8': { amount: 3, color: 'black' },
+                '12': { amount: 5, color: 'white' },
+                '13': { amount: 5, color: 'black' },
+                '17': { amount: 3, color: 'white' },
+                '19': { amount: 5, color: 'white' },
+                '24': { amount: 2, color: 'black' }
             }
             // exiting
             // var boardMap = {'22': {amount: 3, color: 'white'},'24': {amount: 2, color: 'white'},'23': {amount: 1, color: 'white'},'20': {amount: 1, color: 'white'},'19': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
@@ -78,16 +66,16 @@ export default ({
             // var boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // eaten soldiers
             // var boardMap = {'26': {amount: 2, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
-            
-            for (var cell in boardMap){
-                state.cells[cell].soldiers.push(...gameService.createSoldiers(boardMap[cell].amount,boardMap[cell].color))
+
+            for (var cell in boardMap) {
+                state.cells[cell].soldiers.push(...gameService.createSoldiers(boardMap[cell].amount, boardMap[cell].color))
             }
             gameService.updateCells(state.cells)
         },
-        showPossibleMoves(state,{possibleMoves, soldier}) {
+        showPossibleMoves(state, { possibleMoves, soldier }) {
             if (!state.selectedSoldier && soldier.color === state.currTurn) {
                 state.cells.filter(cell => possibleMoves.includes(cell.id))
-                .forEach(cell => cell.isPossibleMove = true);
+                    .forEach(cell => cell.isPossibleMove = true);
             }
         },
         showNoPossibleMoves(state) {
@@ -96,15 +84,15 @@ export default ({
         selectedSoldierNotEaten(state) {
             state.selectedSoldier.isEaten = false
         },
-        updateDices(state,{srcCell,targetCell}) {
-            state.dices = gameService.updateDices(state.dices,srcCell,targetCell)
+        updateDices(state, { srcCell, targetCell }) {
+            state.dices = gameService.updateDices(state.dices, srcCell, targetCell)
         },
         calcPossibleMoves(state) {
             const soldiers = gameService.getAllSoldiers(state.cells)
-            state.possibleMoves = gameService.calcPossibleMoves(state.dices,state.currTurn,state.cells,soldiers)
+            state.possibleMoves = gameService.calcPossibleMoves(state.dices, state.currTurn, state.cells, soldiers)
         },
         checkWinner(state) {
-            state.winner = (gameService.isEndGame(state.cells,state.currTurn))? state.currTurn : false
+            state.winner = (gameService.isEndGame(state.cells, state.currTurn)) ? state.currTurn : false
         },
         startTurn(state) {
             state.duringTurn = true
@@ -114,13 +102,13 @@ export default ({
             state.dices = gameService.nullDices(state.dices)
             state.currTurn = gameService.passTurn(state.currTurn)
         },
-        endGame(state,{winner}) {
+        endGame(state, { winner }) {
             state.winner = winner
         },
         clearBoard(state) {
             state.cells = gameService.clearCells(state.cells)
         },
-        setNewSoldiers(state,{cells}) {
+        setNewSoldiers(state, { cells }) {
             state.cells = cells
         },
         updateCells(state) {
@@ -135,94 +123,84 @@ export default ({
         throwDices(state) {
             gameService.throwDices(state.dices)
         },
-        dicesRes(state, {dices}) {
+        dicesRes(state, { dices }) {
             state.dices.num1ToShow = dices.num1ToShow
             state.dices.num2ToShow = dices.num2ToShow
         },
-        diceRes(state, {dice}) {
-            const color = (state.loggedInUser.color === 'white')? 'black' : 'white'
-            state.startDice[color] = dice
+        setCurrTurn(state, {startingColor}) {
+            state.currTurn = startingColor
         }
-          
     },
     actions: {
-        async throwDices({commit,state}) {
+        async throwDices({ commit, state }) {
             commit('startTurn')
             commit('throwDices')
             commit('calcPossibleMoves')
-            
+
             await setTimeout(() => {
                 commit('unrollDices')
-            },1000)
-            
+            }, 1000)
+
             if (!state.possibleMoves.length) {
                 await setTimeout(() => {
                     commit('endTurn')
-                },2000)
+                }, 2000)
             }
             return state.dices
-            
-        },
-        async throwStartDice({commit}) {
-            commit('setStartDice')
-            
-            await setTimeout(() => {
-                commit('unrollDices')
-            },1000)
         },
         getLoggedInUser({ commit }) {
             userService.getLoggedInUser().then(loggedInUser => {
-            commit({ type: 'setLoggedInUser', user: loggedInUser})
-        })
+                commit({ type: 'setLoggedInUser', user: loggedInUser })
+            })
         },
         login({ commit }, { loginData }) {
             return userService.login(loginData).then(user => {
-            if (user) {
-                commit({ type: 'setLoggedInUser', user })
-            }
-            return user
-        })
+                if (user) {
+                    commit({ type: 'setLoggedInUser', user })
+                }
+                return user
+            })
         },
         logout({ commit }) {
             userService.logout();
             commit('logOutUser');
             return Promise.resolve();
         },
-        setBoard({commit},{cells}) {
+        setBoard({ commit }, { cells }) {
             if (!cells) {
                 commit('setCells')
-                commit({type: 'setSoldiers'})
+                commit({ type: 'setSoldiers' })
             }
             else {
                 commit('clearBoard')
-                commit({type: 'setNewSoldiers', cells})
+                commit({ type: 'setNewSoldiers', cells })
                 commit('updateCells')
                 commit('calcPossibleMoves')
             }
         },
-        moveSoldier({state,commit}, {targetCell}){
-            const isPossibleMove = gameService.isPossibleMove(targetCell.id,state.selectedSoldier) 
+        moveSoldier({ state, commit }, { targetCell }) {
+            const isPossibleMove = gameService.isPossibleMove(targetCell.id, state.selectedSoldier)
             if (!isPossibleMove) return
-            const srcCell = gameService.getCellBySoldierId(state.cells,state.selectedSoldier.id)
+            const srcCell = gameService.getCellBySoldierId(state.cells, state.selectedSoldier.id)
 
             const isMiddleCell = gameService.isMiddleCell(srcCell)
             if (isMiddleCell) {
                 commit('selectedSoldierNotEaten')
             }
 
-            const IsEating = gameService.checkIsEating(targetCell,state.currTurn) 
+            const IsEating = gameService.checkIsEating(targetCell, state.currTurn)
             if (IsEating) {
                 const eatenSoldier = targetCell.soldiers.pop()
                 eatenSoldier.isEaten = true
-                const middleCell = gameService.getMiddleCell(eatenSoldier.color,state.cells)
+                const middleCell = gameService.getMiddleCell(eatenSoldier.color, state.cells)
                 middleCell.soldiers.push(eatenSoldier)
                 gameService.updateCell(middleCell)
             }
-            
+
             srcCell.soldiers.pop()
-            targetCell.soldiers.push(state.selectedSoldier) 
-            
-            commit({type: 'updateDices', srcCell, targetCell})            
+            targetCell.soldiers.push(state.selectedSoldier)
+
+            commit({ type: 'updateDices', srcCell, targetCell })
             commit('calcPossibleMoves')
 
             commit('checkWinner')
@@ -231,16 +209,14 @@ export default ({
             if (!state.possibleMoves.length) {
                 commit('endTurn')
             }
-            
+
         },
     },
     getters: {
         cells: state => state.cells,
         dices: state => state.dices,
         winner: state => state.winner,
-        isGameOn: state => state.isGameOn,
         currTurn: state => state.currTurn,
-        startDice: state => state.startDice,
         duringTurn: state => state.duringTurn,
         loggedInUser: state => state.loggedInUser,
         dicesRolling: state => state.dices.rolling,
@@ -248,6 +224,6 @@ export default ({
         selectedSoldier: state => state.selectedSoldier,
         loggedInUserColor: state => state.loggedInUser.color,
     }
-  })
-  
+})
+
 

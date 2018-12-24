@@ -14,13 +14,14 @@ export default {
     isMiddleCell,
     calcPossibleMoves,
     throwDices,
-    throwStartDice,
     updateDices,
     getMiddleCell,
     isEndGame,
     nullDices,
     clearCells,
 }
+
+
 var soldierId = 0
 function createSoldiers(amount,color) {
     var res = []
@@ -153,10 +154,7 @@ function throwDices(dices) {
     }
 }
 
-function throwStartDice(dices) {
-    dices.num1ToShow = utilService.getRandomInt(1,7)
-    return dices.num1ToShow
-}
+
 
 
 function updateDices(dices,srcCell,targetCell) {
