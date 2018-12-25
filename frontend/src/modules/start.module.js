@@ -12,32 +12,25 @@ export default ({
     mutations: {
         gameOn(state) {
             state.isGameOn = true
+            console.log('game onnnnnn')
         },
         setStartDice(state, {color}) {
             state.startDice.dice = state.startDice[color] = startGameService.throwStartDice(state.startDice.dice)
         },
+        setStartDiceTo(state, {dice, color}) {
+            state.startDice.dice = state.startDice[color] = dice
+        },
         nullDice(state) {
             state.startDice.white = state.startDice.black = null
+            console.log('game onnnnnn')
         }
     },
     actions: {
-        // throwStartDice({ commit, rootState }) {
-        //     const {color} = rootState.gameModule.loggedInUser
-        //     commit({type: 'setStartDice', color})
-        // },
-        diceRes({state, commit}, { userColor }) {
+        diceRes({commit}, { dice, userColor }) {
             const color = (userColor === 'white') ? 'black' : 'white'
-            commit({type: 'setStartDice', color})
-            if (state.startDice.white && state.startDice.black) {
-                // if (state.startDice.white === state.startDice.black) {
-                //     debugger;
-                    
-                //     commit('nullDice')
-                //     return false
-                // }
-                // const startingColor = (state.startDice.white > state.startDice.black)? 'white' : 'black'
-                // return startingColor
-            }
+            if (dice) commit({type: 'setStartDiceTo', color, dice})
+            else commit({type: 'setStartDice', color})
+            
         }
     },
     getters: {
