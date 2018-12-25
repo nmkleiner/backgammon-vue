@@ -180,7 +180,7 @@ export default ({
         },
         moveSoldier({ state, commit }, { targetCell }) {
             const isPossibleMove = gameService.isPossibleMove(targetCell.id, state.selectedSoldier)
-            if (!isPossibleMove) return
+            if (!isPossibleMove) return false
             const srcCell = gameService.getCellBySoldierId(state.cells, state.selectedSoldier.id)
 
             const isMiddleCell = gameService.isMiddleCell(srcCell)
@@ -209,7 +209,7 @@ export default ({
             if (!state.possibleMoves.length) {
                 commit('endTurn')
             }
-
+            return true
         },
     },
     getters: {

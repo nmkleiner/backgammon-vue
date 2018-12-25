@@ -41,22 +41,31 @@ export default {
         soldier
     },
     methods: {
-        onCellClick() {
+        async onCellClick() {
             if (this.selectedSoldier) {
                 this.$store.commit('showNoPossibleMoves')
-                this.$store.dispatch({type: 'moveSoldier', targetCell: this.cell})
+                const soldierDidMove = await this.$store.dispatch({type: 'moveSoldier', targetCell: this.cell})
+                if (soldierDidMove) {
+                    const room = 1
+                    const cells = this.$store.getters.cells
+                    this.$socket.emit('soldierMoved',cells,room)
+                }
             }
             this.$store.commit('unselectSoldiers')
-            const cells = this.$store.getters.cells
-            const room = 1
-            this.$socket.emit('soldierMoved',cells,room)
 
         },
         onSoldierClick(soldier) {
-            this.$store.commit('unselectSoldiers')
-            this.$store.commit('showNoPossibleMoves')
-            this.$store.commit({type: 'showPossibleMoves',possibleMoves: soldier.possibleMoves, soldier})
-            this.$store.commit({type: 'selectSoldier',soldierId: soldier.id})
+            if (soldier.selected) {
+                this.$store.commit('unselectSoldiers')
+            }
+            else if (soldier.isOut) {
+                this.onCellClick()
+            } else {
+                this.$store.commit('unselectSoldiers')
+                this.$store.commit('showNoPossibleMoves')
+                this.$store.commit({type: 'showPossibleMoves',possibleMoves: soldier.possibleMoves, soldier})
+                this.$store.commit({type: 'selectSoldier',soldierId: soldier.id})
+            }
         },
         onSoldierDblClick() {
         },

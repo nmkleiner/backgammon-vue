@@ -104,6 +104,11 @@ function updateCell(cell) {
     else cell.isHouseOf = false
 
     // remove after qa of eating soldiers
+    if (cell.id === 25 || cell.id === 20) {
+        cell.soldiers.forEach(soldier => {
+            soldier.isOut = true
+        })
+    }
     if (cell.id === 26 || cell.id === 27) {
         cell.soldiers.forEach(soldier => {
             soldier.isEaten = true
