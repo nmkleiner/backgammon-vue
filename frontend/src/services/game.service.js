@@ -39,7 +39,8 @@ function createSoldier(color) {
         isEaten: false,
         isOut: false,
         selected: false,
-        isLastInCell: false
+        isLastInCell: false,
+        justMoved: false
     }
 
     return soldier;
@@ -152,6 +153,7 @@ function throwDices(dices) {
     } else {
         dices.doubleCount = 0
     }
+    return dices
 }
 
 

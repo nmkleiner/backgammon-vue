@@ -4,7 +4,8 @@
         :class="{
             'white': soldier.color === 'white',
             'black': soldier.color === 'black',
-            'selected': soldier.selected
+            'selected': soldier.selected,
+            'animated tada fast': soldier.justMoved
             }">
         </div>
         <div class="soldier-const" v-if="color"

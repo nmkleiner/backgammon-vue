@@ -1,10 +1,13 @@
 <template>
     <section class="dices-section flex flex-column align-center">
-        <button v-if="showDiceBtn" @click.stop="decideWhoStarts" class="animate bounce infinite bold capitalize">click to decide who starts</button>
-        <button v-if="showDicesBtn" @click.stop="throwDices" class="bold capitalize">click to throw dices</button>
+        <!-- <button v-if="showDiceBtn" @click.stop="decideWhoStarts" class="animate bounce infinite bold capitalize">click to decide who starts</button> -->
+        <!-- <button v-if="showDicesBtn" @click.stop="throwDices" class="bold capitalize">click to throw dices</button> -->
+        <button @click.stop="throwDices" class="bold capitalize">click to throw dices</button>
         <dice v-if="isGameOn" :rolling="rolling" :num="dices.num1ToShow"></dice>
         <dice v-if="isGameOn" :rolling="rolling" :num="dices.num2ToShow"></dice>
-        <dice v-else :rolling="rolling" :num="startDice.dice"></dice>
+        <dice  :rolling="rolling" :num="dices.num1ToShow"></dice>
+        <dice  :rolling="rolling" :num="dices.num2ToShow"></dice>
+        <!-- <dice v-else :rolling="rolling" :num="startDice.dice"></dice> -->
         <div class="soldier-section capitalize text-center">current turn:</div>
         <soldier :color="currTurn"></soldier>
     </section>

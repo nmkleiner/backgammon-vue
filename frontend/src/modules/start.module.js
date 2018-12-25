@@ -12,7 +12,6 @@ export default ({
     mutations: {
         gameOn(state) {
             state.isGameOn = true
-            console.log('game onnnnnn')
         },
         setStartDice(state, {color}) {
             state.startDice.dice = state.startDice[color] = startGameService.throwStartDice(state.startDice.dice)
@@ -22,7 +21,6 @@ export default ({
         },
         nullDice(state) {
             state.startDice.white = state.startDice.black = null
-            console.log('game onnnnnn')
         }
     },
     actions: {

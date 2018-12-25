@@ -6,7 +6,8 @@ export default ({
         cells: [],
         soldiers: [],
         selectedSoldier: null,
-        currTurn: null,
+        // currTurn: null,when decide who's starting is active
+        currTurn: 'white',
         dices: { num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false },
         possibleMoves: [],
         winner: false,
@@ -121,7 +122,7 @@ export default ({
             state.dices.rolling = false
         },
         throwDices(state) {
-            gameService.throwDices(state.dices)
+            state.dices = gameService.throwDices(state.dices)
         },
         dicesRes(state, { dices }) {
             state.dices.num1ToShow = dices.num1ToShow
@@ -199,7 +200,7 @@ export default ({
 
             srcCell.soldiers.pop()
             targetCell.soldiers.push(state.selectedSoldier)
-
+            state.selectedSoldier.justMoved = true
             commit({ type: 'updateDices', srcCell, targetCell })
             commit('calcPossibleMoves')
 
