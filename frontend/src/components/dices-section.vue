@@ -1,13 +1,10 @@
 <template>
     <section class="dices-section flex flex-column align-center">
-        <!-- <button v-if="showDiceBtn" @click.stop="decideWhoStarts" class="animate bounce infinite bold capitalize">click to decide who starts</button> -->
-        <!-- <button v-if="showDicesBtn" @click.stop="throwDices" class="bold capitalize">click to throw dices</button> -->
-        <button @click.stop="throwDices" class="bold capitalize">click to throw dices</button>
+        <button v-if="showDiceBtn" @click.stop="decideWhoStarts" class="animate bounce infinite bold capitalize">click to decide who starts</button>
+        <button v-if="showDicesBtn" @click.stop="throwDices" class="bold capitalize">click to throw dices</button>
         <dice v-if="isGameOn" :rolling="rolling" :num="dices.num1ToShow"></dice>
         <dice v-if="isGameOn" :rolling="rolling" :num="dices.num2ToShow"></dice>
-        <dice  :rolling="rolling" :num="dices.num1ToShow"></dice>
-        <dice  :rolling="rolling" :num="dices.num2ToShow"></dice>
-        <!-- <dice v-else :rolling="rolling" :num="startDice.dice"></dice> -->
+        <dice v-else :rolling="rolling" :num="startDice.dice"></dice>
         <div class="soldier-section capitalize text-center">current turn:</div>
         <soldier :color="currTurn"></soldier>
     </section>
@@ -42,8 +39,9 @@ export default {
 
             let {userColor} = this
             userColor = (userColor === 'white') ? 'black' : 'white'
-            const {dice} = this.startDice
-            await this.$store.dispatch({type: 'diceRes', dice, userColor })
+            // const {dice} = this.startDice
+            // console.log(dice)
+            await this.$store.dispatch({type: 'diceRes', userColor })
             setTimeout(() => {
                 this.$store.commit('unrollDices')
             },1000)
@@ -121,6 +119,9 @@ export default {
                 }
                 const startingColor = (this.startDice.white > this.startDice.black)? 'white' : 'black'
                 this.$store.commit({type: 'setCurrTurn', startingColor})
+                setTimeout(() => {
+                    this.$store.commit('gameOn')
+                },2000)
             }
         },
         'startDice.black': function(newVals, oldVals) {
@@ -131,6 +132,9 @@ export default {
                 }
                 const startingColor = (this.startDice.white > this.startDice.black)? 'white' : 'black'
                 this.$store.commit({type: 'setCurrTurn', startingColor})
+                setTimeout(() => {
+                    this.$store.commit('gameOn')
+                },2000)
             }
         },
     }

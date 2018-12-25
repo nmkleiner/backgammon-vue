@@ -6,8 +6,7 @@ export default ({
         cells: [],
         soldiers: [],
         selectedSoldier: null,
-        // currTurn: null,when decide who's starting is active
-        currTurn: 'white',
+        currTurn: null,
         dices: { num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false },
         possibleMoves: [],
         winner: false,
