@@ -1,12 +1,12 @@
 <template>
     <section class="dices-section flex flex-column align-center">
-        <button v-if="showDiceBtn" @click.stop="decideWhoStarts" class="bold capitalize">click to decide who starts</button>
+        <button v-if="showDiceBtn && !rolling" @click.stop="decideWhoStarts" class="bold capitalize">click to decide who starts</button>
         <button v-if="showDicesBtn" @click.stop="throwDices" class="bold capitalize">click to throw dices</button>
-        <span class="dice-text" v-if="duringTurn && !dices.doubleCount && dices.num1 && dices.num2">{{dices.num1}} + {{dices.num2}} = {{dices.num1 + dices.num2}}</span>
+        <!-- <span class="dice-text" v-if="duringTurn && !dices.doubleCount && dices.num1 && dices.num2">{{dices.num1}} + {{dices.num2}} = {{dices.num1 + dices.num2}}</span>
         <span class="dice-text" v-if="duringTurn && !dices.doubleCount && !dices.num1">{{dices.num2}}</span>
         <span class="dice-text" v-if="duringTurn && !dices.doubleCount && !dices.num2">{{dices.num1}}</span>
-        <span class="dice-text" v-if="duringTurn && dices.doubleCount">{{dices.num1}} * {{dices.doubleCount}} = {{dices.num1 * dices.doubleCount}}</span>
-        <pre v-if="!isGameOn">{{startDice}}</pre>
+        <span class="dice-text" v-if="duringTurn && dices.doubleCount">{{dices.num1}} * {{dices.doubleCount}} = {{dices.num1 * dices.doubleCount}}</span> -->
+        <!-- <pre v-if="!isGameOn">{{startDice}}</pre> -->
         <dice v-if="isGameOn" :rolling="rolling" :num="dices.num1ToShow"></dice>
         <dice v-if="isGameOn" :rolling="rolling" :num="dices.num2ToShow"></dice>
         <dice v-else :rolling="rolling" :num="startDice.dice"></dice>
@@ -26,7 +26,6 @@ export default {
     },
     data() {
         return {
-            // alreadyThrown: false
         }
     },
     methods: {
@@ -44,13 +43,13 @@ export default {
 
             let {userColor} = this
             userColor = (userColor === 'white') ? 'black' : 'white'
-            const {dice} = this.startDice
-            await this.$store.dispatch({type: 'diceRes', dice, userColor })
+            // const {dice} = this.startDice //always 6
+            await this.$store.dispatch({type: 'diceRes', userColor })
             setTimeout(() => {
                 this.$store.commit('unrollDices')
             },1000)
+            console.log('decideWhoStarts',this.startDice.dice)
 
-            // this.alreadyThrown = true
             this.$socket.emit("startDiceRes", room, this.startDice.dice)
         }
     },
@@ -58,8 +57,10 @@ export default {
         dicesRolling() {
             this.$store.commit('rollDices')
         },
-        dicesUnrolling(dices) {
-            this.$store.commit('unrollDices')
+        async dicesUnrolling(dices) {
+            await setTimeout(() => {
+                this.$store.commit('unrollDices')
+            },1000)
             this.$store.commit({type: 'dicesRes', dices})
         },
         async diceUnrolling(dice) {
@@ -67,6 +68,7 @@ export default {
                 this.$store.commit('unrollDices')
             },1000)
             const {userColor} = this
+            console.log('diceUnrolling',dice)
             await this.$store.dispatch({type: 'diceRes', dice, userColor })
         },
         turnEnded() {
@@ -123,6 +125,9 @@ export default {
                 }
                 const startingColor = (this.startDice.white > this.startDice.black)? 'white' : 'black'
                 this.$store.commit({type: 'setCurrTurn', startingColor})
+                setTimeout(() => {
+                    this.$store.commit('gameOn')
+                },3000)
             }
         },
         'startDice.black': function(newVals, oldVals) {
@@ -133,6 +138,9 @@ export default {
                 }
                 const startingColor = (this.startDice.white > this.startDice.black)? 'white' : 'black'
                 this.$store.commit({type: 'setCurrTurn', startingColor})
+                setTimeout(() => {
+                    this.$store.commit('gameOn')
+                },3000)
             }
         },
     }

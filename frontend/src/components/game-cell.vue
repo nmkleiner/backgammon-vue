@@ -1,9 +1,17 @@
 <template>
-    <div class="game-cell flex flex-column align-center wrap" :class="{'middle': middle, 'exit': exit}">
+    <div class="game-cell flex flex-column align-center wrap" 
+    :class="{
+        'middle': middle,
+        'exit': exit,
+        'possibleMove': cell.isPossibleMove
+    }"
+    @click.stop="onCellClick"
+    >
     
-        <div v-if="!middle" @click.stop="onCellClick"
+        <div v-if="!middle"
             :class="{
             'triangle-up': cell.id > 12 && cell.id < 25,
+            'triangle': cell.id > 0 && cell.id < 25,
             'triangle-down': cell.id < 13 && cell.id > 0,
             'triangle-red': cell.id % 2 === 0,
             'triangle-black': cell.id % 2 !== 0,
