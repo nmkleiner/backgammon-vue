@@ -8,15 +8,16 @@
   },
   "homepage": "https://github.com/myusername/my-app",
   "dependencies": {
+    "animate.css": "^3.7.0",
     "axios": "^0.18.0",
     "element-ui": "^2.4.11",
     "register-service-worker": "^1.5.2",
     "socket.io": "^2.2.0",
+    "uws": "10.148.1",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1",
     "vue-socket.io": "^3.0.4",
-    "vuex": "^3.0.1",
-    "uws": "10.148.1"
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.2.0",

@@ -12,11 +12,20 @@ possibleMoves [{soldierId: moves: [1,2,3,4]},{},...]
 
 
 sockets:
-moving soldier - send the soldier that was moved instead of the whole board
+
+b-001 
+
+- then i can add animate css to show to player what other player does.
+
+- moving soldier - send the soldier that was moved instead of the whole board
 then in both boards, soldier will be popped and pushed instead of board replacement.
-then i can add animate css to show to player what other player does.
 
-session: save usercolor in sessionstorage
-or find better solution
 
-throw dices to decide who starts
+
+-session: save usercolor in sessionstorage
+or find better solution (why did i wanted that?)
+
+how to do loading: have this.loading that is usually false
+,make it true in function that loads something, then false after loading.
+then make something that renders when loading and make everything else not render.
+

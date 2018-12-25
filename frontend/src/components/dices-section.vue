@@ -1,6 +1,6 @@
 <template>
     <section class="dices-section flex flex-column align-center">
-        <button v-if="showDiceBtn" @click.stop="decideWhoStarts" class="bold capitalize">click to decide who starts</button>
+        <button v-if="showDiceBtn" @click.stop="decideWhoStarts" class="animate bounce infinite bold capitalize">click to decide who starts</button>
         <button v-if="showDicesBtn" @click.stop="throwDices" class="bold capitalize">click to throw dices</button>
         <span class="dice-text" v-if="duringTurn && !dices.doubleCount && dices.num1 && dices.num2">{{dices.num1}} + {{dices.num2}} = {{dices.num1 + dices.num2}}</span>
         <span class="dice-text" v-if="duringTurn && !dices.doubleCount && !dices.num1">{{dices.num2}}</span>
