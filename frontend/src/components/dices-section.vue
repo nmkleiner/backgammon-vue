@@ -1,7 +1,14 @@
 <template>
     <section class="dices-section flex flex-column align-center">
-        <button v-if="showDiceBtn" @click.stop="decideWhoStarts" class="animate bounce infinite bold capitalize">click to decide who starts</button>
-        <button v-if="showDicesBtn" @click.stop="throwDices" class="bold capitalize">click to throw dices</button>
+
+
+
+        <button v-if="showDiceBtn" @click.stop="decideWhoStarts" class="animated rubberBand infinite bold capitalize">click to roll dice</button>
+        <button v-if="showDicesBtn" @click.stop="throwDices" class="animated flash bold capitalize">click to roll dices</button>
+        
+
+
+
         <dice v-if="isGameOn" :rolling="rolling" :num="dices.num1ToShow"></dice>
         <dice v-if="isGameOn" :rolling="rolling" :num="dices.num2ToShow"></dice>
         <dice v-else :rolling="rolling" :num="startDice.dice"></dice>
@@ -19,11 +26,6 @@ export default {
         dice,
         soldier
     },
-    data() {
-        return {
-            // alreadyThrown: false
-        }
-    },
     methods: {
         async throwDices() {
             this.$store.commit('rollDices')
@@ -39,14 +41,11 @@ export default {
 
             let {userColor} = this
             userColor = (userColor === 'white') ? 'black' : 'white'
-            // const {dice} = this.startDice
-            // console.log(dice)
             await this.$store.dispatch({type: 'diceRes', userColor })
             setTimeout(() => {
                 this.$store.commit('unrollDices')
             },1000)
 
-            // this.alreadyThrown = true
             this.$socket.emit("startDiceRes", room, this.startDice.dice)
         }
     },
@@ -158,7 +157,6 @@ export default {
         border: none;
         width: 8vw;
         cursor: pointer;
-        // padding: 0 0 20px 0;
         @media (min-width: 850px) {
             font-size: 22px;
         }

@@ -44,15 +44,17 @@ export default {
         async onCellClick() {
             if (this.selectedSoldier) {
                 this.$store.commit('showNoPossibleMoves')
-                const soldierDidMove = await this.$store.dispatch({type: 'moveSoldier', targetCell: this.cell})
+                let soldierDidMove = await this.$store.dispatch({type: 'moveSoldier', targetCell: this.cell})
+                    console.log('soldierDidMove1',soldierDidMove)
                 if (soldierDidMove) {
+                    console.log('soldierDidMove2',soldierDidMove)
                     const room = 1
                     const cells = this.$store.getters.cells
                     this.$socket.emit('soldierMoved',cells,room)
+                    this.$store.commit('unselectSoldiers')
                 }
             }
-            this.$store.commit('unselectSoldiers')
-
+            // this.$store.commit('unselectSoldiers')
         },
         onSoldierClick(soldier) {
             if (soldier.selected) {

@@ -5,7 +5,8 @@
             'white': soldier.color === 'white',
             'black': soldier.color === 'black',
             'selected': soldier.selected,
-            'animated tada fast': soldier.justMoved
+            'animated fadeIn': soldier.hasMoved,
+            'animated fadeOut': soldier.isMoving
             }">
         </div>
         <div class="soldier-const" v-if="color"

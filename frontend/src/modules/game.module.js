@@ -12,6 +12,8 @@ export default ({
         winner: false,
         duringTurn: false,
         loggedInUser: {},
+        isMars: false,
+        isTurkishMars: false
     },
     mutations: {
         setLoggedInUser(state, { user }) {
@@ -62,8 +64,10 @@ export default ({
             }
             // exiting
             // var boardMap = {'22': {amount: 3, color: 'white'},'24': {amount: 2, color: 'white'},'23': {amount: 1, color: 'white'},'20': {amount: 1, color: 'white'},'19': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
-            // endgame
+            // endgame 
             // var boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
+            // endgame with mars
+            // var boardMap = {'24': {amount: 1, color: 'white'},'6': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // eaten soldiers
             // var boardMap = {'26': {amount: 2, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
 
@@ -93,6 +97,18 @@ export default ({
         },
         checkWinner(state) {
             state.winner = (gameService.isEndGame(state.cells, state.currTurn)) ? state.currTurn : false
+        },
+        checkMars(state) {
+            state.isMars = gameService.isMars(state.cells, state.currTurn)
+        },
+        setMars(state) {
+            state.isMars = true
+        },
+        checkTurkishMars(state) {
+            state.isTurkishMars = gameService.isTurkishMars(state.cells, state.currTurn)
+        },
+        setTurkishMars(state) {
+            state.isTurkishMars = true
         },
         startTurn(state) {
             state.duringTurn = true
@@ -178,7 +194,7 @@ export default ({
                 commit('calcPossibleMoves')
             }
         },
-        moveSoldier({ state, commit }, { targetCell }) {
+        async moveSoldier({ state, commit }, { targetCell }) {
             const isPossibleMove = gameService.isPossibleMove(targetCell.id, state.selectedSoldier)
             if (!isPossibleMove) return false
             const srcCell = gameService.getCellBySoldierId(state.cells, state.selectedSoldier.id)
@@ -196,30 +212,48 @@ export default ({
                 middleCell.soldiers.push(eatenSoldier)
                 gameService.updateCell(middleCell)
             }
+            state.selectedSoldier.isMoving = true
 
-            srcCell.soldiers.pop()
-            targetCell.soldiers.push(state.selectedSoldier)
-            state.selectedSoldier.justMoved = true
-            commit({ type: 'updateDices', srcCell, targetCell })
-            commit('calcPossibleMoves')
+            let promise = new Promise(res => {
+             setTimeout(() => {
+                srcCell.soldiers.pop()
+                state.selectedSoldier.isMoving = false
+                targetCell.soldiers.push(state.selectedSoldier)
+                state.selectedSoldier.hasMoved = true
+                
+                commit({ type: 'updateDices', srcCell, targetCell })
+                commit('calcPossibleMoves')
+                
+                commit('checkWinner')
+                if (state.winner) {
+                    commit('checkMars')
+                    if (state.isMars) {
+                        commit('checkTurkishMars')
+                    }
+                    return Promise.resolve(true)
+                }
 
-            commit('checkWinner')
-            if (state.winner) return
-
-            if (!state.possibleMoves.length) {
-                commit('endTurn')
-            }
-            return true
+                if (!state.possibleMoves.length) {
+                    commit('endTurn')
+                }
+                res(true)
+            },200)
+        })
+        console.log('return res')
+        await promise
+        return Promise.resolve(promise)
         },
     },
     getters: {
         cells: state => state.cells,
         dices: state => state.dices,
+        isMars: state => state.isMars,
         winner: state => state.winner,
         currTurn: state => state.currTurn,
         duringTurn: state => state.duringTurn,
         loggedInUser: state => state.loggedInUser,
         dicesRolling: state => state.dices.rolling,
+        isTurkishMars: state => state.isTurkishMars,
         isLoggedInUser: state => !!state.loggedInUser,
         selectedSoldier: state => state.selectedSoldier,
         loggedInUserColor: state => state.loggedInUser.color,

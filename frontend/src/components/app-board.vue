@@ -18,7 +18,6 @@ import gameBoard from './game-board'
 import dicesSection from './dices-section'
 import soldier from './soldier'
 import ioClient from "socket.io-client";
-// import socketService from "@/services/socket.service.js";
 
 export default {
   name: 'appBoard',
@@ -38,6 +37,12 @@ export default {
     },
     winner() {
       return this.$store.getters.winner
+    },
+    mars() {
+      return this.$store.getters.isMars
+    },
+    turkishMars() {
+      return this.$store.getters.isTurkishMars
     }
     
   },
@@ -60,16 +65,36 @@ export default {
     },
     gameEnded(winner) {
       this.$store.commit({type: 'endGame', winner})
+    },
+    isMars() {
+      this.$store.commit('setMars')
+    },
+    isTurkishMars() {
+      this.$store.commit('setTurkishMars')
     }
+    
   },
   watch: {
     winner: function(newVal, oldVal) {
       if (newVal) {
-          const room = 1
-          const winner = newVal
-          this.$socket.emit('endGame',room,winner)
+        const room = 1
+        const winner = newVal
+        this.$socket.emit('endGame',room,winner)
+      }
+    },
+    mars: function(newVal) {
+      if (newVal) {
+        const room = 1
+        this.$socket.emit('mars',room)
+      }
+    },
+    turkishMars: function(newVal) {
+      if (newVal) {
+        const room = 1
+        this.$socket.emit('turkishMars',room)
       }
     }
+
   }
 }
 </script>

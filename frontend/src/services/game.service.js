@@ -17,10 +17,15 @@ export default {
     updateDices,
     getMiddleCell,
     isEndGame,
+    isMars,
+    isTurkishMars,
     nullDices,
     clearCells,
 }
-
+const whiteOutCellId = 0
+const blackOutCellId = 25
+const whiteEatenCellId = 26
+const blackEatenCellId = 27
 
 var soldierId = 0
 function createSoldiers(amount,color) {
@@ -40,7 +45,8 @@ function createSoldier(color) {
         isOut: false,
         selected: false,
         isLastInCell: false,
-        justMoved: false
+        hasMoved: false,
+        isMoving: false
     }
 
     return soldier;
@@ -79,7 +85,7 @@ function getCellBySoldierId(cells,soldierId) {
 }
 
 function getMiddleCell(soldierColor,cells) {
-    const middleCellId = (soldierColor === 'white')? 26 : 27
+    const middleCellId = (soldierColor === 'white')? whiteEatenCellId : blackEatenCellId
     return getCellById(cells,middleCellId)
 }
 
@@ -95,7 +101,7 @@ function updateCell(cell) {
     cell.soldiers.forEach((soldier,idx) => {
         soldier.possibleMoves = []
         soldier.isLastInCell = (idx === cell.soldiers.length - 1)
-
+        soldier.selected = false
         if (soldier.color === 'white') whiteCount++
         else if (soldier.color === 'black') blackCount++
     })
@@ -103,15 +109,9 @@ function updateCell(cell) {
     else if (blackCount > 1) cell.isHouseOf = 'black'
     else cell.isHouseOf = false
 
-    // remove after qa of eating soldiers
-    if (cell.id === 25 || cell.id === 20) {
+    if (cell.id === blackOutCellId || cell.id === whiteOutCellId) {
         cell.soldiers.forEach(soldier => {
             soldier.isOut = true
-        })
-    }
-    if (cell.id === 26 || cell.id === 27) {
-        cell.soldiers.forEach(soldier => {
-            soldier.isEaten = true
         })
     }
 }
@@ -134,7 +134,7 @@ function hasEatenSoldiers(currTurn,soldiers) {
 }
 
 function isMiddleCell(srcCell) {
-    return (srcCell.id === 26 || srcCell.id === 27)? true : false
+    return (srcCell.id === whiteEatenCellId || srcCell.id === blackEatenCellId)? true : false
 }
 
 function throwDices(dices) {
@@ -166,8 +166,8 @@ function throwDices(dices) {
 
 function updateDices(dices,srcCell,targetCell) {
     var srcCellId = srcCell.id
-    if (srcCellId === 26) srcCellId = 0
-    else if (srcCellId === 27) srcCellId = 25
+    if (srcCellId === whiteEatenCellId) srcCellId = whiteOutCellId
+    else if (srcCellId === blackEatenCellId) srcCellId = blackOutCellId
     const dist = Math.abs(srcCellId - targetCell.id)
     
     if (!dices.doubleCount) {
@@ -230,8 +230,8 @@ function getPossibleSoldiers(cells,soldiers,currTurn) {
         return soldiers.filter(soldier => soldier.color === currTurn && soldier.isLastInCell)
     } else {
         return (currTurn === 'white')? 
-        [getCellById(cells,26).soldiers[getCellById(cells,26).soldiers.length -1]] :
-        [getCellById(cells,27).soldiers[getCellById(cells,27).soldiers.length -1]]
+        [getCellById(cells,26).soldiers[getCellById(cells,whiteEatenCellId).soldiers.length -1]] :
+        [getCellById(cells,blackEatenCellId).soldiers[getCellById(cells,blackEatenCellId).soldiers.length -1]]
     }
 }
 
@@ -239,8 +239,8 @@ function calcSoldierMoves(dices,srcCell,direction) {
     var moves = []
     var srcCellId = srcCell.id
     var isGettingOut = true
-    if (srcCellId === 26) srcCellId = 0
-    else if (srcCellId === 27) srcCellId = 25
+    if (srcCellId === whiteEatenCellId) srcCellId = whiteOutCellId
+    else if (srcCellId === blackEatenCellId) srcCellId = blackOutCellId
     else isGettingOut = false
     if (!dices.doubleCount) {
         if (!dices.num1 && !dices.num2) {
@@ -268,8 +268,8 @@ function calcSoldierMoves(dices,srcCell,direction) {
 // when dice is null soldiers get their srcCell as possibleMove
 function removeSrcCellMoves(srcCell,moves) {
     var srcCellId = srcCell.id
-    if (srcCell.id === 27) srcCellId = 25
-    else if (srcCell.id === 26) srcCellId = 0
+    if (srcCell.id === blackEatenCellId) srcCellId = blackOutCellId
+    else if (srcCell.id === whiteEatenCellId) srcCellId = whiteOutCellId
     return moves.map(move => (move === srcCellId)? null : move)
 }
 // remove moves that step on enemy's houses
@@ -300,11 +300,11 @@ function removeBasedOnHousesMoves(dices,moves){
 // remove unneeded moves outside of board
 function removeBasedOnOutsideMoves(moves) {
     moves = moves.map(move => {
-        if (move > 25) return 25 
-        if (move < 0) return 0
+        if (move > blackOutCellId) return blackOutCellId
+        if (move < whiteOutCellId) return whiteOutCellId
         return move
     })
-    const idx = moves.findIndex(move => move === 25 || move === 0)
+    const idx = moves.findIndex(move => move === blackOutCellId || move === whiteOutCellId)
     
     if (idx !== -1) {
         moves = moves.map((move,i) => (i > idx)? null : move)
@@ -314,9 +314,9 @@ function removeBasedOnOutsideMoves(moves) {
 // remove all moves outside of board when exiting is not allowed
 function removeExitMoves(moves,currTurn) {
     if (currTurn === 'white') {
-        return moves.map(move => (move >= 25 || move === 0)? null : move)
+        return moves.map(move => (move >= blackOutCellId || move === whiteOutCellId)? null : move)
     } else {
-        return moves.map(move => (move === 0 || move >= 25)? null : move)
+        return moves.map(move => (move === whiteOutCellId || move >= blackOutCellId)? null : move)
     }
 }
 
@@ -341,8 +341,21 @@ function canExit(cells,currTurn){
 }
 
 function isEndGame(cells,currTurn) {
-    var count = (currTurn === 'white')? cells[25].soldiers.length : cells[0].soldiers.length
+    var count = (currTurn === 'white')? cells[blackOutCellId].soldiers.length : cells[whiteOutCellId].soldiers.length
     return (count === 15)? true : false
+}
+
+function isMars(cells,currTurn) {
+    return (currTurn === 'white')? 
+    (!cells[whiteOutCellId].soldiers.length) :
+    (!cells[blackOutCellId].soldiers.length)  
+}
+
+function isTurkishMars(cells,currTurn) {
+    let count = 0
+    cells = (currTurn === 'white')? cells.slice(0,7): cells.slice(19,26)
+    cells.forEach(cell => count += cell.soldiers.length) 
+    return count < 15
 }
 
 function clearCells(cells) {

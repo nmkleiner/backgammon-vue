@@ -36,5 +36,4 @@ export default ({
         startDice: state => state.startDice,
     }
 })
-// curr prob: throwing dice but it's value stays the same
 
