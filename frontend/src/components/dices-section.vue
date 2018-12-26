@@ -3,8 +3,8 @@
 
 
 
-        <button v-if="showDiceBtn" @click.stop="decideWhoStarts" class="animated rubberBand infinite bold capitalize">click to roll dice</button>
-        <button v-if="showDicesBtn" @click.stop="throwDices" class="animated flash bold capitalize">click to roll dices</button>
+        <button v-if="showDiceBtn" @click.stop="decideWhoStarts" class="animated bold capitalize">roll</button>
+        <button v-if="showDicesBtn" @click.stop="throwDices" class="animated bold capitalize">roll</button>
         
 
 
