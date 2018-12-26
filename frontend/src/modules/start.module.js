@@ -7,7 +7,8 @@ export default ({
             dice: 6,
             white: null,
             black: null
-        }
+        },
+        choosingColors: true,
     },
     mutations: {
         gameOn(state) {
@@ -21,7 +22,11 @@ export default ({
         },
         nullDice(state) {
             state.startDice.white = state.startDice.black = null
+        },
+        setChoosingColors(state) {
+            state.choosingColors = false
         }
+        
     },
     actions: {
         diceRes({commit}, { dice, userColor }) {
@@ -34,6 +39,7 @@ export default ({
     getters: {
         isGameOn: state => state.isGameOn,
         startDice: state => state.startDice,
+        choosingColors: state => state.choosingColors,
     }
 })
 

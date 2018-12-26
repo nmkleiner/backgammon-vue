@@ -237,9 +237,8 @@ export default ({
                     commit('endTurn')
                 }
                 res(true)
-            },200)
+            },300)
         })
-        console.log('return res')
         await promise
         return Promise.resolve(promise)
         },

@@ -1,11 +1,12 @@
 .app-board{
-    background-color: $board-blue;
+    background-color: darken(rgba(228, 191, 142, 0.7),10%);
+    // opacity: .7;
     display: flex;
     flex-direction: column;
     
     @media (min-width: 850px) {
         padding: 0 5vw 0 0;
-        margin-top: 15px;
+        margin-top: 80px;
     }
     
     header,footer {
@@ -24,6 +25,21 @@
             .win{
                 transform: rotateX(180deg);
                 top: 35vh;
+            }
+            .action-btns {
+                transform: rotateX(180deg);
+                top: calc(57vh - 60px);
+                @media (min-width: 850px) {
+                    top: calc(39vh - 5vw);
+                }
+            }
+            .dices-section{
+                transform: rotateX(180deg);
+                top: calc(57vh - 5vw - 15px);
+                @media (min-width: 850px) {
+                    top: calc(39vh - 5vw);
+                }
+                
             }
         }
         .top-row{
@@ -64,6 +80,43 @@
             color: white;
             background-color: black;
             font-size: 2.3rem;
+        }
+        .dices-section {
+            position: absolute;
+            top: calc(60vh - 5vw - 15px);
+            @media (min-width: 850px) {
+                top: calc(46vh - 5vw);
+            }
+            left: 20vw;
+        }
+        .action-btns {
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            top: calc(60vh - 60px);
+            font-size: 2rem;
+            z-index: 2;
+            left: calc(50vw + 3px);
+            width: 39vw;
+            @media (min-width: 850px) {
+                left: calc(45vw + 3px);
+                width: 36vw;
+                top: calc(46vh - 5vw);
+                font-size: 1.5rem;
+            }
+            button {
+                padding: 15px;
+                background-color: rgb(31, 185, 31);
+                font-size: 1.5rem;
+                border: 1px solid rgb(84, 245, 84);
+                border-radius: 5px;
+                @media (min-width: 850px) {
+                    height: 6vh;
+                    width: 10vw;
+                    font-size: 2.5rem;
+        
+                }
+            }    
         }
     }
 
@@ -120,8 +173,8 @@
         width: calc(12vw - 29px);
         height: 50vh;
         transition: 0.3s;
-        &:hover, &.triangle-green {
-            background-color: darken($board-blue, 50%);
+        &.triangle-green {
+            background-color: darken(burlywood, 30%);
         }
         
     }
@@ -149,7 +202,7 @@
     }
 
     .triangle-green {
-        border-bottom-color: teal;
-        border-top-color: teal;
+        border-bottom-color: rgb(60, 206, 47);
+        border-top-color: rgb(60, 206, 47);
     }
 }

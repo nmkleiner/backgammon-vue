@@ -1,5 +1,5 @@
 <template>
-    <section class="game-board" :class="{'flipped-board': userColor === 'black'}" @click="unselect">
+    <section class="game-board" :class="{'flipped-board': userColor === 'black', 'hidden': choosingColors}" @click="unselect">
         <div class="flex flex-column">
 
             <div class="board-row top-row flex space-between">
@@ -11,6 +11,8 @@
             </div>
             </div>
             
+            <action-btns></action-btns>
+            <dices-section></dices-section>
             <span v-if="winner && !mars" class="animated flash win capitalize">{{isWinner? 'you won!': 'you lost!'}}</span>
             <span v-if="winner && mars && !turkishMars" class="animated flash win capitalize">{{isWinner? 'you won! mars!!': 'you lost! mars!!'}}</span>
             <span v-if="winner && mars && turkishMars" class="animated flash win capitalize">{{isWinner? 'you won! turkish mars!!': 'you lost! turkish mars!!'}}</span>
@@ -28,12 +30,18 @@
 
 <script>
 import gameCell from './game-cell.vue'
+import actionBtns from './action-btns'
+import dicesSection from './dices-section'
 export default {
     props: {
         cells: Array
     },
     components: {
-        gameCell
+        gameCell,
+        dicesSection,
+        actionBtns
+    },
+    created() {
     },
     methods: {
         unselect() {
@@ -56,6 +64,9 @@ export default {
         },
         turkishMars() {
             return this.$store.getters.isTurkishMars
+        },
+        choosingColors() {
+            return this.$store.getters.choosingColors
         }
     }
 }

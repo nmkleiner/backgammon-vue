@@ -27,7 +27,8 @@ const blackOutCellId = 25
 const whiteEatenCellId = 26
 const blackEatenCellId = 27
 
-var soldierId = 0
+
+
 function createSoldiers(amount,color) {
     var res = []
     for (var i = 0; i < amount; i++) {
@@ -35,7 +36,8 @@ function createSoldiers(amount,color) {
     }   
     return res
 }
-
+    
+var soldierId = 0
 function createSoldier(color) {
     var soldier = {
         color: color,
@@ -160,9 +162,6 @@ function throwDices(dices) {
     }
     return dices
 }
-
-
-
 
 function updateDices(dices,srcCell,targetCell) {
     var srcCellId = srcCell.id

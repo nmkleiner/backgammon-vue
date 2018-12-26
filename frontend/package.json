@@ -8,6 +8,7 @@
   },
   "homepage": "https://github.com/myusername/my-app",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.6.3",
     "animate.css": "^3.7.0",
     "axios": "^0.18.0",
     "element-ui": "^2.4.11",

@@ -1,30 +1,31 @@
 <template>
   <section class="app-board">
-    <header class="flex justify-center align-center p-10">
+    <!-- <header class="flex justify-center align-center p-10">
       <h2 class="mx-20" :style="{'color': currTurn}">Current Turn</h2>
       <soldier :color="currTurn"></soldier>
-    </header>
+    </header> -->
     <div class="flex flex-row">
       <game-board v-if="cells" :cells="cells"></game-board>
-      <dices-section></dices-section>
+      <info-section></info-section>
     </div>
-    <footer>
-    </footer>
+    <!-- <footer>
+    </footer> -->
   </section>
 </template>
 
 <script>
 import gameBoard from './game-board'
-import dicesSection from './dices-section'
+import infoSection from './info-section'
 import soldier from './soldier'
 import ioClient from "socket.io-client";
+
 
 export default {
   name: 'appBoard',
   components: {
     gameBoard,
-    dicesSection,
-    soldier
+    soldier,
+    infoSection,
   },
   methods: {
   },
@@ -50,6 +51,7 @@ export default {
     this.$store.dispatch({type: 'setBoard'})
     const room = 1
     this.$socket.emit("gameJoined", room);
+    this.$store.commit('setChoosingColors')
     
   },
   sockets: {
@@ -59,6 +61,7 @@ export default {
     },
     someoneAlreadyHere() {
       this.$store.commit('changeMyColor')
+      // this.$store.commit('setChoosingColors')
     },
     movedSoldier(cells) {
       this.$store.dispatch({type: 'setBoard', cells})
