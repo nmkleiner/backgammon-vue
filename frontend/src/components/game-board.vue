@@ -10,12 +10,16 @@
                 <game-cell v-if="cells" v-for="idx in 6" :cell="cells[idx+6]" :key="idx+6"></game-cell>
             </div>
             </div>
-            
-            <action-btns></action-btns>
-            <dices-section></dices-section>
-            <span v-if="winner && !mars" class="animated flash win capitalize">{{isWinner? 'you won!': 'you lost!'}}</span>
-            <span v-if="winner && mars && !turkishMars" class="animated flash win capitalize">{{isWinner? 'you won! mars!!': 'you lost! mars!!'}}</span>
-            <span v-if="winner && mars && turkishMars" class="animated flash win capitalize">{{isWinner? 'you won! turkish mars!!': 'you lost! turkish mars!!'}}</span>
+            <div class="board-wrapper left-side-wrapper flex space-around align-center">
+                <span v-if="winner && !mars" class="animated flash win capitalize">{{isWinner? 'you won!': 'you lost!'}}</span>
+                <span v-if="winner && mars && !turkishMars" class="animated flash win capitalize">{{isWinner? 'you won! mars!!': 'you lost! mars!!'}}</span>
+                <span v-if="winner && mars && turkishMars" class="animated flash win capitalize">{{isWinner? 'you won! turkish mars!!': 'you lost! turkish mars!!'}}</span>
+                <dices-section></dices-section>
+            </div>
+
+            <div class=" board-wrapper right-side-wrapper flex space-around align-center">
+                <action-btns></action-btns>
+            </div>
             <div class="board-row bot-row flex space-between">
             <div class="board-cells flex space-between">
                 <game-cell v-if="cells" v-for="idx in 6" :cell="cells[idx + 12]" :key="idx + 12"></game-cell>

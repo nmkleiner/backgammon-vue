@@ -23,12 +23,16 @@ export default {
     data() {
         return {
             loading: true,
+            diceSound: ''
         }
     },
     created() {
         setTimeout(() => {
             this.loading = false
         },1000)
+    },
+    mounted() {
+        this.diceSound = new Audio(require('../../public/audio/cubes.mp3'))
     },
     computed: {
         showDicesBtn() {
@@ -65,6 +69,7 @@ export default {
 },
 methods: {
     async throwDices() {
+        this.diceSound.play()
         this.$store.commit('rollDices')
         const room = 1
         this.$socket.emit("rollDices", room)
@@ -72,6 +77,7 @@ methods: {
         this.$socket.emit("dicesRes", room, this.dices)
     },
     async throwDice() {
+        this.diceSound.play()
         this.$store.commit('rollDices')
         const room = 1
         this.$socket.emit("rollDices", room)

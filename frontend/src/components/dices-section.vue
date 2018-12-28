@@ -1,9 +1,9 @@
 <template>
-    <section class="dices-section flex">
-        <template v-if="isGameOn && !winner">
+    <section class="dices-section flex justify-center">
+        <div class="two-dices-wrapper flex space-between" v-if="isGameOn && !winner">
             <dice :rolling="rolling" :used="!dices.num1 && !!dices.num2" :num="dices.num1ToShow" />
             <dice :rolling="rolling" :used="!dices.num2 && !!dices.num1 && dices.doubleCount <= 1" :num="dices.num2ToShow" />
-        </template>
+        </div>
         <dice v-if="!isGameOn" :rolling="rolling" :num="startDice.dice"></dice>
     </section>
 </template>
@@ -104,7 +104,9 @@ export default {
     background-color: transparent;
     display: flex;
     width: 12vw;
-    justify-content: space-between; 
+    .two-dices-wrapper {
+        width: 100%;
+    }
 }
 </style>
 
