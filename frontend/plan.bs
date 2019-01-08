@@ -11,19 +11,15 @@ dices when double {num1:num num2:null doubleCount:4,3,2,1} => make num1 null whe
 possibleMoves [{soldierId: moves: [1,2,3,4]},{},...]
 
 
-sockets:
 
-b-001 
+TODO: 
 
-- then i can add animate css to show to player what other player does.
-
-- moving soldier - send the soldier that was moved instead of the whole board
-then in both boards, soldier will be popped and pushed instead of board replacement.
-
-
+branch 003
 
 -session: save usercolor in sessionstorage
 or find better solution (why did i wanted that?)
+in case someone refreshes, or disconnects and reconnects
+
 
 how to do loading: have this.loading that is usually false
 ,make it true in function that loads something, then false after loading.

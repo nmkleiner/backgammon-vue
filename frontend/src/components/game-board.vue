@@ -14,7 +14,7 @@
                 <span v-if="winner && !mars" class="animated flash win capitalize">{{isWinner? 'you won!': 'you lost!'}}</span>
                 <span v-if="winner && mars && !turkishMars" class="animated flash win capitalize">{{isWinner? 'you won! mars!!': 'you lost! mars!!'}}</span>
                 <span v-if="winner && mars && turkishMars" class="animated flash win capitalize">{{isWinner? 'you won! turkish mars!!': 'you lost! turkish mars!!'}}</span>
-                <dices-section></dices-section>
+                <dices-section v-if="!winner"></dices-section>
             </div>
 
             <div class=" board-wrapper right-side-wrapper flex space-around align-center">

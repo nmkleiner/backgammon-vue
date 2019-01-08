@@ -1,15 +1,10 @@
 <template>
   <section class="app-board">
-    <!-- <header class="flex justify-center align-center p-10">
-      <h2 class="mx-20" :style="{'color': currTurn}">Current Turn</h2>
-      <soldier :color="currTurn"></soldier>
-    </header> -->
-    <div class="flex flex-row">
+    <MoonLoader v-if="loading"></MoonLoader>
+    <div v-if="!loading" class="flex flex-row">
       <game-board v-if="cells" :cells="cells"></game-board>
       <info-section></info-section>
     </div>
-    <!-- <footer>
-    </footer> -->
   </section>
 </template>
 
@@ -18,7 +13,7 @@ import gameBoard from './game-board'
 import infoSection from './info-section'
 import soldier from './soldier'
 import ioClient from "socket.io-client";
-
+import { MoonLoader } from '@saeris/vue-spinners'
 
 export default {
   name: 'appBoard',
@@ -26,6 +21,7 @@ export default {
     gameBoard,
     soldier,
     infoSection,
+    MoonLoader
   },
   methods: {
   },
@@ -47,6 +43,14 @@ export default {
     }
     
   },
+  data() {
+    return {
+      loading: true
+    }
+  },
+  mounted() {
+    this.loading = false
+  },
   created() {
     this.$store.dispatch({type: 'setBoard'})
     const room = 1
@@ -58,13 +62,14 @@ export default {
     userJoined() {
       const room = 1
       this.$socket.emit("alreadyHere", room);
+      this.$store.commit('setTwoPlayersConnected')
     },
     someoneAlreadyHere() {
       this.$store.commit('changeMyColor')
-      // this.$store.commit('setChoosingColors')
+      this.$store.commit('setTwoPlayersConnected')
     },
-    movedSoldier(cells) {
-      this.$store.dispatch({type: 'setBoard', cells})
+    movedSoldier({cells,isEating}) {
+      this.$store.dispatch({type: 'setBoard', cells, isEating})
     },
     gameEnded(winner) {
       this.$store.commit({type: 'endGame', winner})

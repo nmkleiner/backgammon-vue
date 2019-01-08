@@ -7,7 +7,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import socketio from 'socket.io'
 import VueSocketIO from 'vue-socket.io'
 import Vuex from 'vuex'
- 
+import { VueSpinners } from '@saeris/vue-spinners'
+
 // import './registerServiceWorker'
 import './assets/scss/main.scss'
 
@@ -17,8 +18,8 @@ if (process.env.NODE_ENV !== "development") {
 }
 
 Vue.use(Vuex)
+Vue.use(VueSpinners)
 Vue.use(ElementUI);
-// Vue.use(VueSocketIO)
 Vue.use(new VueSocketIO({
     debug: true,
     connection: socketURL,
@@ -32,7 +33,6 @@ Vue.use(new VueSocketIO({
 Vue.config.productionTip = false
 Vue.crossOrigin = 'true'
 
-// Vue.use(BootstrapVue);
 new Vue({
   router,
   store,

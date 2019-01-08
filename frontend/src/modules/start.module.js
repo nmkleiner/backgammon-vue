@@ -9,6 +9,7 @@ export default ({
             black: null
         },
         choosingColors: true,
+        playersConnected: 1
     },
     mutations: {
         gameOn(state) {
@@ -25,6 +26,9 @@ export default ({
         },
         setChoosingColors(state) {
             state.choosingColors = false
+        },
+        setTwoPlayersConnected(state) {
+            state.playersConnected = 2
         }
         
     },
@@ -40,6 +44,8 @@ export default ({
         isGameOn: state => state.isGameOn,
         startDice: state => state.startDice,
         choosingColors: state => state.choosingColors,
+        playersConnected: state => state.playersConnected,
+        
     }
 })
 

@@ -194,25 +194,17 @@ function nullDices(dices) {
 
 function calcPossibleMoves(dices,currTurn,cells,soldiers) {
     soldiers = getPossibleSoldiers(cells,soldiers,currTurn)    
-    // console.log('soldiers',soldiers)
     var direction = (currTurn === 'white')? 1 : -1
-
     var possibleMoves = []
     soldiers.forEach(soldier => {
         const srcCell = getCellBySoldierId(cells,soldier.id)
         var moves = calcSoldierMoves(dices,srcCell,direction)
-        // console.log(1,moves)
         moves = removeSrcCellMoves(srcCell,moves)
-        // console.log(2,moves)
         moves = removeHousesMoves(cells,moves,currTurn)
-        // console.log(3,moves)
         moves = removeBasedOnHousesMoves(dices,moves)
-        // console.log(4,moves)
         moves = removeBasedOnOutsideMoves(moves)
-        // console.log(5,moves)
         if (!canExit(cells,currTurn)) {
             moves = removeExitMoves(moves,currTurn)
-            // console.log(6,moves)
         }
         soldier.possibleMoves = moves
         possibleMoves.push({soldierId: soldier.id, moves})

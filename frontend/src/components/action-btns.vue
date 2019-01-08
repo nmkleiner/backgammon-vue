@@ -8,6 +8,12 @@
             roll
         </button>
         <button 
+            v-if="showWaitBtn" 
+            :class="{'lightSpeedIn':showWaitBtn, 'fadeOutUp': !showWaitBtn}" 
+            class="animated bold capitalize wait">
+            wait..<span class="animated flash slower infinite">.</span>
+        </button>
+        <button 
             v-if="showDicesBtn" 
             :class="{'lightSpeedIn':showDicesBtn, 'fadeOutUp': !showDicesBtn}" 
             @click.stop="throwDices" 
@@ -19,20 +25,19 @@
 
 <script>
 import startGameService from '../services/startGame.service.js';
+import soundService from '../services/sound.service.js';
 export default {
     data() {
         return {
             loading: true,
-            diceSound: ''
+            diceSound: '',
+            
         }
     },
     created() {
         setTimeout(() => {
             this.loading = false
         },1000)
-    },
-    mounted() {
-        this.diceSound = new Audio(require('../../public/audio/cubes.mp3'))
     },
     computed: {
         showDicesBtn() {
@@ -43,8 +48,17 @@ export default {
             (
                 !this.startDice.white && this.userColor === 'white' ||
                 this.startDice.white && !this.startDice.black && this.userColor === 'black'
-              )
+              ) && !this.waitingForUser
         },
+        showWaitBtn() {
+            return  !this.isGameOn && 
+            (
+                !this.startDice.white && this.userColor === 'white' ||
+                this.startDice.white && !this.startDice.black && this.userColor === 'black'
+              ) && this.waitingForUser
+        },
+        // v-if="showDiceBtn && waitingForUser" 
+
         dices() {
             return this.$store.getters.dices
         },
@@ -65,11 +79,16 @@ export default {
         },
         startDice() {
             return this.$store.getters.startDice
+        },
+        playersConnected() {
+            return this.$store.getters.playersConnected
+        },
+        waitingForUser() {
+            return !(this.playersConnected === 2)
         }
 },
 methods: {
     async throwDices() {
-        this.diceSound.play()
         this.$store.commit('rollDices')
         const room = 1
         this.$socket.emit("rollDices", room)
@@ -77,7 +96,6 @@ methods: {
         this.$socket.emit("dicesRes", room, this.dices)
     },
     async throwDice() {
-        this.diceSound.play()
         this.$store.commit('rollDices')
         const room = 1
         this.$socket.emit("rollDices", room)

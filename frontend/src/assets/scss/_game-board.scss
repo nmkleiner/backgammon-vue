@@ -1,6 +1,6 @@
 .app-board{
     background-color: darken(rgba(228, 191, 142, 0.7),10%);
-    // opacity: .7;
+    position: relative;
     display: flex;
     flex-direction: column;
     
@@ -71,36 +71,42 @@
             font-size: 2.3rem;
         }
         .board-wrapper {
+            // border:1px white solid;
             position: absolute;
             width: 38.4vw;
-            height: 100vh;
+            top: 45vh;
+            z-index: 2;
             @media (min-width: 850px) {
                 width: 36vw;
-                height: calc(68vh + 40px);    
+                top: 33vh;
+                height: fit-content;    
             }
         }
         .right-side-wrapper {
+            
             left: calc(12vw + 38.4vw + 3vw - 29px + 10px);
             @media (min-width: 850px) {
                 left: calc(5vw + 36vw + 3vw + 20px);
             }
             .action-btns {
-                font-size: 2rem;
-                z-index: 2;
                 @media (min-width: 850px) {
                     font-size: 1.5rem;
                 }
                 button {
-                    padding: 15px;
+                    padding: 0 15px;
+                    
+                    height: 5vw;
                     background-color: rgb(31, 185, 31);
-                    font-size: 1.5rem;
                     border: 1px solid rgb(84, 245, 84);
+                    font-size: 2.5vw;
                     border-radius: 5px;
                     @media (min-width: 850px) {
-                        height: 5rem;
                         width: 10rem;
-                        font-size: 2.5rem;
-            
+                    }
+                    &.wait {
+                        background-color: rgb(169, 172, 169);
+                        border: 1px solid rgb(180, 184, 180);
+
                     }
                 }    
             }
@@ -117,9 +123,11 @@
 
 .game-cell {
     background-color: transparent;
+    // border:1px white solid;
     flex-wrap: wrap;
     width: 6.4vw;
     height: calc(50vh);
+    z-index: 1;
     @media (min-width: 850px) {
         width: 6vw;
         height: 34vh;

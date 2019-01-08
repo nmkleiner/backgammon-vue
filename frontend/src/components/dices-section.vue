@@ -1,6 +1,6 @@
 <template>
     <section class="dices-section flex justify-center">
-        <div class="two-dices-wrapper flex space-between" v-if="isGameOn && !winner">
+        <div class="two-dices-wrapper flex space-between" v-if="isGameOn">
             <dice :rolling="rolling" :used="!dices.num1 && !!dices.num2" :num="dices.num1ToShow" />
             <dice :rolling="rolling" :used="!dices.num2 && !!dices.num1 && dices.doubleCount <= 1" :num="dices.num2ToShow" />
         </div>

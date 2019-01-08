@@ -1,5 +1,6 @@
 import gameService from '@/services/game.service.js'
 import userService from '@/services/user.service.js'
+import soundService from '@/services/sound.service.js'
 
 export default ({
     state: {
@@ -131,6 +132,7 @@ export default ({
             gameService.updateCells(state.cells)
         },
         rollDices(state) {
+            soundService.play('dice')
             state.dices.rolling = true
         },
         unrollDices(state) {
@@ -182,7 +184,7 @@ export default ({
             commit('logOutUser');
             return Promise.resolve();
         },
-        setBoard({ commit }, { cells }) {
+        setBoard({ commit }, { cells, isEating }) {
             if (!cells) {
                 commit('setCells')
                 commit({ type: 'setSoldiers' })
@@ -190,6 +192,8 @@ export default ({
             else {
                 commit('clearBoard')
                 commit({ type: 'setNewSoldiers', cells })
+                let sound = !isEating? 'click' : 'eat'
+                soundService.play(sound)
                 commit('updateCells')
                 commit('calcPossibleMoves')
             }
@@ -203,9 +207,10 @@ export default ({
             if (isMiddleCell) {
                 commit('selectedSoldierNotEaten')
             }
-
-            const IsEating = gameService.checkIsEating(targetCell, state.currTurn)
-            if (IsEating) {
+            
+            const isEating = gameService.checkIsEating(targetCell, state.currTurn)
+            let sound = !isEating? 'click' : 'eat'
+            if (isEating) {
                 const eatenSoldier = targetCell.soldiers.pop()
                 eatenSoldier.isEaten = true
                 const middleCell = gameService.getMiddleCell(eatenSoldier.color, state.cells)
@@ -219,6 +224,7 @@ export default ({
                 srcCell.soldiers.pop()
                 state.selectedSoldier.isMoving = false
                 targetCell.soldiers.push(state.selectedSoldier)
+                soundService.play(sound)
                 state.selectedSoldier.hasMoved = true
                 
                 commit({ type: 'updateDices', srcCell, targetCell })
@@ -236,7 +242,7 @@ export default ({
                 if (!state.possibleMoves.length) {
                     commit('endTurn')
                 }
-                res(true)
+                res({soldierDidMove: true,isEating})
             },300)
         })
         await promise

@@ -17,6 +17,7 @@
 <script>
 import appBoard from './components/app-board.vue'
 import navBar from './components/nav-bar.vue'
+import soundService from './services/sound.service.js';
 export default {
  components: {
    navBar
@@ -33,6 +34,9 @@ export default {
   },
   created() {
     this.$store.dispatch('getLoggedInUser')
+  },
+  mounted() {
+    soundService.load()    
   },
 }
 </script>
