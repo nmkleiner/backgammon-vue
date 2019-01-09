@@ -1,7 +1,11 @@
 <template>
     <section class="info-section flex flex-column align-center">
-        <div v-if="currTurn" class="soldier-section capitalize">current turn:</div>
-        <soldier :color="currTurn"></soldier>
+        <template v-if="showScore">
+            <soldier color="white"></soldier>
+            <h3>{{score.white}}</h3>
+            <soldier color="black"></soldier>
+            <h3>{{score.black}}</h3>
+        </template>
     </section>
 </template>
 
@@ -16,6 +20,15 @@ export default {
     computed: {
         currTurn() {
             return this.$store.getters.currTurn
+        },
+        userColor() {
+            return this.$store.getters.loggedInUserColor
+        },
+        score() {
+            return this.$store.getters.score
+        },
+        showScore() {
+            return this.score.white || this.score.black
         }
     }
 }

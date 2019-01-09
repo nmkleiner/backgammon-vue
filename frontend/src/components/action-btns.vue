@@ -1,6 +1,12 @@
 <template>
     <div class="action-btns" :class="{'hidden': loading}">
         <button 
+            v-if="showWaitBtn" 
+            :class="{'lightSpeedIn':showWaitBtn, 'fadeOutUp': !showWaitBtn}" 
+            class="animated bold capitalize wait">
+            wait..<span class="animated flash slower infinite">.</span>
+        </button>
+        <button 
             v-if="showDiceBtn" 
             :class="{'lightSpeedIn':showDiceBtn, 'fadeOutUp': !showDiceBtn}" 
             @click.stop="throwDice" 
@@ -8,17 +14,24 @@
             roll
         </button>
         <button 
-            v-if="showWaitBtn" 
-            :class="{'lightSpeedIn':showWaitBtn, 'fadeOutUp': !showWaitBtn}" 
-            class="animated bold capitalize wait">
-            wait..<span class="animated flash slower infinite">.</span>
-        </button>
-        <button 
             v-if="showDicesBtn" 
             :class="{'lightSpeedIn':showDicesBtn, 'fadeOutUp': !showDicesBtn}" 
             @click.stop="throwDices" 
             class="animated bold capitalize">
-                roll
+            roll
+        </button>
+        <button 
+            v-if="winner && !isRestarting" 
+            :class="{'lightSpeedIn':winner, 'fadeOutUp': !winner}" 
+            @click.stop="restartGame" 
+            class="animated bold capitalize play-again">
+                play again
+        </button>
+        <button 
+            v-if="isRestarting" 
+            :class="{'lightSpeedIn':isRestarting, 'fadeOutUp': !isRestarting}" 
+            class="animated bold capitalize wait">
+            restarting..<span class="animated flash slower infinite">.</span>
         </button>
     </div>
 </template>
@@ -31,7 +44,7 @@ export default {
         return {
             loading: true,
             diceSound: '',
-            
+            isRestarting: false,
         }
     },
     created() {
@@ -85,20 +98,23 @@ export default {
         },
         waitingForUser() {
             return !(this.playersConnected === 2)
-        }
+        },
+        winner() {
+            return this.$store.getters.winner
+        },
 },
 methods: {
     async throwDices() {
         this.$store.commit('rollDices')
         const room = 1
-        this.$socket.emit("rollDices", room)
+        this.$socket.emit("clientRollDices", room)
         this.$store.dispatch('throwDices')
-        this.$socket.emit("dicesRes", room, this.dices)
+        this.$socket.emit("clientDicesRes", room, this.dices)
     },
     async throwDice() {
         this.$store.commit('rollDices')
         const room = 1
-        this.$socket.emit("rollDices", room)
+        this.$socket.emit("clientRollDices", room)
 
         let {userColor} = this
         userColor = (userColor === 'white') ? 'black' : 'white'
@@ -107,8 +123,17 @@ methods: {
             this.$store.commit('unrollDices')
         },1000)
 
-        this.$socket.emit("startDiceRes", room, this.startDice.dice)
+        this.$socket.emit("clientStartDiceRes", room, this.startDice.dice)
     },
+    async restartGame() {
+        this.isRestarting = true
+        setTimeout(() => {
+            this.isRestarting = false
+            this.$store.dispatch('restartGame')
+            const room = 1
+            this.$socket.emit("clientRestartGame", room)
+        },1500)
+    }
 }
 
 }

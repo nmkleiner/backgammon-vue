@@ -7,7 +7,8 @@
       <button @click="toggleModal">
         X
       </button>
-      Hi, refresh and open the app in two windows to witness the full power.
+      <br>
+      Hi, open the app in two windows to witness the full power.
     </div>
     <nav-bar></nav-bar>
     <router-view/>

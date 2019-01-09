@@ -19,23 +19,23 @@ export default {
         soldier
     },
     sockets: {
-        dicesRolling() {
+        serverDicesRolling() {
             this.$store.commit('rollDices')
         },
-        dicesUnrolling(dices) {
+        serverDicesUnrolling(dices) {
             setTimeout(() => {
                 this.$store.commit('unrollDices')
                 this.$store.commit({type: 'dicesRes', dices})
             },1000)
         },
-        async diceUnrolling(dice) {
+        async serverDiceUnrolling(dice) {
             await setTimeout(() => {
                 this.$store.commit('unrollDices')
             },1000)
             const {userColor} = this
             await this.$store.dispatch({type: 'diceRes', dice, userColor })
         },
-        turnEnded() {
+        serverTurnEnded() {
             this.$store.commit('endTurn')
         }
         
@@ -67,7 +67,7 @@ export default {
         duringTurn: function(newVal, oldVal) {
             if (newVal === false) {
                 const room = 1
-                this.$socket.emit('endTurn',room)
+                this.$socket.emit('clientEndTurn',room)
             }
         },
         'startDice.white': function(newVals, oldVals) {

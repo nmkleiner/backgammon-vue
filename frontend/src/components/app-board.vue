@@ -54,31 +54,34 @@ export default {
   created() {
     this.$store.dispatch({type: 'setBoard'})
     const room = 1
-    this.$socket.emit("gameJoined", room);
+    this.$socket.emit("clientGameJoined", room);
     this.$store.commit('setChoosingColors')
     
   },
   sockets: {
-    userJoined() {
+    serverUserJoined() {
       const room = 1
-      this.$socket.emit("alreadyHere", room);
+      this.$socket.emit("clientAlreadyHere", room);
       this.$store.commit('setTwoPlayersConnected')
     },
-    someoneAlreadyHere() {
+    serverSomeoneAlreadyHere() {
       this.$store.commit('changeMyColor')
       this.$store.commit('setTwoPlayersConnected')
     },
-    movedSoldier({cells,isEating}) {
+    serverMovedSoldier({cells,isEating}) {
       this.$store.dispatch({type: 'setBoard', cells, isEating})
     },
-    gameEnded(winner) {
+    serverGameEnded(winner) {
       this.$store.commit({type: 'endGame', winner})
     },
-    isMars() {
-      this.$store.commit('setMars')
+    serverIsMars() {
+      this.$store.commit({type: 'setMars', isMars: true})
     },
-    isTurkishMars() {
-      this.$store.commit('setTurkishMars')
+    serverIsTurkishMars() {
+      this.$store.commit({type: 'setTurkishMars', isTurkishMars: true})
+    },
+    serverRestartGame() {
+      this.$store.dispatch({type: 'restartGame', isTurkishMars: true})
     }
     
   },
@@ -87,19 +90,19 @@ export default {
       if (newVal) {
         const room = 1
         const winner = newVal
-        this.$socket.emit('endGame',room,winner)
+        this.$socket.emit('clientEndGame',room,winner)
       }
     },
     mars: function(newVal) {
       if (newVal) {
         const room = 1
-        this.$socket.emit('mars',room)
+        this.$socket.emit('clientMars',room)
       }
     },
     turkishMars: function(newVal) {
       if (newVal) {
         const room = 1
-        this.$socket.emit('turkishMars',room)
+        this.$socket.emit('clientTurkishMars',room)
       }
     }
 

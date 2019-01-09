@@ -48,11 +48,10 @@ export default {
                 if (soldierDidMove) {
                     const room = 1
                     const cells = this.$store.getters.cells
-                    this.$socket.emit('soldierMoved', cells, isEating, room)
+                    this.$socket.emit('clientSoldierMoved', cells, isEating, room)
                     this.$store.commit('unselectSoldiers')
                 }
             }
-            // this.$store.commit('unselectSoldiers')
         },
         onSoldierClick(soldier) {
             if (soldier.selected) {
@@ -67,8 +66,6 @@ export default {
                 this.$store.commit({type: 'selectSoldier',soldierId: soldier.id})
             }
         },
-        onSoldierDblClick() {
-        },
         onSoldierHover(soldier) {
             if (soldier.possibleMoves.length) {
                 this.$store.commit({type: 'showPossibleMoves',possibleMoves: soldier.possibleMoves, soldier})
@@ -77,7 +74,6 @@ export default {
         onSoldierOut() {
             if (!this.selectedSoldier) this.$store.commit('showNoPossibleMoves')
         },
-
     },
     computed: {
         selectedSoldier() {

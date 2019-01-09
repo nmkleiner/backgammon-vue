@@ -5,7 +5,7 @@ import soundService from '@/services/sound.service.js'
 export default ({
     state: {
         cells: [],
-        soldiers: [],
+        // soldiers: [],
         selectedSoldier: null,
         currTurn: null,
         dices: { num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false },
@@ -14,7 +14,8 @@ export default ({
         duringTurn: false,
         loggedInUser: {},
         isMars: false,
-        isTurkishMars: false
+        isTurkishMars: false,
+        score: {white: 0 , black: 0}
     },
     mutations: {
         setLoggedInUser(state, { user }) {
@@ -102,14 +103,14 @@ export default ({
         checkMars(state) {
             state.isMars = gameService.isMars(state.cells, state.currTurn)
         },
-        setMars(state) {
-            state.isMars = true
+        setMars(state, {isMars}) {
+            state.isMars = isMars
         },
         checkTurkishMars(state) {
             state.isTurkishMars = gameService.isTurkishMars(state.cells, state.currTurn)
         },
-        setTurkishMars(state) {
-            state.isTurkishMars = true
+        setTurkishMars(state, {isTurkishMars}) {
+            state.isTurkishMars = isTurkishMars
         },
         startTurn(state) {
             state.duringTurn = true
@@ -118,6 +119,12 @@ export default ({
             state.duringTurn = false
             state.dices = gameService.nullDices(state.dices)
             state.currTurn = gameService.passTurn(state.currTurn)
+        },
+        setDuringTurn(state) {
+            state.duringTurn = false
+        },
+        nullDices(state) {
+            state.dices = gameService.nullDices(state.dices)
         },
         endGame(state, { winner }) {
             state.winner = winner
@@ -147,6 +154,9 @@ export default ({
         },
         setCurrTurn(state, {startingColor}) {
             state.currTurn = startingColor
+        },
+        updateScore(state) {
+            state.score[state.currTurn]++
         }
     },
     actions: {
@@ -248,9 +258,21 @@ export default ({
         await promise
         return Promise.resolve(promise)
         },
+        restartGame({commit}) {
+            commit({type: 'setMars' , isMars: false})
+            commit({type: 'setTurkishMars' , isTurkishMars: false})
+            commit({type: 'clearBoard'})
+            commit({type: 'setSoldiers'})
+            commit({type: 'nullDices'})
+            commit({type: 'calcPossibleMoves'})
+            commit({type: 'checkWinner' })
+            commit({type: 'setDuringTurn'})
+            commit({type: 'updateScore'})
+        }
     },
     getters: {
         cells: state => state.cells,
+        score: state => state.score,
         dices: state => state.dices,
         isMars: state => state.isMars,
         winner: state => state.winner,
