@@ -110,10 +110,16 @@
                             width: 20rem;
                         }
                     }
+                    &.restarting {
+                        background-color: rgb(169, 172, 169);
+                        border: 1px solid rgb(180, 184, 180);
+                        @media (min-width: 850px) {
+                            width: 20rem;
+                        }
+                    }
                     &.wait {
                         background-color: rgb(169, 172, 169);
                         border: 1px solid rgb(180, 184, 180);
-
                     }
                 }    
             }

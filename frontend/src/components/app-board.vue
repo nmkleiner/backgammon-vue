@@ -1,7 +1,6 @@
 <template>
   <section class="app-board">
-    <MoonLoader v-if="loading"></MoonLoader>
-    <div v-if="!loading" class="flex flex-row">
+    <div class="flex flex-row">
       <game-board v-if="cells" :cells="cells"></game-board>
       <info-section></info-section>
     </div>
@@ -13,7 +12,6 @@ import gameBoard from './game-board'
 import infoSection from './info-section'
 import soldier from './soldier'
 import ioClient from "socket.io-client";
-import { MoonLoader } from '@saeris/vue-spinners'
 
 export default {
   name: 'appBoard',
@@ -21,7 +19,6 @@ export default {
     gameBoard,
     soldier,
     infoSection,
-    MoonLoader
   },
   methods: {
   },
@@ -43,20 +40,11 @@ export default {
     }
     
   },
-  data() {
-    return {
-      loading: true
-    }
-  },
-  mounted() {
-    this.loading = false
-  },
   created() {
     this.$store.dispatch({type: 'setBoard'})
     const room = 1
     this.$socket.emit("clientGameJoined", room);
     this.$store.commit('setChoosingColors')
-    
   },
   sockets: {
     serverUserJoined() {

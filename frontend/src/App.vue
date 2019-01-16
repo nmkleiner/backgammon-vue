@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <button @click="toggleModal" class="animated shake">
+    <chat-cmp></chat-cmp>
+    <!-- <button @click="toggleModal" class="animated shake">
       <i class="fas fa-info-circle"></i>
-    </button>
+    </button> -->
+
     <div class="modal animated" :class="{'hidden': !isOpenModal, 'bounce': isOpenModal}">
       <button @click="toggleModal">
         X
@@ -10,7 +12,8 @@
       <br>
       Hi, open the app in two windows to witness the full power.
     </div>
-    <nav-bar></nav-bar>
+
+    <!-- <nav-bar></nav-bar> -->
     <router-view/>
   </div>
 </template>
@@ -18,10 +21,13 @@
 <script>
 import appBoard from './components/app-board.vue'
 import navBar from './components/nav-bar.vue'
+import chatCmp from './components/chat-cmp'
 import soundService from './services/sound.service.js';
+
 export default {
  components: {
-   navBar
+   navBar,
+   chatCmp
   },
   data() {
     return {

@@ -30,7 +30,7 @@
         <button 
             v-if="isRestarting" 
             :class="{'lightSpeedIn':isRestarting, 'fadeOutUp': !isRestarting}" 
-            class="animated bold capitalize wait">
+            class="animated bold capitalize restarting">
             restarting..<span class="animated flash slower infinite">.</span>
         </button>
     </div>
