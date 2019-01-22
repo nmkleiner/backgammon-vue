@@ -26,12 +26,11 @@ how to do loading: have this.loading that is usually false
 then make something that renders when loading and make everything else not render.
 
 branch 004
-
-chat component
--copy from musicgroups
--make it look much better
--design:
--desktop can be open to the side
--mobile will be opened with button and cover whole screen
--cool animation
--great colors
+v-toggle chat btn will become x btn when open
+v-will show also when focus
+v-will be ok in mobile when focus
+v-soldiers in middle cell will go to center
+v-fix win count location in mobile
+v-move soldier sound played twice
+v-כשמזיזים חייל: זה שמזיז לא צריך את כל ההבהובים האלה
+v-זה שצופה צריך יותר הבהובים, גם כשהחייל נוחת how can this be done?

@@ -1,13 +1,24 @@
 <template>
-  <div class="chat-cmp">
-    <button class="open-btn" @click="isChatOpen = !isChatOpen">
-      <i class="far fa-comments"></i>
-    </button>
-    <div class="conversation animated" 
-      :class="{'hidden': loading,'slideOutRight': isChatOpen, 'slideInRight': !isChatOpen}"
-    >
-      <div class="empty"></div>
-      <div class="conversation-container" ref="conversationRef">
+  <section class="chat-cmp">
+    <div class="btn-wrapper">
+      <button class="open-btn" @click="toggleChat">
+        <i class="far fa-times-circle" v-if="isChatOpen"></i>
+        <i class="far fa-comments" v-else></i>
+      </button>
+      <div class="msg-notification" v-if="showNotification && !isChatOpen">
+        <i class="fas fa-envelope"></i>
+      </div>
+    </div>
+    <div 
+      class="conversation animated" 
+      :class="{'hidden': loading,'slideOutRight': !isChatOpen, 'slideInRight': isChatOpen}"
+    > 
+      <div :class="{'input-focus': isInputFocus}" class="empty"></div>
+      <div 
+        :class="{'input-focus': isInputFocus}" 
+        class="conversation-container" 
+        ref="conversationRef"
+      >
         <div v-for="(msg, idx) in msgs" :key="idx">
           <div
             class="container round"
@@ -23,23 +34,27 @@
         </div>
       </div>
 
-      <form class="conversation-compose flex space-between">
+      <form :class="{'input-focus': isInputFocus}" class="conversation-compose flex align-center">
         <input
-          type="text"
           v-if="!hasNickname"
           v-model="nickname"
+          @focus="isInputFocus = true"
+          @blur="isInputFocus = false"
           class="input-msg"
           placeholder="Choose nickname"
+          autocomplete="off"
         >
         <textarea
           v-else
           v-model="newMsg.txt"
+          @focus="isInputFocus = true"
+          @blur="isInputFocus = false"
           class="input-msg"
           name="input"
           placeholder="Type a message"
           autocomplete="off"
           autofocus
-        ></textarea>
+        />
         <button class="send-btn" v-if="!hasNickname" @click.prevent="enterNickname">
           <i class="far fa-comment"></i>
         </button>
@@ -49,12 +64,13 @@
         </button>
       </form>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
 import ioClient from "socket.io-client";
 import msgService from "../services/msg.service.js";
+import soundService from "../services/sound.service.js"
 import soldier from "./soldier";
 export default {
   components: {
@@ -67,11 +83,17 @@ export default {
       hasNickname: false,
       newMsg: null,
       typeMsg: "",
-      isChatOpen: true,
-      loading: true
+      isChatOpen: false,
+      loading: true,
+      isInputFocus: false,
+      showNotification: false
     };
   },
   methods: {
+    toggleChat() {
+      this.isChatOpen = !this.isChatOpen;
+      this.showNotification = false;
+    },
     send() {
       if (!this.newMsg.txt) return;
       this.$socket.emit("assignMsg", {
@@ -111,11 +133,9 @@ export default {
   },
   sockets: {
     renderMsg(msg) {
-      this.scrollIntoView();
+      soundService.play('msg')
+      this.showNotification = true
       this.msgs.push(msg);
-      this.$nextTick(() => {
-        this.scrollToEnd();
-      });
     }
   }
 };
@@ -123,23 +143,35 @@ export default {
 
 <style scoped lang='scss'>
 .chat-cmp {
-  // margin-top: 40px;
-  // display: flex;
-  // width: 100%;
-  // justify-content: flex-end;
-  .open-btn {
+  .btn-wrapper {
     position: fixed;
+    z-index: 11;
     top: 10px;
     right: 10px;
-    z-index: 11;
-    padding: 10px;
-    background-color: black;
-    color: white;
-    border-radius: 50%;
-    border: none;
-    outline: 0;
-    font-size: 18px;
-    cursor: pointer;
+    .open-btn {
+      position: relative;
+      padding: 10px;
+      background-color: black;
+      color: white;
+      border-radius: 50%;
+      border: none;
+      outline: 0;
+      font-size: 18px;
+      cursor: pointer;
+      &.input-focus {
+        visibility: hidden;
+        @media (min-width: 850px) {
+          visibility: visible;
+        }
+      }
+    }
+
+    .msg-notification {
+      color: lighten(#25D366, 10%);
+      position: absolute;
+      top: 28px;
+      left: 28px;
+    }
   }
   .conversation {
     border-left: 2px solid darken(white,10%);
@@ -151,8 +183,14 @@ export default {
     z-index: 10;
   }
   .empty {
-    height: 55px;
+    height: 65px;
     background-color: black;
+    &.input-focus {
+      height: 0;
+      @media (min-width: 850px) {
+      height: 65px;
+      }
+    }
   }
 
   .conversation-container {
@@ -163,9 +201,13 @@ export default {
       height: 400px;
     }
     width: 100vw;
-    height: calc(100vh - 55px - 52px);
+    height: calc(100vh - 65px - 52px);
+    &.input-focus {
+      @media (max-width: 850px) {
+        height: calc(100vh);
+      }
+    }
     padding: 0 15px 15px 15px;
-    // padding-top: 40px;
   }
 
   .container {
@@ -182,19 +224,23 @@ export default {
     @media (min-width: 850px) {
       width: unset;
     }
+    &::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
 
-  }
+    .chat-user-name {
+      font-size: 16px;
+      font-weight: bold;
+    }
 
-  .container::after {
-    content: "";
-    clear: both;
-    display: table;
   }
 
   .msgOut {
     background-color: lighten(#25D366, 10%);
     margin: 5px 50px 0px 5px;
-    &:after {
+    &::after {
       content: ' ';
       position: absolute;
       width: 0;
@@ -212,8 +258,7 @@ export default {
     background-color: darken(white, 3%);
     margin: 5px 5px 0px 50vw;
     @media (min-width: 850px) {
-    margin: 5px 5px 0px 50px;
-
+      margin: 5px 5px 0px 50px;
     }
     &:after {
       content: ' ';
@@ -245,43 +290,62 @@ export default {
   }
 
   .conversation-compose {
+    padding: 3px 0;
+    background-color: lighten(black,10%);
+    width: 100%;
+    justify-content: space-evenly;
     @media (min-width: 850px) {
-      padding: 10px 20px;
+      padding: 10px 0;
     }
-    padding: 3px 20px;
-    background-color: black;
-
-  }
-
-  .chat-user-name {
-    font-size: 16px;
-    font-weight: bold;
-  }
-
-
-  .input-msg {
-    @media (min-width: 850px) {
-      width: 150px;
+    &.input-focus {
+      position: fixed;
+      bottom: 0;
+      @media (min-width: 500px) {
+        height: 100vh;
+      }
+      @media (min-width: 850px) {
+        height: unset;
+        position: unset;
+      }
+      .input-msg {
+          outline: none;
+      }
     }
-    width: 40vw;
-    padding: 3px;
-    border-radius: 10px;
-    font-size: 16px;
-    &:focus {
-      outline: none;
-    }
-  }
 
-  .send-btn {
-    padding: 7px;
-    width: 46px;
-    background-color: darken(#25D366, 20%);
-    border: none;
-    color: darken(white,15%);
-    border-radius: 50%;
-    outline: 0;
-    font-size: 16px;
-    cursor: pointer;
+    .input-msg {
+      background-color: transparent;
+      border: none;
+      border-bottom: darken(#25D366, 20%) 1px solid;
+      color: white;
+      width: 70vw;
+      padding: 3px;
+      font-size: 16px;
+      @media (min-width: 850px) {
+        width: 150px;
+      }
+    }
+    textarea.input-msg {
+      height: unset;
+      @media (min-width: 500px) {
+        height: 80vh;
+      }
+      @media (min-width: 850px) {
+        height: unset;
+      }
+    }
+
+    .send-btn {
+      padding: 7px;
+      width: 46px;
+      height: 46px;
+      background-color: darken(#25D366, 20%);
+      border: none;
+      color: darken(white,15%);
+      border-radius: 50%;
+      outline: 0;
+      font-size: 16px;
+      cursor: pointer;
+    }
   }
 }
 </style>

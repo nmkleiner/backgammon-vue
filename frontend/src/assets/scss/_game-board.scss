@@ -8,15 +8,23 @@
         padding: 0 5vw 0 0;
         margin-top: 80px;
     }
-    
-    header,footer {
-        display: none;
-        @media (min-width: 850px) {
-            display: flex;
+    .rotate-screen {
+        height: 100vh;
+        width: 100%;
+        font-size: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;        
+        @media screen and (orientation:landscape) {
+            display: none;
         }
     }
     
     .game-board{
+        @media screen and (orientation:portrait) {
+            display: none;
+        }
+        
         .board-cells {
             background-color: burlywood;
         }
@@ -47,6 +55,9 @@
         .bot-row {
             .game-cell{
                 flex-direction: column-reverse;
+                &.middle{
+                    flex-direction: column
+                }
             }
             flex-direction: row-reverse;
             align-items: flex-end;
@@ -147,6 +158,7 @@
     }
     transition: .3s;
     &.middle{
+        flex-direction: column-reverse;
         background-color: darkgoldenrod;
         width: 3vw;
     }

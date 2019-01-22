@@ -5,15 +5,19 @@
             'white': soldier.color === 'white',
             'black': soldier.color === 'black',
             'selected': soldier.selected,
-            'animated fadeIn': soldier.hasMoved,
-            'animated fadeOut': soldier.isMoving
+            'animated zoomOut fast': soldier.isMoving && soldier.color !== loggedInUserColor,
+            'animated zoomIn fast': soldier.hasMoved && soldier.color !== loggedInUserColor,
             }">
+            <!-- 'animated fadeIn': soldier.hasMoved && soldier.color === loggedInUserColor, unconsistent behaviour-->
+            <!-- 'animated fadeOut': soldier.isMoving && soldier.color === loggedInUserColor, -->
         </div>
-        <div class="soldier-const" v-if="color"
-        :class="{
-            'white': color === 'white',
-            'black': color === 'black',
-            }">
+        <div 
+            class="soldier-const" v-if="color"
+            :class="{
+                'white': color === 'white',
+                'black': color === 'black',
+                }"
+        >
         </div>
     </section>
 </template>
@@ -23,7 +27,12 @@ export default {
     props: {
         soldier: Object,
         color: String
-    }
+    },
+    computed: {
+        loggedInUserColor() {
+            return this.$store.getters.loggedInUserColor
+        }
+    },
 }
 </script>
 

@@ -47,7 +47,6 @@ function createSoldier(color) {
         isOut: false,
         selected: false,
         isLastInCell: false,
-        hasMoved: false,
         isMoving: false
     }
 

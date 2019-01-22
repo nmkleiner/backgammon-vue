@@ -9,7 +9,7 @@ const getMsgs = () => {
 }
 
 
-function createEmptyMsg(nickname = 'jhon doe', txt = '') {
+function createEmptyMsg(nickname = 'john doe', txt = '') {
     return { txt, from: nickname };
 }
 

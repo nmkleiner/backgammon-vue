@@ -35,8 +35,10 @@ export default {
             const {userColor} = this
             await this.$store.dispatch({type: 'diceRes', dice, userColor })
         },
-        serverTurnEnded() {
-            this.$store.commit('endTurn')
+        serverEndTurn() {
+            setTimeout(() => {
+                this.$store.commit('endTurn')
+            },1500)
         }
         
     },

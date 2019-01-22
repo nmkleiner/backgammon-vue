@@ -15,7 +15,7 @@ export default ({
         loggedInUser: {},
         isMars: false,
         isTurkishMars: false,
-        score: {white: 0 , black: 0}
+        score: { white: 0, black: 0 }
     },
     mutations: {
         setLoggedInUser(state, { user }) {
@@ -71,7 +71,7 @@ export default ({
             // endgame with mars
             // var boardMap = {'24': {amount: 1, color: 'white'},'6': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // eaten soldiers
-            // var boardMap = {'26': {amount: 2, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
+            // var boardMap = {'26': {amount: 2, color: 'white'},'27': {amount: 2, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
 
             for (var cell in boardMap) {
                 state.cells[cell].soldiers.push(...gameService.createSoldiers(boardMap[cell].amount, boardMap[cell].color))
@@ -103,13 +103,13 @@ export default ({
         checkMars(state) {
             state.isMars = gameService.isMars(state.cells, state.currTurn)
         },
-        setMars(state, {isMars}) {
+        setMars(state, { isMars }) {
             state.isMars = isMars
         },
         checkTurkishMars(state) {
             state.isTurkishMars = gameService.isTurkishMars(state.cells, state.currTurn)
         },
-        setTurkishMars(state, {isTurkishMars}) {
+        setTurkishMars(state, { isTurkishMars }) {
             state.isTurkishMars = isTurkishMars
         },
         startTurn(state) {
@@ -152,7 +152,7 @@ export default ({
             state.dices.num1ToShow = dices.num1ToShow
             state.dices.num2ToShow = dices.num2ToShow
         },
-        setCurrTurn(state, {startingColor}) {
+        setCurrTurn(state, { startingColor }) {
             state.currTurn = startingColor
         },
         updateScore(state) {
@@ -172,7 +172,7 @@ export default ({
             if (!state.possibleMoves.length) {
                 await setTimeout(() => {
                     commit('endTurn')
-                }, 2000)
+                }, 1500)
             }
             return state.dices
         },
@@ -194,18 +194,25 @@ export default ({
             commit('logOutUser');
             return Promise.resolve();
         },
-        setBoard({ commit }, { cells, isEating }) {
+        setBoard({ state, commit }, { soldierId, cells, isEating }) {
             if (!cells) {
                 commit('setCells')
-                commit({ type: 'setSoldiers' })
+                commit('setSoldiers')
             }
             else {
-                commit('clearBoard')
-                commit({ type: 'setNewSoldiers', cells })
-                let sound = !isEating? 'click' : 'eat'
-                soundService.play(sound)
-                commit('updateCells')
-                commit('calcPossibleMoves')
+                let movedSoldier = gameService.getSoldierById(state.cells, soldierId)
+                movedSoldier.isMoving = true
+                setTimeout(() => {
+                    commit('clearBoard')
+                    commit({ type: 'setNewSoldiers', cells })
+                    movedSoldier = gameService.getSoldierById(state.cells, soldierId)
+                    movedSoldier.hasMoved = true
+                    let sound = !isEating ? 'click' : 'eat'
+                    soundService.play(sound)
+                    commit('updateCells')
+
+                    commit('calcPossibleMoves')
+                }, 500)
             }
         },
         async moveSoldier({ state, commit }, { targetCell }) {
@@ -217,9 +224,8 @@ export default ({
             if (isMiddleCell) {
                 commit('selectedSoldierNotEaten')
             }
-            
+
             const isEating = gameService.checkIsEating(targetCell, state.currTurn)
-            let sound = !isEating? 'click' : 'eat'
             if (isEating) {
                 const eatenSoldier = targetCell.soldiers.pop()
                 eatenSoldier.isEaten = true
@@ -227,47 +233,43 @@ export default ({
                 middleCell.soldiers.push(eatenSoldier)
                 gameService.updateCell(middleCell)
             }
-            state.selectedSoldier.isMoving = true
 
             let promise = new Promise(res => {
-             setTimeout(() => {
-                srcCell.soldiers.pop()
-                state.selectedSoldier.isMoving = false
-                targetCell.soldiers.push(state.selectedSoldier)
-                soundService.play(sound)
-                state.selectedSoldier.hasMoved = true
-                
-                commit({ type: 'updateDices', srcCell, targetCell })
-                commit('calcPossibleMoves')
-                
-                commit('checkWinner')
-                if (state.winner) {
-                    commit('checkMars')
-                    if (state.isMars) {
-                        commit('checkTurkishMars')
-                    }
-                    return Promise.resolve(true)
-                }
+                setTimeout(() => {
+                    srcCell.soldiers.pop()
+                    // state.selectedSoldier.isMoving = false
+                    targetCell.soldiers.push(state.selectedSoldier)
+                    commit({ type: 'updateDices', srcCell, targetCell })
+                    commit('calcPossibleMoves')
 
-                if (!state.possibleMoves.length) {
-                    commit('endTurn')
-                }
-                res({soldierDidMove: true,isEating})
-            },300)
-        })
-        await promise
-        return Promise.resolve(promise)
+                    commit('checkWinner')
+                    if (state.winner) {
+                        commit('checkMars')
+                        if (state.isMars) {
+                            commit('checkTurkishMars')
+                        }
+                        return Promise.resolve(true)
+                    }
+
+                    if (!state.possibleMoves.length) {
+                        commit('endTurn')
+                    }
+                    res({ soldierDidMove: true, isEating })
+                }, 200)
+            })
+            await promise
+            return Promise.resolve(promise)
         },
-        restartGame({commit}) {
-            commit({type: 'setMars' , isMars: false})
-            commit({type: 'setTurkishMars' , isTurkishMars: false})
-            commit({type: 'clearBoard'})
-            commit({type: 'setSoldiers'})
-            commit({type: 'nullDices'})
-            commit({type: 'calcPossibleMoves'})
-            commit({type: 'checkWinner' })
-            commit({type: 'setDuringTurn'})
-            commit({type: 'updateScore'})
+        restartGame({ commit }) {
+            commit({ type: 'setMars', isMars: false })
+            commit({ type: 'setTurkishMars', isTurkishMars: false })
+            commit({ type: 'clearBoard' })
+            commit({ type: 'setSoldiers' })
+            commit({ type: 'nullDices' })
+            commit({ type: 'calcPossibleMoves' })
+            commit({ type: 'checkWinner' })
+            commit({ type: 'setDuringTurn' })
+            commit({ type: 'updateScore' })
         }
     },
     getters: {

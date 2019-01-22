@@ -1,11 +1,11 @@
 <template>
     <section class="info-section flex flex-column align-center">
-        <template v-if="showScore">
+        <div class="mt-30" v-if="showScore">
             <soldier color="white"></soldier>
             <h3>{{score.white}}</h3>
             <soldier color="black"></soldier>
             <h3>{{score.black}}</h3>
-        </template>
+        </div>
     </section>
 </template>
 
@@ -26,6 +26,8 @@ export default {
         },
         score() {
             return this.$store.getters.score
+            // return {black: 1, white: 1}
+
         },
         showScore() {
             return this.score.white || this.score.black
@@ -35,6 +37,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 .info-section {
+    @media screen and (orientation:portrait) {
+        display: none;
+    }
     background-color: black;
     @media (min-width: 850px) {
         width: 8vw;

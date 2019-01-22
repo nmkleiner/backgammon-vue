@@ -19,10 +19,11 @@
             'triangle-green': cell.isPossibleMove,
         }">
         </div>
+        <!-- v-if="cell.soldiers" -->
         <soldier @dblclick.native="onSoldierDblClick()" @mouseout.native="onSoldierOut()" 
         @mouseover.native="onSoldierHover(soldier)"
         @click.native.stop="onSoldierClick(soldier)" 
-        v-if="cell.soldiers" v-for="(soldier,idx) in cell.soldiers" 
+        v-for="(soldier,idx) in cell.soldiers" 
         :key="soldier.id" :soldier="soldier" :idx="idx"></soldier>
     </div>
 </template>
@@ -43,12 +44,22 @@ export default {
     methods: {
         async onCellClick() {
             if (this.selectedSoldier) {
+                const soldier = this.selectedSoldier
                 this.$store.commit('showNoPossibleMoves')
-                let {soldierDidMove,isEating} = await this.$store.dispatch({type: 'moveSoldier', targetCell: this.cell})
+                let {soldierDidMove,isEating} = await this.$store
+                    .dispatch({type: 'moveSoldier', targetCell: this.cell})
                 if (soldierDidMove) {
                     const room = 1
                     const cells = this.$store.getters.cells
-                    this.$socket.emit('clientSoldierMoved', cells, isEating, room)
+                    this.$socket
+                        .emit('clientSoldierMoved',
+                        {
+                            soldierId:soldier.id,
+                            targetCell: this.cell,
+                            cells,
+                            isEating,
+                            room
+                        })
                     this.$store.commit('unselectSoldiers')
                 }
             }

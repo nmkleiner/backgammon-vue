@@ -1,6 +1,9 @@
 <template>
   <section class="app-board">
     <div class="flex flex-row">
+      <div class="rotate-screen animated swing">
+        <img src="../../public/img/rotate.png"/>
+      </div>
       <game-board v-if="cells" :cells="cells"></game-board>
       <info-section></info-section>
     </div>
@@ -56,8 +59,8 @@ export default {
       this.$store.commit('changeMyColor')
       this.$store.commit('setTwoPlayersConnected')
     },
-    serverMovedSoldier({cells,isEating}) {
-      this.$store.dispatch({type: 'setBoard', cells, isEating})
+    serverSoldierMoved({soldierId, targetCell, cells, isEating}) {
+      this.$store.dispatch({type: 'setBoard', soldierId, targetCell, cells, isEating})
     },
     serverGameEnded(winner) {
       this.$store.commit({type: 'endGame', winner})
