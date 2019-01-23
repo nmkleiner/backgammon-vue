@@ -1,18 +1,6 @@
 <template>
   <div id="app">
     <chat-cmp></chat-cmp>
-    <!-- <button @click="toggleModal" class="animated shake">
-      <i class="fas fa-info-circle"></i>
-    </button> -->
-
-    <div class="modal animated" :class="{'hidden': !isOpenModal, 'bounce': isOpenModal}">
-      <button @click="toggleModal">
-        X
-      </button>
-      <br>
-      Hi, open the app in two windows to witness the full power.
-    </div>
-
     <!-- <nav-bar></nav-bar> -->
     <router-view/>
   </div>

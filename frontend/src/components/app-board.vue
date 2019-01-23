@@ -1,19 +1,27 @@
 <template>
   <section class="app-board">
-    <div class="flex flex-row">
+    <div class="flex">
       <div class="rotate-screen animated swing">
         <img src="../../public/img/rotate.png"/>
       </div>
+      <msg-cmp v-if="showMsg" :msg="msg"></msg-cmp>
       <game-board v-if="cells" :cells="cells"></game-board>
       <info-section></info-section>
     </div>
   </section>
 </template>
 
+            <!-- 
+              // No Possible Moves
+              <span v-if="winner && !mars" class="animated flash win capitalize">{{isWinner? "you won!": "you lost!"}}</span>
+                <span v-if="winner && mars && !turkishMars" class="animated flash win capitalize">{{isWinner? "you won! mars!!": "you lost! mars!!"}}</span>
+                <span v-if="winner && mars && turkishMars" class="animated flash win capitalize">{{isWinner? "you won! turkish mars!!": "you lost! turkish mars!!"}}</span> -->
+
 <script>
-import gameBoard from './game-board'
-import infoSection from './info-section'
-import soldier from './soldier'
+import gameBoard from "./game-board"
+import infoSection from "./info-section"
+import soldier from "./soldier"
+import msgCmp from "./msg-cmp";
 import ioClient from "socket.io-client";
 
 export default {
@@ -22,6 +30,7 @@ export default {
     gameBoard,
     soldier,
     infoSection,
+    msgCmp
   },
   methods: {
   },
@@ -32,6 +41,12 @@ export default {
     currTurn() {
       return this.$store.getters.currTurn
     },
+    isWinner() {
+      return this.winner === this.userColor
+    },
+    userColor() {
+      return this.$store.getters.loggedInUserColor
+    },
     winner() {
       return this.$store.getters.winner
     },
@@ -40,19 +55,34 @@ export default {
     },
     turkishMars() {
       return this.$store.getters.isTurkishMars
-    }
+    },
+    noPossibleMoves() {
+      return this.$store.getters.noPossibleMoves
+    },
+    showMsg() {
+      return (this.winner || this.noPossibleMoves)
+    },
+    msg() {
+      if (!this.showMsg) return;
+      if (this.noPossibleMoves) return 'No Possible Moves'
+      if (this.winner && this.turkishMars) return (this.isWinner)? 'you won! turkish mars!' : 'you lost! turkish mars!'
+      if (this.winner && this.mars) return (this.isWinner)? 'you won! mars!' : 'you lost! mars!'
+      if (this.winner) return (this.isWinner)? 'you won!' : 'you lost!'
+
+    },
+
     
   },
   created() {
     this.$store.dispatch({type: 'setBoard'})
     const room = 1
-    this.$socket.emit("clientGameJoined", room);
+    this.$socket.emit('clientGameJoined', room);
     this.$store.commit('setChoosingColors')
   },
   sockets: {
     serverUserJoined() {
       const room = 1
-      this.$socket.emit("clientAlreadyHere", room);
+      this.$socket.emit('clientAlreadyHere', room);
       this.$store.commit('setTwoPlayersConnected')
     },
     serverSomeoneAlreadyHere() {
@@ -101,6 +131,6 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped lang='scss'>
   
 </style>

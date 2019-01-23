@@ -7,9 +7,7 @@
             'selected': soldier.selected,
             'animated zoomOut fast': soldier.isMoving && soldier.color !== loggedInUserColor,
             'animated zoomIn fast': soldier.hasMoved && soldier.color !== loggedInUserColor,
-            }">
-            <!-- 'animated fadeIn': soldier.hasMoved && soldier.color === loggedInUserColor, unconsistent behaviour-->
-            <!-- 'animated fadeOut': soldier.isMoving && soldier.color === loggedInUserColor, -->
+        }">
         </div>
         <div 
             class="soldier-const" v-if="color"

@@ -5,15 +5,15 @@
             <div class="board-row top-row flex space-between">
                 <game-cell :exit="true" :cell="cells[0]"></game-cell>
             <div class="board-cells flex space-between">
-                <game-cell v-if="cells" v-for="idx in 6" :cell="cells[idx]" :key="idx"></game-cell>
+                <game-cell v-for="idx in 6" :cell="cells[idx]" :key="idx"></game-cell>
                 <game-cell :middle="true" :cell="cells[26]"></game-cell>
-                <game-cell v-if="cells" v-for="idx in 6" :cell="cells[idx+6]" :key="idx+6"></game-cell>
+                <game-cell v-for="idx in 6" :cell="cells[idx+6]" :key="idx+6"></game-cell>
             </div>
             </div>
             <div class="board-wrapper left-side-wrapper flex space-around align-center">
-                <span v-if="winner && !mars" class="animated flash win capitalize">{{isWinner? 'you won!': 'you lost!'}}</span>
+                <!-- <span v-if="winner && !mars" class="animated flash win capitalize">{{isWinner? 'you won!': 'you lost!'}}</span>
                 <span v-if="winner && mars && !turkishMars" class="animated flash win capitalize">{{isWinner? 'you won! mars!!': 'you lost! mars!!'}}</span>
-                <span v-if="winner && mars && turkishMars" class="animated flash win capitalize">{{isWinner? 'you won! turkish mars!!': 'you lost! turkish mars!!'}}</span>
+                <span v-if="winner && mars && turkishMars" class="animated flash win capitalize">{{isWinner? 'you won! turkish mars!!': 'you lost! turkish mars!!'}}</span> -->
                 <dices-section v-if="!winner"></dices-section>
             </div>
 
@@ -22,9 +22,9 @@
             </div>
             <div class="board-row bot-row flex space-between">
             <div class="board-cells flex space-between">
-                <game-cell v-if="cells" v-for="idx in 6" :cell="cells[idx + 12]" :key="idx + 12"></game-cell>
+                <game-cell v-for="idx in 6" :cell="cells[idx + 12]" :key="idx + 12"></game-cell>
                 <game-cell :middle="true" :cell="cells[27]"></game-cell>
-                <game-cell v-if="cells" v-for="idx in 6" :cell="cells[idx + 18]" :key="idx + 18"></game-cell>
+                <game-cell v-for="idx in 6" :cell="cells[idx + 18]" :key="idx + 18"></game-cell>
             </div>
                 <game-cell :exit="true" :cell="cells[25]"></game-cell>
             </div>
@@ -59,9 +59,6 @@ export default {
         },
         userColor() {
             return this.$store.getters.loggedInUserColor
-        },
-        isWinner() {
-            return this.winner === this.userColor
         },
         mars() {
             return this.$store.getters.isMars

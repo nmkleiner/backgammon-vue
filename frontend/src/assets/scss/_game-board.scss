@@ -1,11 +1,24 @@
+$board-border: 20px;
+$thin-board-border: 10px;
+// $cell-width: 6vw;
+// $cell-width-mobile: 6.4vw;
+// $cell-height: 33vh;
+// $cell-height-mobile: 45vh;
+// $info-width: 8vw + 10px;
+// $info-width-mobile: 8vw;
+// $middle-width: 3vw;
+// $app-board-width: 5vw + 12*6vw + 3vw + 20px + 10px + 8vw (+5vw)(shoolaim)
 .app-board{
     background-color: darken(rgba(228, 191, 142, 0.7),10%);
     position: relative;
     display: flex;
     flex-direction: column;
+    width: 100%;
     
     @media (min-width: 850px) {
-        padding: 0 5vw 0 0;
+        width: calc(5vw + 72vw + 3vw + 20px + 10px + 8vw + 5vw);
+        margin: 0 auto;
+        // padding: 0 5vw 0 0;
         margin-top: 80px;
     }
     .rotate-screen {
@@ -43,12 +56,12 @@
         .top-row{
             .board-cells {
                 @media (min-width: 850px) {
-                    border-top: 20px solid black;
-                    border-left: 20px solid black;
-                    border-right: 10px solid black;
+                    border-top: $board-border solid black;
+                    border-left: $board-border solid black;
+                    border-right: $thin-board-border solid black;
                 }
-                border-right: 10px solid black;
-                border-left: 10px solid black;
+                border-right: $thin-board-border solid black;
+                border-left: $thin-board-border solid black;
             }
         }
         
@@ -63,11 +76,11 @@
             align-items: flex-end;
             .board-cells {
                 @media (min-width: 850px) {
-                    border-bottom: 20px solid black;
-                    border-left: 20px solid black;
-                    border-right: 10px solid black;
+                    border-bottom: $board-border solid black;
+                    border-left: $board-border solid black;
+                    border-right: $thin-board-border solid black;
                 }
-                border-left: 10px solid black;
+                border-left: $thin-board-border solid black;
                 border-right: 10px solid black;
                 flex-direction: row-reverse;
                 align-items: flex-end;

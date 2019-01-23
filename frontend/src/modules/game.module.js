@@ -5,7 +5,6 @@ import soundService from '@/services/sound.service.js'
 export default ({
     state: {
         cells: [],
-        // soldiers: [],
         selectedSoldier: null,
         currTurn: null,
         dices: { num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false },
@@ -15,7 +14,8 @@ export default ({
         loggedInUser: {},
         isMars: false,
         isTurkishMars: false,
-        score: { white: 0, black: 0 }
+        score: { white: 0, black: 0 },
+        noPossibleMoves: false
     },
     mutations: {
         setLoggedInUser(state, { user }) {
@@ -72,6 +72,8 @@ export default ({
             // var boardMap = {'24': {amount: 1, color: 'white'},'6': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // eaten soldiers
             // var boardMap = {'26': {amount: 2, color: 'white'},'27': {amount: 2, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
+            // no possible moves
+            // var boardMap = {'26': {amount: 2, color: 'white'},'4': {amount: 2, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 2, color: 'black'},'5': {amount: 2, color: 'black'},'6': {amount: 2, color: 'black'},'15': {amount: 2, color: 'black'},'1': {amount: 2, color: 'black'}}
 
             for (var cell in boardMap) {
                 state.cells[cell].soldiers.push(...gameService.createSoldiers(boardMap[cell].amount, boardMap[cell].color))
@@ -157,10 +159,17 @@ export default ({
         },
         updateScore(state) {
             state.score[state.currTurn]++
-        }
+        },
+        noPossibleMovesOn(state) {
+            state.noPossibleMoves = true
+        },
+        noPossibleMovesOff(state) {
+            state.noPossibleMoves = false
+        },
     },
     actions: {
         async throwDices({ commit, state }) {
+            
             commit('startTurn')
             commit('throwDices')
             commit('calcPossibleMoves')
@@ -172,6 +181,9 @@ export default ({
             if (!state.possibleMoves.length) {
                 await setTimeout(() => {
                     commit('endTurn')
+                    // point 1 if dices don't allow movement
+                    commit('noPossibleMovesOn')
+                    setTimeout(() => commit('noPossibleMovesOff'),1800)
                 }, 1500)
             }
             return state.dices
@@ -285,6 +297,7 @@ export default ({
         isTurkishMars: state => state.isTurkishMars,
         isLoggedInUser: state => !!state.loggedInUser,
         selectedSoldier: state => state.selectedSoldier,
+        noPossibleMoves: state => state.noPossibleMoves,
         loggedInUserColor: state => state.loggedInUser.color,
     }
 })
