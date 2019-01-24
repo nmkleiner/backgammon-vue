@@ -4,7 +4,7 @@
             <h2>Login to play</h2>
             <el-input required v-model="loginData.userName" placeholder="username"></el-input>
             <el-input required v-model="loginData.password" type="password" placeholder="password"></el-input>
-            <span v-if="isWrong">Wrong password / username</span>
+            <span v-if="isWrong">Wrong password / username.</span>
             <div class="flex">
             <el-button class="brand-button" round native-type="submit" ><i class="fas fa-sign-in-alt"></i> Login</el-button>
             <el-button class="brand-button" round @click="signup" ><i class="fas fa-user-plus"></i> Sign Up</el-button>

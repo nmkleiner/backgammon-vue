@@ -62,8 +62,8 @@ export default {
         }
     }
     .soldier-const {
-        height: 2vw;
-        width: 2vw;
+        height: 24px;
+        width: 24px;
         border-radius: 50%;
         &.black{
             background-color: black;

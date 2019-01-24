@@ -9,13 +9,14 @@ export default {
   getLoggedInUser,
   getById,
   signupUser,
+  getPicUrl
 };
 
-function login({ userName, password }) {
-  return axios.put(`${BASE_URL}/login`, { userName, password }).then(res => {
-    sessionStorage.loggedInUser = JSON.stringify(res.data);
-    return res.data;
-  });
+async function login({ userName, password }) {
+  const res = await axios.put(`${BASE_URL}/login`, { userName, password })
+  console.log('login data',res.data)
+  sessionStorage.loggedInUser = JSON.stringify(res.data);
+  return res.data;
 }
 
 function logout() {
@@ -37,6 +38,24 @@ function getById(id) {
 }
 
 function signupUser(user) {
+  console.log('user service signing user up',user)
   return axios.post(`${BASE_URL}/signup`, user);
 }
+const CLOUDINARY_URL = ' https://api.cloudinary.com/v1_1/do6zqbr29/upload'
+const CLOUDINARY_UPLOAD_PRESET = 'enr75skp'
+async function getPicUrl(file) {
+  const data = new FormData()
+    data.append('file',file)
+    data.append('upload_preset',CLOUDINARY_UPLOAD_PRESET)
 
+    const res = await axios({
+        url: CLOUDINARY_URL,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data
+    })
+    console.log(res)
+    return Promise.resolve(res.data.secure_url)
+}

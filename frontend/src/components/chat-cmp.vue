@@ -1,14 +1,5 @@
 <template>
   <section class="chat-cmp">
-    <div class="btn-wrapper">
-      <button class="open-btn" @click="toggleChat">
-        <i class="far fa-times-circle" v-if="isChatOpen"></i>
-        <i class="far fa-comments" v-else></i>
-      </button>
-      <div class="msg-notification" v-if="showNotification && !isChatOpen">
-        <i class="fas fa-envelope"></i>
-      </div>
-    </div>
     <div 
       class="conversation animated" 
       :class="{'hidden': loading,'slideOutRight': !isChatOpen, 'slideInRight': isChatOpen}"
@@ -22,47 +13,32 @@
         <div v-for="(msg, idx) in msgs" :key="idx">
 
           <div
-            class="container round"
+            class="container round msg"
             :class="{msgOut: nickname === msg.from, msgIn: nickname !== msg.from}"
           >
-            <p class="msg">
-            <img src="https://res.cloudinary.com/do6zqbr29/image/upload/w_48,h_48/v1548316876/samples/Optimized-20160428_111029.jpg"/>
-            <soldier :color="msg.color"></soldier>
-            <!-- https://res.cloudinary.com/demo/image/upload/w_400,h_350,c_crop,g_face/r_20,bo_5px_solid_black/l_cloudinary_icon,o_50,w_0.25,fl_relative,g_north_east,y_10,x_10/q_auto,f_auto/sample_woman.jpg -->
-              <span class="chat-user-name">{{msg.from}}:</span>
-              <br>
-              {{msg.txt}}
-            </p>
+            <div class="img-wrapper">
+              <img v-if="msg.pic" :src="msg.pic"/>
+              <img v-else src="../../public/img/user.jpg"/>
+              <soldier :color="msg.color"></soldier>
+            </div>
+            <span class="chat-user-name">{{msg.from}}:</span>
+            <br>
+            {{msg.txt}}
           </div>
         </div>
       </div>
 
       <form :class="{'input-focus': isInputFocus}" class="conversation-compose flex align-center">
-        <input
-          v-if="!hasNickname"
-          v-model="nickname"
-          @focus="isInputFocus = true"
-          @blur="isInputFocus = false"
-          class="input-msg"
-          placeholder="Choose nickname"
-          autocomplete="off"
-        >
         <textarea
-          v-else
           v-model="newMsg.txt"
-          @focus="isInputFocus = true"
-          @blur="isInputFocus = false"
-          class="input-msg"
-          name="input"
+          @focus="toggleInputFocus"
+          @blur="toggleInputFocus"
+          class="border-bottom-input"
           placeholder="Type a message"
           autocomplete="off"
           autofocus
         />
-        <button class="send-btn" v-if="!hasNickname" @click.prevent="enterNickname">
-          <i class="far fa-comment"></i>
-        </button>
-
-        <button class="send-btn" v-else @click.prevent="send">
+        <button class="send-btn" @click.prevent="send">
           <i class="far fa-comment"></i>
         </button>
       </form>
@@ -79,28 +55,28 @@ export default {
   components: {
     soldier
   },
+  props: {
+    isChatOpen: Boolean
+  },
   data() {
     return {
       msgs: [],
-      nickname: null,
-      hasNickname: false,
-      newMsg: null,
+      newMsg: {},
       typeMsg: "",
-      isChatOpen: false,
       loading: true,
       isInputFocus: false,
-      showNotification: false
     };
   },
   methods: {
-    toggleChat() {
-      this.isChatOpen = !this.isChatOpen;
-      this.showNotification = false;
-    },
     send() {
       if (!this.newMsg.txt) return;
       this.$socket.emit("assignMsg", {
-        msg: { ...this.newMsg, color: this.loggedInUser.color },
+        msg: { 
+            ...this.newMsg, 
+            from: this.nickname, 
+            color: this.loggedInUser.color, 
+            pic: this.loggedInUser.pic 
+          },
         room: 1
       });
       this.newMsg = msgService.createEmptyMsg(this.nickname);
@@ -118,13 +94,15 @@ export default {
     pushMsgToHistory(msg) {
       this.$emit("pushMsgToHistory", msg);
     },
-    enterNickname() {
-      this.hasNickname = true;
-      this.newMsg.from = this.nickname;
+    toggleInputFocus() {
+      this.isInputFocus = !this.isInputFocus
+      this.$emit('onToggleInputFocus')
     }
   },
-  created() {
+  async created() {
+    await this.$store.dispatch('getLoggedInUser')
     this.newMsg = msgService.createEmptyMsg(this.nickname);
+    console.log('nick',this.newMsg)
     const room = 1;
     this.$socket.emit("chatJoined", room);
     setTimeout(() => this.loading = false,1200)
@@ -132,12 +110,15 @@ export default {
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
+    },
+    nickname() {
+      return (this.loggedInUser.userName)? this.loggedInUser.userName : 'guest'
     }
   },
   sockets: {
     renderMsg(msg) {
       soundService.play('msg')
-      this.showNotification = true
+      this.$emit('showNotification')
       this.msgs.push(msg);
     }
   }
@@ -146,65 +127,36 @@ export default {
 
 <style scoped lang='scss'>
 .chat-cmp {
-  .btn-wrapper {
-    position: fixed;
-    z-index: 11;
-    top: 10px;
-    right: 10px;
-    .open-btn {
-      position: relative;
-      padding: 10px;
-      background-color: black;
-      color: white;
-      border-radius: 50%;
-      border: none;
-      outline: 0;
-      font-size: 18px;
-      cursor: pointer;
-      &.input-focus {
-        visibility: hidden;
-        @media (min-width: 850px) {
-          visibility: visible;
-        }
+  .empty {
+    height: 65px;
+    &.input-focus {
+      height: 0;
+      @media (min-width: 850px) {
+        height: 65px;
       }
-    }
-
-    .msg-notification {
-      color: lighten(#25D366, 10%);
-      position: absolute;
-      top: 28px;
-      left: 28px;
     }
   }
   .conversation {
-    border-left: 2px solid darken(white,10%);
-    border-bottom: 2px solid darken(white,10%);
-    border-radius: 6px;
+    background-color: black;
     position: fixed;
     top: 0;
     right: 0;
     z-index: 10;
-  }
-  .empty {
-    height: 65px;
-    background-color: black;
-    &.input-focus {
-      height: 0;
-      @media (min-width: 850px) {
-      height: 65px;
-      }
-    }
-  }
-
-  .conversation-container {
-    overflow: auto;
-    background-color: black;
     @media (min-width: 850px) {
       width: 18.6vw;
-      height: 400px;
+      min-width: 196px;
+      border-radius: 6px;
+      border-left: 2px solid darken(white,10%);
+      border-bottom: 2px solid darken(white,10%);
     }
     width: 100vw;
+  }
+  .conversation-container {
+    overflow: auto;
     height: calc(100vh - 65px - 52px);
+    @media (min-width: 850px) {
+      height: 400px;
+    }
     &.input-focus {
       @media (max-width: 850px) {
         height: calc(100vh);
@@ -232,9 +184,8 @@ export default {
       clear: both;
       display: table;
     }
-    img {
-      border-radius: 50%;
-    }
+    
+  
     .chat-user-name {
       font-size: 16px;
       font-weight: bold;
@@ -257,6 +208,7 @@ export default {
       border: 12px solid;
       border-color: lighten(#25D366, 10%) lighten(#25D366, 10%) transparent transparent;
     }
+    
   }
 
   .msgIn {
@@ -286,11 +238,19 @@ export default {
   }
   .msg {
     color: black;
-    padding: 5px;
-    .soldier-const {
-      width: 2vw!important;
-      height: 2vw!important;
-      outline: 1px red;
+    padding: 10px;
+    .img-wrapper {
+      position: relative;
+      img {
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+      }
+      .soldier-section {
+        position: absolute;
+        top: 34px;
+        left: 34px;
+      }
     }
   }
 
@@ -312,28 +272,16 @@ export default {
         height: unset;
         position: unset;
       }
-      .input-msg {
+      .border-bottom-input {
           outline: none;
       }
     }
 
-    .input-msg {
-      background-color: transparent;
-      border: none;
-      border-bottom: darken(#25D366, 20%) 1px solid;
-      color: white;
-      width: 70vw;
-      padding: 3px;
-      font-size: 16px;
-      @media (min-width: 850px) {
-        width: 150px;
-      }
-    }
-    textarea.input-msg {
+    textarea.border-bottom-input {
+      // @media (min-width: 500px) {
+      //   height: 80vh;
+      // }
       height: unset;
-      @media (min-width: 500px) {
-        height: 80vh;
-      }
       @media (min-width: 850px) {
         height: unset;
       }

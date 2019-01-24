@@ -1,34 +1,28 @@
 <template>
   <div id="app">
-    <chat-cmp></chat-cmp>
-    <!-- <nav-bar></nav-bar> -->
+    <aside-cmp></aside-cmp>
     <router-view/>
   </div>
 </template>
 
 <script>
 import appBoard from './components/app-board.vue'
-import navBar from './components/nav-bar.vue'
-import chatCmp from './components/chat-cmp'
+import asideCmp from './components/aside-cmp'
 import soundService from './services/sound.service.js';
 
 export default {
  components: {
-   navBar,
-   chatCmp
+   asideCmp
   },
   data() {
     return {
-      isOpenModal: false,
+      
     }
   },
   methods: {
-    toggleModal() {
-      this.isOpenModal = !this.isOpenModal
-    }
+    
   },
   created() {
-    this.$store.dispatch('getLoggedInUser')
   },
   mounted() {
     soundService.load()    

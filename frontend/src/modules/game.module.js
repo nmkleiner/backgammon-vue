@@ -9,9 +9,9 @@ export default ({
         currTurn: null,
         dices: { num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false },
         possibleMoves: [],
-        winner: 'white',
+        winner: false,//turns to white or black when game ends
         duringTurn: false,
-        loggedInUser: {pic: ''},
+        loggedInUser: {userName: '',_id:'', pic: '',color: 'white'},
         isMars: false,
         isTurkishMars: false,
         score: { white: 0, black: 0 },
@@ -19,12 +19,9 @@ export default ({
     },
     mutations: {
         setLoggedInUser(state, { user }) {
-            state.loggedInUser = {
-                name: user.name,
-                _id: user._id,
-                pic: user.pic,
-                color: 'white'
-            }
+            state.loggedInUser.userName = user.userName
+            state.loggedInUser._id = user._id
+            state.loggedInUser.pic = user.pic
         },
         logOutUser(state) {
             state.loggedInUser = '';
