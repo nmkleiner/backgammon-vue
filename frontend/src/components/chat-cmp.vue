@@ -20,12 +20,15 @@
         ref="conversationRef"
       >
         <div v-for="(msg, idx) in msgs" :key="idx">
+
           <div
             class="container round"
             :class="{msgOut: nickname === msg.from, msgIn: nickname !== msg.from}"
           >
             <p class="msg">
-              <soldier :color="msg.color"></soldier>
+            <img src="https://res.cloudinary.com/do6zqbr29/image/upload/w_48,h_48/v1548316876/samples/Optimized-20160428_111029.jpg"/>
+            <soldier :color="msg.color"></soldier>
+            <!-- https://res.cloudinary.com/demo/image/upload/w_400,h_350,c_crop,g_face/r_20,bo_5px_solid_black/l_cloudinary_icon,o_50,w_0.25,fl_relative,g_north_east,y_10,x_10/q_auto,f_auto/sample_woman.jpg -->
               <span class="chat-user-name">{{msg.from}}:</span>
               <br>
               {{msg.txt}}
@@ -229,7 +232,9 @@ export default {
       clear: both;
       display: table;
     }
-
+    img {
+      border-radius: 50%;
+    }
     .chat-user-name {
       font-size: 16px;
       font-weight: bold;

@@ -44,7 +44,7 @@ export default {
         @media (min-width: 850px) {
             padding: 60px;
         }
-        font-size: 40px;
+        font-size: 35px;
         font-family: monospace;
         border-radius: 20px;
         color: #bbb;
