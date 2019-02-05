@@ -53,3 +53,5 @@ V-login design: design btns,remove forgot your password, more margins, add borde
 V-verify notifications
 V-signup design: no back btn,design save btn, save should close and bring back chat, add border like chat.
 V-delete unnecessary classes and css.
+
+V-back btn will not get out of the page

@@ -8,7 +8,6 @@ import socketio from 'socket.io'
 import VueSocketIO from 'vue-socket.io'
 import Vuex from 'vuex'
 import { VueSpinners } from '@saeris/vue-spinners'
-
 // import './registerServiceWorker'
 import './assets/scss/main.scss'
 
@@ -29,7 +28,6 @@ Vue.use(new VueSocketIO({
         mutationPrefix: 'SOCKET_'
     }
 }))
-
 Vue.config.productionTip = false
 Vue.crossOrigin = 'true'
 

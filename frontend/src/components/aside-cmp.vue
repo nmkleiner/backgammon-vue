@@ -5,11 +5,13 @@
                 class="white-text-btn" 
                 v-if="isChatFullyOpen && !loggedInUser.userName && !isInputFocus" @click="openLogin"
             >Login</button>
-            <button class="open-btn" @click="toggleAside">
-                <i class="far fa-times-circle" v-if="isAsideOpen"></i>
-                <i class="far fa-comments" v-else></i>
+            <button class="open-btn" v-if="isAsideOpen" @click="closeChat">
+                <i class="far fa-times-circle"></i>
             </button>
-            <div class="msg-notification" v-if="showNotification && !isChatOpen">
+            <button class="open-btn" v-else @click="openChat">
+                <i class="far fa-comments"></i>
+            </button>
+            <div class="msg-notification" v-if="showNotification && !isAsideOpen">
                 <i class="fas fa-envelope"></i>
             </div>
         </div>
@@ -37,25 +39,25 @@ export default {
             isSignupOpen: false,
             showNotification: false,
             isInputFocus: false,
-
         }
     },
     methods: {
-        toggleAside() {
-            // open chat or close aside
-            if (this.isAsideOpen) {
-                this.isChatOpen = false
-                this.isChatFullyOpen = false
-                this.isLoginOpen = false        
-                this.isSignupOpen = false        
-            } else {
-                this.isChatOpen = true
-                this.isLoginOpen = false        
-                this.isSignupOpen = false        
-                setTimeout(() => this.isChatFullyOpen = true, 900)
-            }
+        closeChat() {
+            this.isChatOpen = false
+            this.isChatFullyOpen = false
+            this.isLoginOpen = false        
+            this.isSignupOpen = false
             this.showNotification = false
+            this.$router.push('/game')
         },
+        openChat() {
+            this.isChatOpen = true
+            setTimeout(() => this.isChatFullyOpen = true, 900)
+            this.isLoginOpen = false        
+            this.isSignupOpen = false        
+            this.showNotification = false
+            this.$router.push('/chat')
+        },            
         doShowNotification() {
             this.showNotification = true
         },
@@ -64,6 +66,7 @@ export default {
             this.isLoginOpen = false        
             this.isChatOpen = false
             this.isChatFullyOpen = false
+            this.$router.push('/signup')
         },
         openLogin() {
             this.isLoginOpen = true        
@@ -71,14 +74,25 @@ export default {
             this.isChatFullyOpen = false
             this.isSignupOpen = false
             this.showNotification = false
+            this.$router.push('/login')
         },
         closeLogin() {
             this.isChatOpen = true
             this.isLoginOpen = false        
+            this.$router.push('/game')
         },
         closeSignup() {
             this.isChatOpen = true
             this.isSignupOpen = false        
+            this.$router.push('/game')
+        },
+        closeAside() {
+            this.isChatOpen = false
+            this.isChatFullyOpen = false
+            this.isSignupOpen = false        
+            this.isLoginOpen = false        
+            this.showNotification = false
+            this.$router.push('/game')
         },
         toggleInputFocus() {
             this.isInputFocus = !this.isInputFocus
@@ -92,6 +106,22 @@ export default {
             return this.isLoginOpen || this.isChatOpen || this.isSignupOpen
         }
     },
+    watch:{
+    $route (to, from){
+        switch(to.path) {
+            case '/game':
+            this.closeChat()
+            case '/chat':
+            if (from.path === '/login') {
+                this.closeAside()
+            }
+            case '/login':
+            if (from.path === '/signup') {
+                this.closeAside()
+            }
+        }
+    },
+} 
 }
 </script>
 

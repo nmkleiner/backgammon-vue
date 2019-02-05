@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import signUp from './views/sign-up.vue'
-// import loginPage from './views/login-page.vue'
 import homePage from './views/home-page.vue'
+
 Vue.use(Router)
 
 export default new Router({
@@ -10,15 +9,10 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
+      path: '/:openCmp',
       name: 'homepage',
       component: homePage
     },
-    // {
-    //   path: '/signup',
-    //   name: 'signup',
-    //   component: signUp
-    // },
     // {
     //   path: '/login',
     //   name: 'login',

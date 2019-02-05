@@ -9,7 +9,7 @@ export default ({
         currTurn: null,
         dices: { num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false },
         possibleMoves: [],
-        winner: false,//turns to white or black when game ends
+        winner: false,
         duringTurn: false,
         loggedInUser: {userName: '',_id:'', pic: '',color: 'white'},
         isMars: false,
