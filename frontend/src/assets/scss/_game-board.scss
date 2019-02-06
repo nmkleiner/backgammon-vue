@@ -9,7 +9,7 @@ $thin-board-border: 10px;
 // $middle-width: 3vw;
 // $app-board-width: 5vw + 12*6vw + 3vw + 20px + 10px + 8vw (+5vw)(shoolaim)
 .app-board{
-    background-color: darken(rgba(228, 191, 142, 0.7),10%);
+    background-color: darken(#e4bf8e,10%);
     position: relative;
     display: flex;
     flex-direction: column;

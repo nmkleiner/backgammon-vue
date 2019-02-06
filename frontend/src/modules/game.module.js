@@ -198,6 +198,9 @@ export default ({
                 return user
             })
         },
+        googleLogin({ commit }, { loginData }) {
+            commit({ type: 'setLoggedInUser', user: {userName: loginData.userName} })
+        },
         logout({ commit }) {
             userService.logout();
             commit('logOutUser');

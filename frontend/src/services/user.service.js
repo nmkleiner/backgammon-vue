@@ -8,7 +8,7 @@ export default {
   logout,
   getLoggedInUser,
   getById,
-  signupUser,
+  signUpUser,
   getPicUrl
 };
 
@@ -37,8 +37,7 @@ function getById(id) {
   }
 }
 
-function signupUser(user) {
-  console.log('user service signing user up',user)
+function signUpUser(user) {
   return axios.post(`${BASE_URL}/signup`, user);
 }
 const CLOUDINARY_URL = ' https://api.cloudinary.com/v1_1/do6zqbr29/upload'
@@ -56,6 +55,5 @@ async function getPicUrl(file) {
         },
         data
     })
-    console.log(res)
     return Promise.resolve(res.data.secure_url)
 }

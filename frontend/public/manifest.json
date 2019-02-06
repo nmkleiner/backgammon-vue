@@ -1,21 +1,36 @@
 {
-  "name": "backgammon",
-  "short_name": "backgammon",
-  "description": "backgammon game for two players",
+  "name": "Backgammon",
+  "short_name": "Backgammon",
+  "description": "Backgammon game for two players",
   "icons": [
     {
-      "src": "./img/icons/android-chrome-192x192.png",
-      "sizes": "192x192",
+      "src": "./img/icons/android-chrome-70x70.png",
+      "sizes": "70x70",
       "type": "image/png"
     },
     {
-      "src": "./img/icons/android-chrome-512x512.png",
-      "sizes": "512x512",
+      "src": "./img/icons/android-chrome-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "./img/icons/android-chrome-150x150.png",
+      "sizes": "150x150",
+      "type": "image/png"
+    },
+    {
+      "src": "./img/icons/android-chrome-310x310.png",
+      "sizes": "310x310",
+      "type": "image/png"
+    },
+    {
+      "src": "./img/icons/android-chrome-310x150.png",
+      "sizes": "310x150",
       "type": "image/png"
     }
   ],
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#000000",
+  "background_color": "#e4bf8e",
   "theme_color": "#e4bf8e"
 }
