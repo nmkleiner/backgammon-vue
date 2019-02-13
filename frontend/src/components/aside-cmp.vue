@@ -5,6 +5,10 @@
                 class="white-text-btn" 
                 v-if="isChatFullyOpen && !loggedInUser.userName && !isInputFocus" @click="openLogin"
             >Login</button>
+            <button 
+                class="white-text-btn" 
+                v-if="loggedInUser.userName && isChatFullyOpen" @click="logout"
+            >Logout</button>
             <button class="open-btn" v-if="isAsideOpen" @click="closeChat">
                 <i class="far fa-times-circle"></i>
             </button>
@@ -16,7 +20,7 @@
             </div>
         </div>
     <chat-cmp :isChatOpen="isChatOpen" @showNotification="doShowNotification" @onToggleInputFocus="toggleInputFocus"></chat-cmp>
-    <login-cmp :isLoginOpen="isLoginOpen" @openSignup="openSignup" @closeLogin="closeLogin"></login-cmp>
+    <login-cmp :isLoginOpen="isLoginOpen" @openSignup="openSignup" @closeLogin="closeLogin" @onLogin="closeAside" ></login-cmp>
     <signup-cmp :isSignupOpen="isSignupOpen" @onCloseSignup="closeSignup"></signup-cmp>
     </section>
 </template>
@@ -25,6 +29,8 @@
 import loginCmp from './login-cmp';
 import signupCmp from './signup-cmp';
 import chatCmp from './chat-cmp';
+import * as firebase from 'firebase'
+
 export default {
     components: {
         chatCmp,
@@ -42,6 +48,10 @@ export default {
         }
     },
     methods: {
+        async logout() {
+            await firebase.auth().signOut()
+            this.$store.commit({type :'setLoggedInUser', user: {userName: '',pic: '',_id: ''}})
+        },
         closeChat() {
             this.isChatOpen = false
             this.isChatFullyOpen = false

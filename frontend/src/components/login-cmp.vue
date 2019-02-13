@@ -3,7 +3,6 @@
         class="login-cmp aside-card flex justify-center animated"
         :class="{'hidden': loading,'slideOutRight': !isLoginOpen, 'slideInRight': isLoginOpen}"    
     >
-            <!-- v-if="!isGoogleLogin"  -->
         <form 
             @submit.prevent="onSubmit" 
             class="flex flex-column align-center"
@@ -15,30 +14,18 @@
             <div class="flex">
                 <button class="white-text-btn" type="submit" >Log In</button>
                 <button class="white-text-btn" type="button" @click="openSignup" >Sign Up</button>
-                <!-- <button class="white-text-btn" type="button" @click="isGoogleLogin = true" >Log In With Google</button> -->
+                <button class="white-text-btn" type="button" @click="signUp('google')">Google Sign In</button>
+                <button class="white-text-btn" type="button" @click="signUp('facebook')">Facebook Sign In</button>
+
             </div>
             <a @click="sorry">forgot your password?</a>
             <span class="white-text" v-if="isSorry">Sorry I can't help you.</span>
         </form>
-
-        <!-- <form 
-            v-else 
-            @submit.prevent="onGoogleSubmit" 
-            class="flex flex-column align-center"
-        >
-            <h2>Login</h2>
-            <input class="border-bottom-input" required v-model="loginData.email" placeholder="email"/>
-            <input class="border-bottom-input" required v-model="loginData.password" type="password" placeholder="password"/>
-            <span class="white-text" v-if="isWrong">Wrong password / email address.</span>
-            <div class="flex">
-                <button class="white-text-btn" type="submit" >Log In</button>
-            </div>
-        </form> -->
     </section>
 </template>
 
 <script>
-// import * as firebase from 'firebase'
+import * as firebase from 'firebase'
 
 export default {
     props: {
@@ -49,13 +36,13 @@ export default {
             loginData: {
                 userName: '',
                 password: '',
-                // email: ''
             },
             isWrong: false,
             fromEventId: '',
             loading: true,
             isSorry: false,
-            // isGoogleLogin: false
+            gProvider: '',
+            fProvider: ''
         }
     },
     methods: {
@@ -66,49 +53,53 @@ export default {
                 this.isWrong = false
                 this.$emit('closeLogin')
             }
-            
         },
-        // onGoogleSubmit() {
-        //     const {email,password} = this.loginData
-        //     const prm = firebase.auth().signInWithEmailAndPassword(email,password)
-        //     prm.catch((e) => {
-        //         this.isWrong = true
-        //         console.log(e.message)
-        //     })
-        //     prm.then((res) => {
-        //         this.isWrong = false
-        //         this.$store.dispatch({type: 'googleLogin', loginData: {userName: email.split('@')[0], password}})
-        //         .then(() => this.$emit('closeLogin'))
-        //     })
-
-        // },
         openSignup() {
             this.$emit('openSignup')
         },
         sorry() {
             this.isSorry = !this.isSorry
+        },
+        signUp(authenticator) {
+            const provider = authenticator === 'google'? this.gProvider : this.fProvider
+            console.log('provider',provider)
+            firebase.auth().signInWithPopup(provider)
+            .then((result) => {
+                console.log('res',result)
+                var token = result.credential.accessToken;
+                var user = result.user;
+            })
+            .catch(function(error) {
+                var errorCode = error.code;
+                console.error(errorCode)
+                var errorMessage = error.message;
+                var email = error.email;
+                var credential = error.credential;
+            });
+        },
+        fbSignUp() {
+            firebase.auth().sign
         }
     },
     created() {
         setTimeout(() => this.loading = false,1200)
 
-        // firebase.auth().onAuthStateChanged(function(user) {
-        // if (user) {
-        //     // User is signed in.
-        //     var displayName = user.displayName;
-        //     var email = user.email;
-        //     var emailVerified = user.emailVerified;
-        //     var photoURL = user.photoURL;
-        //     var isAnonymous = user.isAnonymous;
-        //     var uid = user.uid;
-        //     var providerData = user.providerData;
-        //     console.log(user,'user')
-        //     // ...
-        // } else {
-        //     // User is signed out.
-        //     // ...
-        // }
-        // });
+        this.gProvider = new firebase.auth.GoogleAuthProvider();
+        this.fProvider = new firebase.auth.FacebookAuthProvider();
+
+        firebase.auth().onAuthStateChanged((user) => {
+            console.log('auth changed')
+        if (user) {
+            var userName = user.displayName;
+            var pic = user.photoURL;
+            var _id = user.uid;
+            this.$store.commit({type :'setLoggedInUser', user: {userName,pic,_id}})
+            this.$emit('onLogin')
+
+        } else {
+
+        }
+        });
     }
 }
 </script>
@@ -136,9 +127,6 @@ export default {
             }
             input,button {
                 margin: 10px 10px 10px;
-            }
-            .white-text-btn {
-                font-size: 1.2rem;
             }
         }
 }

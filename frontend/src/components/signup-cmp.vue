@@ -3,7 +3,6 @@
     class="signup-cmp aside-card animated"
     :class="{'hidden': loading,'slideOutRight': !isSignupOpen, 'slideInRight': isSignupOpen}"
   >
-      <!-- v-if="!isGoogleSignUp" -->
     <form
       @submit.prevent="submitNewUser"
       class="signup-form-container flex flex-column align-center"
@@ -16,26 +15,12 @@
         Choose Profile Picture
       </label>
       <button  class="white-text-btn" type="submit">Signup</button>
-      <!-- <button  class="white-text-btn" type="button" @click="isGoogleSignUp = true">Signup With Google</button> -->
     </form>
-
-    <!-- <form 
-      v-else
-      @submit.prevent="submitNewGoogleUser"
-      class="signup-form-container flex flex-column align-center"
-    >
-      <h2 class="capitalize">sign up</h2>
-      <input class="border-bottom-input" required type="text" placeholder="Email" v-model="newUser.email">
-      <input class="border-bottom-input" required type="password" placeholder="Password" v-model="newUser.password">
-      <input @change="getFile" id="file-upload" type="file" style="display:none;">
-      <button  class="white-text-btn" type="submit">Signup</button>
-    </form> -->
   </section>
 </template>
 
 <script>
 import userService from '../services/user.service.js';
-// import * as firebase from 'firebase'
 
 export default {
   props: {
@@ -44,13 +29,11 @@ export default {
   data() {
     return {
       loading: true,
-      // isGoogleSignUp: false,
       newUser: {
         userName: '',
         password: '',
         pic: '',
         file: '',
-        // email: ''
       },
     };
   },
@@ -63,19 +46,6 @@ export default {
     getFile(ev) {
       this.newUser.file = ev.target.files[0]
     },
-    // submitNewGoogleUser() {
-    //   const {email,password} = this.newUser
-    //   const prm = firebase.auth().createUserWithEmailAndPassword(email,password)
-    //   prm.catch(() => {
-    //     console.log('problem')
-    //   })
-    //   prm.then(() => {
-    //     console.log('no problem')
-    //     // get user details
-    //     //put user in store
-    //     // close aside
-    //   })
-    // }
   },
   created() {
     setTimeout(() => this.loading = false,1200)

@@ -143,7 +143,7 @@ export default {
     right: 0;
     z-index: 10;
     @media (min-width: 850px) {
-      width: 18.6vw;
+      width: 24vw;
       min-width: 196px;
       border-radius: 6px;
       border-left: 2px solid darken(white,10%);
@@ -278,9 +278,6 @@ export default {
     }
 
     textarea.border-bottom-input {
-      // @media (min-width: 500px) {
-      //   height: 80vh;
-      // }
       height: unset;
       @media (min-width: 850px) {
         height: unset;

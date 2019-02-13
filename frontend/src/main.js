@@ -6,7 +6,6 @@ import ElementUI from 'element-ui';
 import * as firebase from 'firebase'
 
 import 'element-ui/lib/theme-chalk/index.css'
-// import socketio from 'socket.io'
 import VueSocketIO from 'vue-socket.io'
 import Vuex from 'vuex'
 import './registerServiceWorker'
