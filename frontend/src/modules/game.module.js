@@ -51,20 +51,20 @@ export default ({
         },
         setSoldiers(state) {
             // regular board
-            const boardMap = {
-                '1': { amount: 2, color: 'white' },
-                '6': { amount: 5, color: 'black' },
-                '8': { amount: 3, color: 'black' },
-                '12': { amount: 5, color: 'white' },
-                '13': { amount: 5, color: 'black' },
-                '17': { amount: 3, color: 'white' },
-                '19': { amount: 5, color: 'white' },
-                '24': { amount: 2, color: 'black' }
-            }
+            // const boardMap = {
+            //     '1': { amount: 2, color: 'white' },
+            //     '6': { amount: 5, color: 'black' },
+            //     '8': { amount: 3, color: 'black' },
+            //     '12': { amount: 5, color: 'white' },
+            //     '13': { amount: 5, color: 'black' },
+            //     '17': { amount: 3, color: 'white' },
+            //     '19': { amount: 5, color: 'white' },
+            //     '24': { amount: 2, color: 'black' }
+            // }
             // exiting
             // var boardMap = {'22': {amount: 3, color: 'white'},'24': {amount: 2, color: 'white'},'23': {amount: 1, color: 'white'},'20': {amount: 1, color: 'white'},'19': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // endgame 
-            // var boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
+            var boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // endgame with mars
             // var boardMap = {'24': {amount: 1, color: 'white'},'6': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // eaten soldiers

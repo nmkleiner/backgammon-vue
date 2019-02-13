@@ -184,8 +184,8 @@ $thin-board-border: 10px;
         }
         height: calc(34vh + 20px);
         .soldier {
-            width: 2vw!important;
-            height: 2vw!important;
+            border-radius: 5px;
+            height: 1.2vw!important;
         }
     }
     

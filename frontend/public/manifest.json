@@ -9,11 +9,6 @@
       "type": "image/png"
     },
     {
-      "src": "./img/icons/android-chrome-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png"
-    },
-    {
       "src": "./img/icons/android-chrome-150x150.png",
       "sizes": "150x150",
       "type": "image/png"
