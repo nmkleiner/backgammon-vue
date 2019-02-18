@@ -4,7 +4,6 @@ import * as firebase from 'firebase/app'
 const BASE_URL =
   process.env.NODE_ENV !== 'development' ? '' : '//localhost:3000';
 
-// const API_KEY = 'AIzaSyAy0MEnLAI1gBNxTT2DBtw440qGgNzZb8c';
 export default {
   login,
   logout,
@@ -66,21 +65,18 @@ async function getPicUrl(file) {
 
 
 function firebaseLogin(provider) {
-  console.log(provider)
   firebase
     .auth()
     .signInWithPopup(provider)
     .then(result => {
       var token = result.credential.accessToken;
       var user = result.user;
-      console.log(user, token)
     })
     .catch(function (error) {
       var errorCode = error.code;
       var errorMessage = error.message;
       var email = error.email;
       var credential = error.credential;
-      console.log(errorCode, errorMessage)
     });
 }
 
@@ -100,7 +96,6 @@ function getFProvider() {
 function firebaseOnAuthStateChanged(store,emit) {
   firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log('if user')
         const userName = user.displayName;
         const pic = user.photoURL;
         const _id = user.uid;
