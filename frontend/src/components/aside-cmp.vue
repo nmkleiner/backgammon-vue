@@ -20,7 +20,7 @@
             </div>
         </div>
     <chat-cmp :isChatOpen="isChatOpen" @showNotification="doShowNotification" @onToggleInputFocus="toggleInputFocus"></chat-cmp>
-    <login-cmp :isLoginOpen="isLoginOpen" @openSignup="openSignup" @closeLogin="closeLogin" @onLogin="closeAside" ></login-cmp>
+    <login-cmp :isLoginOpen="isLoginOpen" @openSignup="openSignup" @closeLogin="closeLogin" @onLogin="openChat" ></login-cmp>
     <signup-cmp :isSignupOpen="isSignupOpen" @onCloseSignup="closeSignup"></signup-cmp>
     </section>
 </template>
@@ -29,7 +29,7 @@
 import loginCmp from './login-cmp';
 import signupCmp from './signup-cmp';
 import chatCmp from './chat-cmp';
-import * as firebase from 'firebase'
+import userService from '../services/user.service.js'
 
 export default {
     components: {
@@ -48,8 +48,8 @@ export default {
         }
     },
     methods: {
-        async logout() {
-            await firebase.auth().signOut()
+        logout() {
+            userService.firebaseLogOut()
             this.$store.commit({type :'setLoggedInUser', user: {userName: '',pic: '',_id: ''}})
         },
         closeChat() {
@@ -76,7 +76,6 @@ export default {
             this.isLoginOpen = false        
             this.isChatOpen = false
             this.isChatFullyOpen = false
-            this.$router.push('/signup')
         },
         openLogin() {
             this.isLoginOpen = true        
@@ -84,7 +83,6 @@ export default {
             this.isChatFullyOpen = false
             this.isSignupOpen = false
             this.showNotification = false
-            this.$router.push('/login')
         },
         closeLogin() {
             this.isChatOpen = true
@@ -121,14 +119,14 @@ export default {
         switch(to.path) {
             case '/game':
             this.closeChat()
-            case '/chat':
-            if (from.path === '/login') {
-                this.closeAside()
-            }
-            case '/login':
-            if (from.path === '/signup') {
-                this.closeAside()
-            }
+            // case '/chat':
+            // if (from.path === '/login') {
+            //     this.closeAside()
+            // }
+            // case '/login':
+            // if (from.path === '/signup') {
+            //     this.closeAside()
+            // }
         }
     },
 } 

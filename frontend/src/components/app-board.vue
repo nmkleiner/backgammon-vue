@@ -16,7 +16,6 @@ import infoSection from "./info-section";
 import soldier from "./soldier";
 import msgCmp from "./msg-cmp";
 import ioClient from "socket.io-client";
-import * as firebase from 'firebase'
 
 export default {
   name: "appBoard",
@@ -72,23 +71,6 @@ export default {
     const room = 1;
     this.$socket.emit("clientGameJoined", room);
     this.$store.commit("setChoosingColors");
-    // firebase.auth().onAuthStateChanged((user) => {
-    //     if (user) {
-    //         // User is signed in.
-    //         const {displayName, photoURL, uid} = user
-    //         this.$store.commit({
-    //           type: 'setLoggedInUser', 
-    //           user: {
-    //             userName: displayName,
-    //             _id: uid,
-    //             pic: photoURL
-    //             }
-    //           })
-    //     } else {
-    //         // User is signed out.
-    //         // ...
-    //     }
-    //     });
   },
   sockets: {
     serverUserJoined() {
