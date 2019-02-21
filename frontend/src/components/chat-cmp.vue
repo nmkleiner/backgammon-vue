@@ -1,24 +1,23 @@
 <template>
   <section class="chat-cmp">
-    <div 
-      class="conversation animated" 
+    <div
+      class="conversation animated"
       :class="{'hidden': loading,'slideOutRight': !isChatOpen, 'slideInRight': isChatOpen}"
-    > 
+    >
       <div :class="{'input-focus': isInputFocus}" class="empty"></div>
-      <div 
-        :class="{'input-focus': isInputFocus}" 
-        class="conversation-container" 
+      <div
+        :class="{'input-focus': isInputFocus}"
+        class="conversation-container"
         ref="conversationRef"
       >
         <div v-for="(msg, idx) in msgs" :key="idx">
-
           <div
             class="container round msg"
             :class="{msgOut: nickname === msg.from, msgIn: nickname !== msg.from}"
           >
             <div class="img-wrapper">
-              <img v-if="msg.pic" :src="msg.pic"/>
-              <img v-else src="../../public/img/user.jpg"/>
+              <img v-if="msg.pic" :src="msg.pic">
+              <img v-else src="../../public/img/user.jpg">
               <soldier :color="msg.color"></soldier>
             </div>
             <span class="chat-user-name">{{msg.from}}:</span>
@@ -49,8 +48,8 @@
 <script>
 import ioClient from "socket.io-client";
 import msgService from "../services/msg.service.js";
-import soundService from "../services/sound.service.js"
-import soldier from "./soldier";
+import soundService from "../services/sound.service.js";
+const soldier = () => import("./soldier");
 export default {
   components: {
     soldier
@@ -64,19 +63,19 @@ export default {
       newMsg: {},
       typeMsg: "",
       loading: true,
-      isInputFocus: false,
+      isInputFocus: false
     };
   },
   methods: {
     send() {
       if (!this.newMsg.txt) return;
       this.$socket.emit("assignMsg", {
-        msg: { 
-            ...this.newMsg, 
-            from: this.nickname, 
-            color: this.loggedInUser.color, 
-            pic: this.loggedInUser.pic 
-          },
+        msg: {
+          ...this.newMsg,
+          from: this.nickname,
+          color: this.loggedInUser.color,
+          pic: this.loggedInUser.pic
+        },
         room: 1
       });
       this.newMsg = msgService.createEmptyMsg(this.nickname);
@@ -95,30 +94,30 @@ export default {
       this.$emit("pushMsgToHistory", msg);
     },
     toggleInputFocus() {
-      this.isInputFocus = !this.isInputFocus
-      this.$emit('onToggleInputFocus')
+      this.isInputFocus = !this.isInputFocus;
+      this.$emit("onToggleInputFocus");
     }
   },
   async created() {
-    await this.$store.dispatch('getLoggedInUser')
+    await this.$store.dispatch("getLoggedInUser");
     this.newMsg = msgService.createEmptyMsg(this.nickname);
-    console.log('nick',this.newMsg)
+    console.log("nick", this.newMsg);
     const room = 1;
     this.$socket.emit("chatJoined", room);
-    setTimeout(() => this.loading = false,1200)
+    setTimeout(() => (this.loading = false), 1200);
   },
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
     },
     nickname() {
-      return (this.loggedInUser.userName)? this.loggedInUser.userName : 'guest'
+      return this.loggedInUser.userName ? this.loggedInUser.userName : "guest";
     }
   },
   sockets: {
     renderMsg(msg) {
-      soundService.play('msg')
-      this.$emit('showNotification')
+      soundService.play("msg");
+      this.$emit("showNotification");
       this.msgs.push(msg);
     }
   }
@@ -146,8 +145,8 @@ export default {
       width: 24vw;
       min-width: 196px;
       border-radius: 6px;
-      border-left: 2px solid darken(white,10%);
-      border-bottom: 2px solid darken(white,10%);
+      border-left: 2px solid darken(white, 10%);
+      border-bottom: 2px solid darken(white, 10%);
     }
     width: 100vw;
   }
@@ -184,20 +183,18 @@ export default {
       clear: both;
       display: table;
     }
-    
-  
+
     .chat-user-name {
       font-size: 16px;
       font-weight: bold;
     }
-
   }
 
   .msgOut {
-    background-color: lighten(#25D366, 10%);
+    background-color: lighten(#25d366, 10%);
     margin: 5px 50px 0px 5px;
     &::after {
-      content: ' ';
+      content: " ";
       position: absolute;
       width: 0;
       height: 0;
@@ -206,9 +203,9 @@ export default {
       top: 38px;
       bottom: auto;
       border: 12px solid;
-      border-color: lighten(#25D366, 10%) lighten(#25D366, 10%) transparent transparent;
+      border-color: lighten(#25d366, 10%) lighten(#25d366, 10%) transparent
+        transparent;
     }
-    
   }
 
   .msgIn {
@@ -218,7 +215,7 @@ export default {
       margin: 5px 5px 0px 50px;
     }
     &:after {
-      content: ' ';
+      content: " ";
       position: absolute;
       width: 0;
       height: 0;
@@ -227,11 +224,11 @@ export default {
       top: 38px;
       bottom: auto;
       border: 12px solid;
-      border-color: darken(white, 3%) transparent transparent darken(white,3%);
+      border-color: darken(white, 3%) transparent transparent darken(white, 3%);
     }
   }
-    
-  .round{
+
+  .round {
     border-radius: 30px;
     -webkit-border-radius: 30px;
     -moz-border-radius: 30px;
@@ -256,7 +253,7 @@ export default {
 
   .conversation-compose {
     padding: 3px 0;
-    background-color: lighten(black,10%);
+    background-color: lighten(black, 10%);
     width: 100%;
     justify-content: space-evenly;
     @media (min-width: 850px) {
@@ -273,7 +270,7 @@ export default {
         position: unset;
       }
       .border-bottom-input {
-          outline: none;
+        outline: none;
       }
     }
 
@@ -288,9 +285,9 @@ export default {
       padding: 7px;
       width: 46px;
       height: 46px;
-      background-color: darken(#25D366, 20%);
+      background-color: darken(#25d366, 20%);
       border: none;
-      color: darken(white,15%);
+      color: darken(white, 15%);
       border-radius: 50%;
       outline: 0;
       font-size: 16px;

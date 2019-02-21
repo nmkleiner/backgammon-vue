@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import homePage from './views/home-page.vue'
+const homePage = () => import('./views/home-page.vue')
 
 Vue.use(Router)
 
@@ -9,14 +9,14 @@ export default new Router({
   base: process.env.BASE_URL,
   routes: [
     {
+      path: '/',
+      name: 'homepage',
+      component: homePage
+    },
+    {
       path: '/:openCmp',
       name: 'homepage',
       component: homePage
     },
-    // {
-    //   path: '/login',
-    //   name: 'login',
-    //   component: loginPage
-    // },
   ]
 })

@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import asideCmp from '../components/aside-cmp'
-import appBoard from '../components/app-board'
+const asideCmp = () => import('../components/aside-cmp')
+const appBoard = () => import('../components/app-board')
 export default {
     components: {
         appBoard,

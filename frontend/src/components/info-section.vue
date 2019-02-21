@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import soldier from './soldier'
+const soldier = () => import("./soldier.vue");
 
 export default {
     components: {
@@ -26,8 +26,6 @@ export default {
         },
         score() {
             return this.$store.getters.score
-            // return {black: 1, white: 1}
-
         },
         showScore() {
             return this.score.white || this.score.black
@@ -52,7 +50,6 @@ export default {
     .soldier-section {
         display: block;
         margin-top: 3vh;
-        // font-size: 1.2rem;
 
         @media (min-width: 850px) {
             font-size: 1.5rem;

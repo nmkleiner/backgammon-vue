@@ -104,7 +104,6 @@ function firebaseOnAuthStateChanged(store,emit) {
           user: { userName, pic, _id }
         });
         emit("onLogin");
-      } else {
-      }
+      } 
     });
 }

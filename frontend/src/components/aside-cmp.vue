@@ -20,17 +20,16 @@
             </div>
         </div>
     <chat-cmp :isChatOpen="isChatOpen" @showNotification="doShowNotification" @onToggleInputFocus="toggleInputFocus"></chat-cmp>
-    <login-cmp :isLoginOpen="isLoginOpen" @openSignup="openSignup" @closeLogin="closeLogin" @onLogin="openChat" ></login-cmp>
+    <login-cmp :isLoginOpen="isLoginOpen" @openSignup="openSignup" @closeLogin="closeLogin" ></login-cmp>
     <signup-cmp :isSignupOpen="isSignupOpen" @onCloseSignup="closeSignup"></signup-cmp>
     </section>
 </template>
 
 <script>
-import loginCmp from './login-cmp';
-import signupCmp from './signup-cmp';
-import chatCmp from './chat-cmp';
-import userService from '../services/user.service.js'
-
+const loginCmp = () => import("./login-cmp")
+const signupCmp = () => import("./signup-cmp")
+const chatCmp = () => import("./chat-cmp")
+const userService = () => import("../services/user.service.js")
 export default {
     components: {
         chatCmp,
@@ -58,7 +57,7 @@ export default {
             this.isLoginOpen = false        
             this.isSignupOpen = false
             this.showNotification = false
-            this.$router.push('/game')
+            this.$router.push('/')
         },
         openChat() {
             this.isChatOpen = true
@@ -87,12 +86,12 @@ export default {
         closeLogin() {
             this.isChatOpen = true
             this.isLoginOpen = false        
-            this.$router.push('/game')
+            this.$router.push('/')
         },
         closeSignup() {
             this.isChatOpen = true
             this.isSignupOpen = false        
-            this.$router.push('/game')
+            this.$router.push('/')
         },
         closeAside() {
             this.isChatOpen = false
@@ -100,7 +99,7 @@ export default {
             this.isSignupOpen = false        
             this.isLoginOpen = false        
             this.showNotification = false
-            this.$router.push('/game')
+            this.$router.push('/')
         },
         toggleInputFocus() {
             this.isInputFocus = !this.isInputFocus
@@ -117,7 +116,7 @@ export default {
     watch:{
     $route (to, from){
         switch(to.path) {
-            case '/game':
+            case '/':
             this.closeChat()
             // case '/chat':
             // if (from.path === '/login') {
