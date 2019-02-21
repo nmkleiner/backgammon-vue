@@ -36,7 +36,7 @@
 </template>
 
 <script>
-const gameCell = () => import("./game-cell.vue");
+import gameCell from "./game-cell.vue";
 const actionBtns = () => import("./action-btns");
 const dicesSection = () => import("./dices-section");
 export default {

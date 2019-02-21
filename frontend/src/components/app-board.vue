@@ -11,11 +11,11 @@
   </section>
 </template>
 <script>
-const gameBoard = () => import("./game-board")
-const infoSection = () => import("./info-section")
-const soldier = () => import("./soldier")
-const msgCmp = () => import("./msg-cmp")
-const ioClient = () => import("socket.io-client")
+import gameBoard from "./game-board";
+const infoSection = () => import("./info-section");
+const soldier = () => import("./soldier");
+const msgCmp = () => import("./msg-cmp");
+const ioClient = () => import("socket.io-client");
 
 export default {
   name: "appBoard",
