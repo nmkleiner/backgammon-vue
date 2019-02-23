@@ -33,6 +33,7 @@ export default ({
             const soldiers = gameService.getAllSoldiers(state.cells)
             soldiers.forEach(soldier => soldier.selected = false)
             state.selectedSoldier = null
+            console.log(state.selectedSoldier)
         },
         selectSoldier(state, { soldierId }) {
             const soldier = gameService.getSoldierById(state.cells, soldierId)
@@ -51,7 +52,7 @@ export default ({
         },
         setSoldiers(state) {
             // regular board
-            const boardMap = {
+            let boardMap = {
                 '1': { amount: 2, color: 'white' },
                 '6': { amount: 5, color: 'black' },
                 '8': { amount: 3, color: 'black' },
@@ -62,11 +63,11 @@ export default ({
                 '24': { amount: 2, color: 'black' }
             }
             // exiting
-            // var boardMap = {'22': {amount: 3, color: 'white'},'24': {amount: 2, color: 'white'},'23': {amount: 1, color: 'white'},'20': {amount: 1, color: 'white'},'19': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
+            boardMap = {'22': {amount: 7, color: 'white'},'24': {amount: 5, color: 'white'},'23': {amount: 1, color: 'white'},'20': {amount: 1, color: 'white'},'19': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // endgame 
-            // var boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
+            // boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // endgame with mars
-            // var boardMap = {'24': {amount: 1, color: 'white'},'6': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
+            // boardMap = {'24': {amount: 1, color: 'white'},'6': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // eaten soldiers
             // var boardMap = {'26': {amount: 2, color: 'white'},'27': {amount: 2, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // no possible moves
@@ -219,7 +220,7 @@ export default ({
                     commit({ type: 'setNewSoldiers', cells })
                     movedSoldier = gameService.getSoldierById(state.cells, soldierId)
                     movedSoldier.hasMoved = true
-                    let sound = !isEating ? 'click' : 'eat'
+                    let sound = !isEating ? 'move' : 'eat'
                     soundService.play(sound)
                     commit('updateCells')
 
@@ -228,6 +229,7 @@ export default ({
             }
         },
         async moveSoldier({ state, commit }, { targetCell }) {
+            console.log(targetCell)
             const isPossibleMove = gameService.isPossibleMove(targetCell.id, state.selectedSoldier)
             if (!isPossibleMove) return false
             const srcCell = gameService.getCellBySoldierId(state.cells, state.selectedSoldier.id)
@@ -271,6 +273,9 @@ export default ({
             })
             await promise
             return Promise.resolve(promise)
+        },
+        win({state}) {
+            state.currTurn === state.loggedInUser.color? soundService.play("win") : console.log('lose');
         },
         restartGame({ commit }) {
             commit({ type: 'setMars', isMars: false })

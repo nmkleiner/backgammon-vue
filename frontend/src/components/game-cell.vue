@@ -6,8 +6,9 @@
         'exit': exit,
         'possibleMove': cell.isPossibleMove
     }"
-    @click.stop="onCellClick"
+    @click="onCellClick"
   >
+    <div v-if="middle" class="middle-line"></div>
     <div
       v-if="!middle"
       :class="{
@@ -20,9 +21,8 @@
             'triangle-green': cell.isPossibleMove,
         }"
     ></div>
-    <!-- v-if="cell.soldiers" -->
     <soldier
-      @dblclick.native="onSoldierDblClick()"
+      @dblclick.native="onSoldierDblClick(soldier)"
       @mouseout.native="onSoldierOut()"
       @mouseover.native="onSoldierHover(soldier)"
       @click.native.stop="onSoldierClick(soldier)"
@@ -30,7 +30,7 @@
       :key="soldier.id"
       :soldier="soldier"
       :idx="idx"
-    ></soldier>
+    />
   </div>
 </template>
 
@@ -48,7 +48,8 @@ export default {
     soldier
   },
   methods: {
-    async onCellClick() {
+    async onCellClick(ev) {
+      if (this.cell.isPossibleMove && ev) ev.stopPropagation();
       if (this.selectedSoldier) {
         const soldier = this.selectedSoldier;
         this.$store.commit("showNoPossibleMoves");
@@ -57,23 +58,12 @@ export default {
           targetCell: this.cell
         });
         if (soldierDidMove) {
-          const room = 1;
-          const cells = this.$store.getters.cells;
-          this.$socket.emit("clientSoldierMoved", {
-            soldierId: soldier.id,
-            targetCell: this.cell,
-            cells,
-            isEating,
-            room
-          });
-          this.$store.commit("unselectSoldiers");
+          this.afterSoldierMove(soldier, isEating);
         }
       }
     },
     onSoldierClick(soldier) {
-      if (soldier.selected) {
-        this.$store.commit("unselectSoldiers");
-      } else if (soldier.isOut) {
+      if (soldier.isOut || this.selectedSoldier) {
         this.onCellClick();
       } else {
         this.$store.commit("unselectSoldiers");
@@ -85,6 +75,29 @@ export default {
         });
         this.$store.commit({ type: "selectSoldier", soldierId: soldier.id });
       }
+    },
+    async onSoldierDblClick(soldier) {
+      const targetCellIdx = this.loggedInUserColor === "white" ? 25 : 0;
+      let { soldierDidMove, isEating } = await this.$store.dispatch({
+        type: "moveSoldier",
+        targetCell: this.cells.find(cell => cell.id === targetCellIdx)
+      });
+      if (soldierDidMove) {
+        this.afterSoldierMove(soldier, false);
+      }
+    },
+    afterSoldierMove(soldier, isEating) {
+      const room = 1;
+      const cells = this.cells;
+      this.$socket.emit("clientSoldierMoved", {
+        soldierId: soldier.id,
+        targetCell: this.cell,
+        cells,
+        isEating,
+        room
+      });
+      this.$store.commit("unselectSoldiers");
+      this.$store.commit("showNoPossibleMoves");
     },
     onSoldierHover(soldier) {
       if (soldier.possibleMoves.length) {
@@ -102,6 +115,12 @@ export default {
   computed: {
     selectedSoldier() {
       return this.$store.getters.selectedSoldier;
+    },
+    loggedInUserColor() {
+      return this.$store.getters.loggedInUserColor;
+    },
+    cells() {
+      return this.$store.getters.cells;
     }
   }
 };

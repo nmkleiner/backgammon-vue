@@ -14,9 +14,6 @@
         </div>
       </div>
       <div class="board-wrapper left-side-wrapper flex space-around align-center">
-        <!-- <span v-if="winner && !mars" class="animated flash win capitalize">{{isWinner? 'you won!': 'you lost!'}}</span>
-                <span v-if="winner && mars && !turkishMars" class="animated flash win capitalize">{{isWinner? 'you won! mars!!': 'you lost! mars!!'}}</span>
-        <span v-if="winner && mars && turkishMars" class="animated flash win capitalize">{{isWinner? 'you won! turkish mars!!': 'you lost! turkish mars!!'}}</span>-->
         <dices-section v-if="!winner"></dices-section>
       </div>
 
@@ -51,6 +48,7 @@ export default {
   created() {},
   methods: {
     unselect() {
+        console.log('unselect')
       this.$store.commit("showNoPossibleMoves");
       this.$store.commit("unselectSoldiers");
     }

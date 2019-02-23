@@ -3,13 +3,19 @@ export default {
     load
 }
 
-var sounds = {dice: '', click: '', eat: '', msg: ''}
+var sounds = {
+    dice: 'mp3',
+    move: 'wav',
+    eat: 'wav',
+    msg: 'wav',
+    yourTurn: 'wav',
+    win: 'wav'
+}
 
 function load() {
-    sounds.dice = new Audio(require('../../public/audio/cubes.mp3'))
-    sounds.click = new Audio(require('../../public/audio/click.wav'))
-    sounds.eat = new Audio(require('../../public/audio/eat.wav'))
-    sounds.msg = new Audio(require('../../public/audio/msg.wav'))
+    for (let key in sounds) {
+        sounds[key] = new Audio(require('../../public/audio/' + key + '.' + sounds[key]))
+    }
 }
 
 function play(fileName) {

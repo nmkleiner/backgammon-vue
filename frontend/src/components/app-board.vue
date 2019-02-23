@@ -11,14 +11,14 @@
   </section>
 </template>
 <script>
-import gameBoard from "./game-board";
-const infoSection = () => import("./info-section");
-const soldier = () => import("./soldier");
-const msgCmp = () => import("./msg-cmp");
-const ioClient = () => import("socket.io-client");
+import gameBoard from './game-board';
+const infoSection = () => import('./info-section');
+const soldier = () => import('./soldier');
+const msgCmp = () => import('./msg-cmp');
+const ioClient = () => import('socket.io-client');
 
 export default {
-  name: "appBoard",
+  name: 'appBoard',
   components: {
     gameBoard,
     soldier,
@@ -56,35 +56,35 @@ export default {
     },
     msg() {
       if (!this.showMsg) return;
-      if (this.noPossibleMoves) return "No Possible Moves";
+      if (this.noPossibleMoves) return 'No Possible Moves';
       if (this.winner && this.turkishMars)
         return this.isWinner
-          ? "you won! turkish mars!"
-          : "you lost! turkish mars!";
+          ? 'you won! turkish mars!'
+          : 'you lost! turkish mars!';
       if (this.winner && this.mars)
-        return this.isWinner ? "you won! mars!" : "you lost! mars!";
-      if (this.winner) return this.isWinner ? "you won!" : "you lost!";
+        return this.isWinner ? 'you won! mars!' : 'you lost! mars!';
+      if (this.winner) return this.isWinner ? 'you won!' : 'you lost!';
     }
   },
   created() {
-    this.$store.dispatch({ type: "setBoard" });
+    this.$store.dispatch({ type: 'setBoard' });
     const room = 1;
-    this.$socket.emit("clientGameJoined", room);
-    this.$store.commit("setChoosingColors");
+    this.$socket.emit('clientGameJoined', room);
+    this.$store.commit('setChoosingColors');
   },
   sockets: {
     serverUserJoined() {
       const room = 1;
-      this.$socket.emit("clientAlreadyHere", room);
-      this.$store.commit("setTwoPlayersConnected");
+      this.$socket.emit('clientAlreadyHere', room);
+      this.$store.commit('setTwoPlayersConnected');
     },
     serverSomeoneAlreadyHere() {
-      this.$store.commit("changeMyColor");
-      this.$store.commit("setTwoPlayersConnected");
+      this.$store.commit('changeMyColor');
+      this.$store.commit('setTwoPlayersConnected');
     },
     serverSoldierMoved({ soldierId, targetCell, cells, isEating }) {
       this.$store.dispatch({
-        type: "setBoard",
+        type: 'setBoard',
         soldierId,
         targetCell,
         cells,
@@ -92,36 +92,37 @@ export default {
       });
     },
     serverGameEnded(winner) {
-      this.$store.commit({ type: "endGame", winner });
+      this.$store.commit({ type: 'endGame', winner });
     },
     serverIsMars() {
-      this.$store.commit({ type: "setMars", isMars: true });
+      this.$store.commit({ type: 'setMars', isMars: true });
     },
     serverIsTurkishMars() {
-      this.$store.commit({ type: "setTurkishMars", isTurkishMars: true });
+      this.$store.commit({ type: 'setTurkishMars', isTurkishMars: true });
     },
     serverRestartGame() {
-      this.$store.dispatch({ type: "restartGame", isTurkishMars: true });
+      this.$store.dispatch({ type: 'restartGame', isTurkishMars: true });
     }
   },
   watch: {
     winner: function(newVal, oldVal) {
       if (newVal) {
         const room = 1;
-        const winner = newVal;
-        this.$socket.emit("clientEndGame", room, winner);
+        const winner = true;
+        this.$socket.emit('clientEndGame', room, winner);
+        this.$store.dispatch('win');
       }
     },
     mars: function(newVal) {
       if (newVal) {
         const room = 1;
-        this.$socket.emit("clientMars", room);
+        this.$socket.emit('clientMars', room);
       }
     },
     turkishMars: function(newVal) {
       if (newVal) {
         const room = 1;
-        this.$socket.emit("clientTurkishMars", room);
+        this.$socket.emit('clientTurkishMars', room);
       }
     }
   }

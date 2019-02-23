@@ -1,5 +1,6 @@
 $board-border: 20px;
 $thin-board-border: 10px;
+$board-color: #deb887;
 // $cell-width: 6vw;
 // $cell-width-mobile: 6.4vw;
 // $cell-height: 33vh;
@@ -9,16 +10,15 @@ $thin-board-border: 10px;
 // $middle-width: 3vw;
 // $app-board-width: 5vw + 12*6vw + 3vw + 20px + 10px + 8vw (+5vw)(shoolaim)
 .app-board{
-    background-color: darken(#e4bf8e,10%);
+    background-color: #e4bf8e;
     position: relative;
     display: flex;
     flex-direction: column;
     width: 100%;
     
     @media (min-width: 850px) {
-        width: calc(5vw + 72vw + 3vw + 20px + 10px + 8vw + 5vw);
+        width: calc(5vw + 72vw + 3vw + 20px + 10px + 8vw);
         margin: 0 auto;
-        // padding: 0 5vw 0 0;
         margin-top: 80px;
     }
     .rotate-screen {
@@ -39,7 +39,7 @@ $thin-board-border: 10px;
         }
         
         .board-cells {
-            background-color: burlywood;
+            background-color: $board-color;
         }
         &.flipped-board {
             transform: rotateX(180deg);
@@ -56,12 +56,13 @@ $thin-board-border: 10px;
         .top-row{
             .board-cells {
                 @media (min-width: 850px) {
-                    border-top: $board-border solid black;
-                    border-left: $board-border solid black;
-                    border-right: $thin-board-border solid black;
+                    border-top: $board-border solid darken($board-color,30%);
+                    border-left: $board-border solid darken($board-color,30%);
+                    border-right: $board-border solid darken($board-color,30%);
                 }
-                border-right: $thin-board-border solid black;
-                border-left: $thin-board-border solid black;
+                border-right: $thin-board-border solid darken($board-color,30%);
+                border-left: $thin-board-border solid darken($board-color,30%);
+                border-top: $thin-board-border solid darken($board-color,30%);
             }
         }
         
@@ -76,26 +77,18 @@ $thin-board-border: 10px;
             align-items: flex-end;
             .board-cells {
                 @media (min-width: 850px) {
-                    border-bottom: $board-border solid black;
-                    border-left: $board-border solid black;
-                    border-right: $thin-board-border solid black;
+                    border-bottom: $board-border solid darken($board-color,30%);
+                    border-left: $board-border solid darken($board-color,30%);
+                    border-right: $board-border solid darken($board-color,30%);
                 }
-                border-left: $thin-board-border solid black;
-                border-right: 10px solid black;
+                border-left: $thin-board-border solid darken($board-color,30%);
+                border-right: $thin-board-border solid darken($board-color,30%);
+                border-bottom: $thin-board-border solid darken($board-color,30%);
                 flex-direction: row-reverse;
                 align-items: flex-end;
             }
         }
-        
-        .win{
-            display: block;
-            padding: 10px;
-            color: white;
-            background-color: black;
-            font-size: 2.3rem;
-        }
         .board-wrapper {
-            // border:1px white solid;
             position: absolute;
             width: 38.4vw;
             top: 45vh;
@@ -160,10 +153,9 @@ $thin-board-border: 10px;
 
 .game-cell {
     background-color: transparent;
-    // border:1px white solid;
     flex-wrap: wrap;
     width: 6.4vw;
-    height: calc(50vh);
+    height: calc(50vh - 10px);
     z-index: 1;
     @media (min-width: 850px) {
         width: 6vw;
@@ -172,8 +164,19 @@ $thin-board-border: 10px;
     transition: .3s;
     &.middle{
         flex-direction: column-reverse;
-        background-color: darkgoldenrod;
+        background-color: darken($board-color, 30%);
         width: 3vw;
+        .middle-line {
+            background-color: darken(#df372b,70%);
+            position: absolute;
+            height: calc(50vh);
+            width: 1px;
+            @media (min-width:850px){
+                width: 2px;
+                height: calc(33vh + 30px);
+
+            }
+        }
     }
     &.exit{
         background-color: transparent;
@@ -184,8 +187,11 @@ $thin-board-border: 10px;
         }
         height: calc(34vh + 20px);
         .soldier {
-            border-radius: 5px;
-            height: 1.2vw!important;
+            border-radius: 5px!important;
+            height: 1.4vw!important;
+            @media (min-width: 850px) {
+                margin-top: 1px!important;
+            }
         }
     }
     
@@ -193,9 +199,9 @@ $thin-board-border: 10px;
         position: absolute;
         border-left: 3vw solid transparent;
         border-right: 3vw solid transparent;
-        border-bottom: 32vh solid black;
+        border-bottom: 32vh solid;
         @media (min-width: 850px) {
-            border-bottom: 26vh solid black;
+            border-bottom: 26vh solid;
         }
     }
 
@@ -209,7 +215,7 @@ $thin-board-border: 10px;
         height: 50vh;
         transition: 0.3s;
         &.triangle-green {
-            background-color: darken(burlywood, 30%);
+            background-color: darken($board-color, 30%);
         }
         
     }
@@ -218,22 +224,22 @@ $thin-board-border: 10px;
         position: absolute;
         border-left: 3vw solid transparent;
         border-right: 3vw solid transparent;
-        border-top: 32vh solid black;
+        border-top: 32vh solid;
         @media (min-width: 850px) {
             border-left: 3vw solid transparent;
             border-right: 3vw solid transparent;
-            border-top: 26vh solid black;
+            border-top: 26vh solid;
         }
     }
 
     .triangle-black {
-        border-bottom-color: rgb(30,30,30);
-        border-top-color: rgb(30,30,30);
+        border-bottom-color: darken(#df372b,70%);
+        border-top-color: darken(#df372b,70%);
     }
 
     .triangle-red {
-        border-bottom-color: red;
-        border-top-color: red;
+        border-bottom-color: darken(#df372b,10%);
+        border-top-color: darken(#df372b,10%);
     }
 
     .triangle-green {
