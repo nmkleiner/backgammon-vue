@@ -13,7 +13,7 @@ export default {
     hasEatenSoldiers,
     isMiddleCell,
     calcPossibleMoves,
-    throwDices,
+    setDicesNums,
     updateDices,
     getMiddleCell,
     isEndGame,
@@ -138,7 +138,7 @@ function isMiddleCell(srcCell) {
     return (srcCell.id === whiteEatenCellId || srcCell.id === blackEatenCellId)? true : false
 }
 
-function throwDices(dices) {
+function setDicesNums(dices) {
     dices.num1 = utilService.getRandomInt(1,7)
     dices.num2 = utilService.getRandomInt(1,7)
     // dices.num1 = 1

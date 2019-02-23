@@ -35,7 +35,7 @@
 const loginCmp = () => import("./login-cmp");
 const signupCmp = () => import("./signup-cmp");
 const chatCmp = () => import("./chat-cmp");
-const userService = () => import("../services/user.service.js");
+import userService from "../services/user.service.js";
 export default {
   components: {
     chatCmp,
@@ -55,7 +55,7 @@ export default {
   methods: {
     logout() {
       userService.firebaseLogOut();
-      this.$store.commit({
+      this.$store.dispatch({
         type: "setLoggedInUser",
         user: { userName: "", pic: "", _id: "" }
       });
@@ -63,6 +63,7 @@ export default {
     closeChat() {
       this.isChatOpen = false;
       this.isChatFullyOpen = false;
+      setTimeout(() => (this.isChatFullyOpen = false), 900);
       this.isLoginOpen = false;
       this.isSignupOpen = false;
       this.showNotification = false;

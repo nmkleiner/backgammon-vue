@@ -15,10 +15,10 @@ export default ({
         gameOn(state) {
             state.isGameOn = true
         },
-        setStartDice(state, {color}) {
-            state.startDice.dice = state.startDice[color] = startGameService.throwStartDice(state.startDice.dice)
+        setStartDice(state, { color }) {
+            state.startDice.dice = state.startDice[color] = startGameService.setStartDice(state.startDice.dice)
         },
-        setStartDiceTo(state, {dice, color}) {
+        setStartDiceTo(state, { dice, color }) {
             state.startDice.dice = state.startDice[color] = dice
         },
         nullDice(state) {
@@ -30,22 +30,33 @@ export default ({
         setTwoPlayersConnected(state) {
             state.playersConnected = 2
         }
-        
+
     },
     actions: {
-        diceRes({commit}, { dice, userColor }) {
+        diceRes({ commit }, { dice, userColor }) {
+            commit("rollDices");
+
             const color = (userColor === 'white') ? 'black' : 'white'
-            if (dice) commit({type: 'setStartDiceTo', color, dice})
-            else commit({type: 'setStartDice', color})
-            
+            if (dice) commit({ type: 'setStartDiceTo', color, dice })
+            else commit({ type: 'setStartDice', color })
+            setTimeout(() => {
+                commit("unrollDices");
+            }, 1000);
+        },
+        setTwoPlayersConnected({ commit }) {
+            commit('setTwoPlayersConnected')
+        },
+        changeMyColor({ commit }) {
+            commit('changeMyColor');
         }
+
     },
     getters: {
         isGameOn: state => state.isGameOn,
         startDice: state => state.startDice,
         choosingColors: state => state.choosingColors,
         playersConnected: state => state.playersConnected,
-        
+
     }
 })
 

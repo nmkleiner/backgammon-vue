@@ -101,7 +101,6 @@ export default {
   async created() {
     await this.$store.dispatch("getLoggedInUser");
     this.newMsg = msgService.createEmptyMsg(this.nickname);
-    console.log("nick", this.newMsg);
     const room = 1;
     this.$socket.emit("chatJoined", room);
     setTimeout(() => (this.loading = false), 1200);
@@ -256,6 +255,7 @@ export default {
     background-color: lighten(black, 10%);
     width: 100%;
     justify-content: space-evenly;
+    z-index: 1;
     @media (min-width: 850px) {
       padding: 10px 0;
     }

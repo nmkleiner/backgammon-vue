@@ -13,45 +13,7 @@ possibleMoves [{soldierId: moves: [1,2,3,4]},{},...]
 
 
 TODO: 
-
-branch 003
-
 -session: save usercolor in sessionstorage
 or find better solution (why did i wanted that?)
-in case someone refreshes, or disconnects and reconnects
+in case someone refreshes, or disconnects and reconnects take the current game state from other player
 
-
-how to do loading: have this.loading that is usually false
-,make it true in function that loads something, then false after loading.
-then make something that renders when loading and make everything else not render.
-
-branch 004
-v-toggle chat btn will become x btn when open
-v-will show also when focus
-v-will be ok in mobile when focus
-v-soldiers in middle cell will go to center
-v-fix win count location in mobile
-v-move soldier sound played twice
-v-כשמזיזים חייל: זה שמזיז לא צריך את כל ההבהובים האלה
-v-זה שצופה צריך יותר הבהובים, גם כשהחייל נוחת how can this be done?
-
-
-branch 005
-
-V-link from chat to login & sign up cmps
-V-user who's not logged in will have default pic
-V-user who logged in can upload pic
-V-if have pic show it if not show default
-V-if have name show it if not show guest
-sV-how soldier with color next to pic
-
-V-when logging in should go back to chat
-V-design cool inputs for login and signup
-V-remove choose nickname from chat
-V-login button design
-V-login design: design btns,remove forgot your password, more margins, add border like chat.
-V-verify notifications
-V-signup design: no back btn,design save btn, save should close and bring back chat, add border like chat.
-V-delete unnecessary classes and css.
-
-V-back btn will not get out of the page

@@ -115,24 +115,16 @@ export default {
   },
   methods: {
     async throwDices() {
-      this.$store.commit("rollDices");
+      this.$store.dispatch("throwDices");
       const room = 1;
       this.$socket.emit("clientRollDices", room);
-      this.$store.dispatch("throwDices");
       this.$socket.emit("clientDicesRes", room, this.dices);
     },
     async throwDice() {
-      this.$store.commit("rollDices");
       const room = 1;
       this.$socket.emit("clientRollDices", room);
-
-      let { userColor } = this;
-      userColor = userColor === "white" ? "black" : "white";
+      let userColor = this.userColor === "white" ? "black" : "white";
       await this.$store.dispatch({ type: "diceRes", userColor });
-      setTimeout(() => {
-        this.$store.commit("unrollDices");
-      }, 1000);
-
       this.$socket.emit("clientStartDiceRes", room, this.startDice.dice);
     },
     async restartGame() {

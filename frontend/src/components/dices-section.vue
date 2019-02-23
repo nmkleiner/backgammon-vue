@@ -32,6 +32,9 @@ export default {
         this.$store.commit({ type: "dicesRes", dices });
       }, 1000);
     },
+
+
+
     async serverDiceUnrolling(dice) {
       await setTimeout(() => {
         this.$store.commit("unrollDices");
@@ -39,6 +42,10 @@ export default {
       const { userColor } = this;
       await this.$store.dispatch({ type: "diceRes", dice, userColor });
     },
+
+
+
+
     serverEndTurn() {
       setTimeout(() => {
         this.$store.commit("endTurn");

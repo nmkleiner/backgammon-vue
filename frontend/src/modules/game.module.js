@@ -11,7 +11,7 @@ export default ({
         possibleMoves: [],
         winner: false,
         duringTurn: false,
-        loggedInUser: {userName: '',_id:'', pic: '',color: 'white'},
+        loggedInUser: { userName: '', _id: '', pic: '', color: 'white' },
         isMars: false,
         isTurkishMars: false,
         score: { white: 0, black: 0 },
@@ -33,7 +33,6 @@ export default ({
             const soldiers = gameService.getAllSoldiers(state.cells)
             soldiers.forEach(soldier => soldier.selected = false)
             state.selectedSoldier = null
-            console.log(state.selectedSoldier)
         },
         selectSoldier(state, { soldierId }) {
             const soldier = gameService.getSoldierById(state.cells, soldierId)
@@ -63,9 +62,9 @@ export default ({
                 '24': { amount: 2, color: 'black' }
             }
             // exiting
-            boardMap = {'22': {amount: 7, color: 'white'},'24': {amount: 5, color: 'white'},'23': {amount: 1, color: 'white'},'20': {amount: 1, color: 'white'},'19': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
+            // boardMap = {'22': {amount: 7, color: 'white'},'24': {amount: 5, color: 'white'},'23': {amount: 1, color: 'white'},'20': {amount: 1, color: 'white'},'19': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // endgame 
-            // boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
+            boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // endgame with mars
             // boardMap = {'24': {amount: 1, color: 'white'},'6': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // eaten soldiers
@@ -145,8 +144,8 @@ export default ({
         unrollDices(state) {
             state.dices.rolling = false
         },
-        throwDices(state) {
-            state.dices = gameService.throwDices(state.dices)
+        setDicesNums(state) {
+            state.dices = gameService.setDicesNums(state.dices)
         },
         dicesRes(state, { dices }) {
             state.dices.num1ToShow = dices.num1ToShow
@@ -167,11 +166,11 @@ export default ({
     },
     actions: {
         async throwDices({ commit, state }) {
-            
+            commit("rollDices")
             commit('startTurn')
-            commit('throwDices')
+            commit('setDicesNums')
             commit('calcPossibleMoves')
-
+            
             await setTimeout(() => {
                 commit('unrollDices')
             }, 1000)
@@ -179,9 +178,8 @@ export default ({
             if (!state.possibleMoves.length) {
                 await setTimeout(() => {
                     commit('endTurn')
-                    // point 1 if dices don't allow movement
                     commit('noPossibleMovesOn')
-                    setTimeout(() => commit('noPossibleMovesOff'),1800)
+                    setTimeout(() => commit('noPossibleMovesOff'), 1800)
                 }, 1500)
             }
             return state.dices
@@ -200,7 +198,7 @@ export default ({
             })
         },
         googleLogin({ commit }, { loginData }) {
-            commit({ type: 'setLoggedInUser', user: {userName: loginData.userName} })
+            commit({ type: 'setLoggedInUser', user: { userName: loginData.userName } })
         },
         logout({ commit }) {
             userService.logout();
@@ -211,25 +209,22 @@ export default ({
             if (!cells) {
                 commit('setCells')
                 commit('setSoldiers')
+                commit('setChoosingColors')
             }
             else {
                 let movedSoldier = gameService.getSoldierById(state.cells, soldierId)
                 movedSoldier.isMoving = true
-                setTimeout(() => {
-                    commit('clearBoard')
-                    commit({ type: 'setNewSoldiers', cells })
-                    movedSoldier = gameService.getSoldierById(state.cells, soldierId)
-                    movedSoldier.hasMoved = true
-                    let sound = !isEating ? 'move' : 'eat'
-                    soundService.play(sound)
-                    commit('updateCells')
-
-                    commit('calcPossibleMoves')
-                }, 500)
+                commit('clearBoard')
+                commit({ type: 'setNewSoldiers', cells })
+                movedSoldier = gameService.getSoldierById(state.cells, soldierId)
+                movedSoldier.hasMoved = true
+                let sound = !isEating ? 'move' : 'eat'
+                soundService.play(sound)
+                commit('updateCells')
+                commit('calcPossibleMoves')
             }
         },
         async moveSoldier({ state, commit }, { targetCell }) {
-            console.log(targetCell)
             const isPossibleMove = gameService.isPossibleMove(targetCell.id, state.selectedSoldier)
             if (!isPossibleMove) return false
             const srcCell = gameService.getCellBySoldierId(state.cells, state.selectedSoldier.id)
@@ -250,8 +245,8 @@ export default ({
 
             let promise = new Promise(res => {
                 setTimeout(() => {
+                    console.log('problem')
                     srcCell.soldiers.pop()
-                    // state.selectedSoldier.isMoving = false
                     targetCell.soldiers.push(state.selectedSoldier)
                     commit({ type: 'updateDices', srcCell, targetCell })
                     commit('calcPossibleMoves')
@@ -269,13 +264,22 @@ export default ({
                         commit('endTurn')
                     }
                     res({ soldierDidMove: true, isEating })
-                }, 200)
+                }, 100)
             })
             await promise
             return Promise.resolve(promise)
         },
-        win({state}) {
-            state.currTurn === state.loggedInUser.color? soundService.play("win") : console.log('lose');
+        win({ state }) {
+            state.currTurn === state.loggedInUser.color ? soundService.play("win") : console.log('lose');
+        },
+        endGame({commit},{winner}) {
+            commit({ type: 'endGame', winner });
+        },
+        setMars({commit}, {isMars}) {
+            commit({ type: "setMars", isMars: true });
+        },
+        setTurkishMars({commit},{isTurkishMars}) {
+            commit({ type: "setTurkishMars", isTurkishMars: true });
         },
         restartGame({ commit }) {
             commit({ type: 'setMars', isMars: false })
@@ -287,6 +291,9 @@ export default ({
             commit({ type: 'checkWinner' })
             commit({ type: 'setDuringTurn' })
             commit({ type: 'updateScore' })
+        },
+        setLoggedInUser({commit}, {user}) {
+            commit({type: 'setLoggedInUser',user})
         }
     },
     getters: {
