@@ -27,8 +27,6 @@ const blackOutCellId = 25
 const whiteEatenCellId = 26
 const blackEatenCellId = 27
 
-
-
 function createSoldiers(amount,color) {
     var res = []
     for (var i = 0; i < amount; i++) {

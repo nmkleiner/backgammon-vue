@@ -64,7 +64,7 @@ export default ({
             // exiting
             // boardMap = {'22': {amount: 7, color: 'white'},'24': {amount: 5, color: 'white'},'23': {amount: 1, color: 'white'},'20': {amount: 1, color: 'white'},'19': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // endgame 
-            boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
+            // boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // endgame with mars
             // boardMap = {'24': {amount: 1, color: 'white'},'6': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // eaten soldiers
@@ -223,6 +223,18 @@ export default ({
                 commit('updateCells')
                 commit('calcPossibleMoves')
             }
+        },
+        selectSoldier({commit},{soldier}) {
+
+            commit("unselectSoldiers");
+            commit("showNoPossibleMoves");
+            commit({
+                type: "showPossibleMoves",
+                possibleMoves: soldier.possibleMoves,
+                soldier
+            });
+            console.log(soldier)
+            commit({ type: "selectSoldier", soldierId: soldier.id });
         },
         async moveSoldier({ state, commit }, { targetCell }) {
             const isPossibleMove = gameService.isPossibleMove(targetCell.id, state.selectedSoldier)

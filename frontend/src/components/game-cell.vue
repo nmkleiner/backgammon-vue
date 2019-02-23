@@ -25,7 +25,7 @@
       @dblclick.native="onSoldierDblClick(soldier)"
       @mouseout.native="onSoldierOut()"
       @mouseover.native="onSoldierHover(soldier)"
-      @click.native.stop="onSoldierClick(soldier)"
+      @click.native="onSoldierClick(soldier,$event)"
       v-for="(soldier,idx) in cell.soldiers"
       :key="soldier.id"
       :soldier="soldier"
@@ -62,18 +62,13 @@ export default {
         }
       }
     },
-    onSoldierClick(soldier) {
-      if (soldier.isOut || this.selectedSoldier) {
-        this.onCellClick();
+    onSoldierClick(soldier,ev) {
+      console.log(ev,soldier)
+      if (!soldier.isOut && !this.selectedSoldier) {
+        console.log('baba')
+        this.$store.dispatch({type: 'selectSoldier', soldier})
+        ev.stopPropagation()
       } else {
-        this.$store.commit("unselectSoldiers");
-        this.$store.commit("showNoPossibleMoves");
-        this.$store.commit({
-          type: "showPossibleMoves",
-          possibleMoves: soldier.possibleMoves,
-          soldier
-        });
-        this.$store.commit({ type: "selectSoldier", soldierId: soldier.id });
       }
     },
     async onSoldierDblClick(soldier) {
