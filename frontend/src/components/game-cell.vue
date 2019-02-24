@@ -63,9 +63,7 @@ export default {
       }
     },
     onSoldierClick(soldier,ev) {
-      console.log(ev,soldier)
       if (!soldier.isOut && !this.selectedSoldier) {
-        console.log('baba')
         this.$store.dispatch({type: 'selectSoldier', soldier})
         ev.stopPropagation()
       } else {

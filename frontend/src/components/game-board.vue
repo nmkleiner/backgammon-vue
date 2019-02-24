@@ -48,7 +48,6 @@ export default {
   created() {},
   methods: {
     unselect() {
-        console.log('unselect')
       this.$store.commit("showNoPossibleMoves");
       this.$store.commit("unselectSoldiers");
     }

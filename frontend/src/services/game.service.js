@@ -27,17 +27,19 @@ const blackOutCellId = 25
 const whiteEatenCellId = 26
 const blackEatenCellId = 27
 
+
+
 function createSoldiers(amount,color) {
-    var res = []
-    for (var i = 0; i < amount; i++) {
+    const res = []
+    for (let i = 0; i < amount; i++) {
         res.push(createSoldier(color))
     }   
     return res
 }
     
-var soldierId = 0
+let soldierId = 0
 function createSoldier(color) {
-    var soldier = {
+    const soldier = {
         color: color,
         id: soldierId++,
         possibleMoves: [],
@@ -52,7 +54,7 @@ function createSoldier(color) {
 }
 
 function getAllSoldiers(cells) {
-    var res = []
+    const res = []
     cells
     .map(cell => cell.soldiers)
     .forEach(soldiers => {
@@ -64,7 +66,7 @@ function getAllSoldiers(cells) {
 }
 
 function getSoldierById(cells,soldierId) {
-    var reqSoldier
+    let reqSoldier
     cells.find(cell => {
         reqSoldier = cell.soldiers.find((soldier) => soldier.id === soldierId)
         if (reqSoldier) return reqSoldier
@@ -95,8 +97,8 @@ function updateCells(cells) {
 }
 
 function updateCell(cell) {
-    var whiteCount = 0
-    var blackCount = 0
+    let whiteCount = 0
+    let blackCount = 0
     cell.soldiers.forEach((soldier,idx) => {
         soldier.possibleMoves = []
         soldier.isLastInCell = (idx === cell.soldiers.length - 1)
@@ -161,7 +163,7 @@ function setDicesNums(dices) {
 }
 
 function updateDices(dices,srcCell,targetCell) {
-    var srcCellId = srcCell.id
+    let srcCellId = srcCell.id
     if (srcCellId === whiteEatenCellId) srcCellId = whiteOutCellId
     else if (srcCellId === blackEatenCellId) srcCellId = blackOutCellId
     const dist = Math.abs(srcCellId - targetCell.id)
@@ -174,7 +176,7 @@ function updateDices(dices,srcCell,targetCell) {
             dices.num2 = null 
         }
     } else {
-        var stepCount = Math.floor(dist/dices.num1)
+        const stepCount = Math.floor(dist/dices.num1)
         if (dist % dices.num1 !== 0) stepCount++
         dices.doubleCount -= stepCount
         if (!dices.doubleCount) dices.num1 = null
@@ -190,19 +192,20 @@ function nullDices(dices) {
 }
 
 function calcPossibleMoves(dices,currTurn,cells,soldiers) {
-    soldiers = getPossibleSoldiers(cells,soldiers,currTurn)    
-    var direction = (currTurn === 'white')? 1 : -1
-    var possibleMoves = []
+    soldiers = getPossibleSoldiers(cells,soldiers,currTurn)
+    const direction = (currTurn === 'white')? 1 : -1
+    let possibleMoves = []
     soldiers.forEach(soldier => {
         const srcCell = getCellBySoldierId(cells,soldier.id)
-        var moves = calcSoldierMoves(dices,srcCell,direction)
-        moves = removeSrcCellMoves(srcCell,moves)
-        moves = removeHousesMoves(cells,moves,currTurn)
-        moves = removeBasedOnHousesMoves(dices,moves)
-        moves = removeBasedOnOutsideMoves(moves)
-        if (!canExit(cells,currTurn)) {
-            moves = removeExitMoves(moves,currTurn)
-        }
+        let moves = []
+            moves = calcSoldierMoves(dices,srcCell,direction)
+            moves = removeSrcCellMoves(srcCell,moves)
+            moves = removeHousesMoves(cells,moves,currTurn)
+            moves = removeBasedOnHousesMoves(dices,moves)
+            moves = removeBasedOnOutsideMoves(moves)
+            if (!canExit(cells,currTurn)) {
+                moves = removeExitMoves(moves,currTurn)
+            }
         soldier.possibleMoves = moves
         possibleMoves.push({soldierId: soldier.id, moves})
     })
@@ -215,18 +218,18 @@ function calcPossibleMoves(dices,currTurn,cells,soldiers) {
 
 function getPossibleSoldiers(cells,soldiers,currTurn) {
     if (!hasEatenSoldiers(currTurn,soldiers)) {
-        return soldiers.filter(soldier => soldier.color === currTurn && soldier.isLastInCell)
+        return soldiers.filter(soldier => soldier.color === currTurn && soldier.isLastInCell && !soldier.isOut)
     } else {
         return (currTurn === 'white')? 
-        [getCellById(cells,26).soldiers[getCellById(cells,whiteEatenCellId).soldiers.length -1]] :
+        [getCellById(cells,whiteEatenCellId).soldiers[getCellById(cells,whiteEatenCellId).soldiers.length -1]] :
         [getCellById(cells,blackEatenCellId).soldiers[getCellById(cells,blackEatenCellId).soldiers.length -1]]
     }
 }
 
 function calcSoldierMoves(dices,srcCell,direction) {
-    var moves = []
-    var srcCellId = srcCell.id
-    var isGettingOut = true
+    let moves = []
+    let srcCellId = srcCell.id
+    let isGettingOut = true
     if (srcCellId === whiteEatenCellId) srcCellId = whiteOutCellId
     else if (srcCellId === blackEatenCellId) srcCellId = blackOutCellId
     else isGettingOut = false
@@ -247,7 +250,7 @@ function calcSoldierMoves(dices,srcCell,direction) {
             ]
         }
     } else {
-        for (var i = 1; i <= dices.doubleCount; i++) {
+        for (let i = 1; i <= dices.doubleCount; i++) {
             moves.push(srcCellId + direction*dices.num1 * i)
         }
     }
@@ -255,7 +258,7 @@ function calcSoldierMoves(dices,srcCell,direction) {
 }
 // when dice is null soldiers get their srcCell as possibleMove
 function removeSrcCellMoves(srcCell,moves) {
-    var srcCellId = srcCell.id
+    let srcCellId = srcCell.id
     if (srcCell.id === blackEatenCellId) srcCellId = blackOutCellId
     else if (srcCell.id === whiteEatenCellId) srcCellId = whiteOutCellId
     return moves.map(move => (move === srcCellId)? null : move)
@@ -293,19 +296,15 @@ function removeBasedOnOutsideMoves(moves) {
         return move
     })
     const idx = moves.findIndex(move => move === blackOutCellId || move === whiteOutCellId)
-    
+    // this if is always true, but what does it do inside?
     if (idx !== -1) {
         moves = moves.map((move,i) => (i > idx)? null : move)
     }
     return moves
 }
 // remove all moves outside of board when exiting is not allowed
-function removeExitMoves(moves,currTurn) {
-    if (currTurn === 'white') {
-        return moves.map(move => (move >= blackOutCellId || move === whiteOutCellId)? null : move)
-    } else {
-        return moves.map(move => (move === whiteOutCellId || move >= blackOutCellId)? null : move)
-    }
+function removeExitMoves(moves) {
+    return moves.map(move => (move >= blackOutCellId || move <= whiteOutCellId)? null : move)
 }
 
 function hasPossibleMoves(possibleMoves) {
@@ -319,7 +318,7 @@ function hasPossibleMoves(possibleMoves) {
 
 function canExit(cells,currTurn){
     cells = (currTurn === 'white')? cells.slice(19,26) : cells.slice(0,7)
-    var count = 0
+    let count = 0
     cells.forEach(cell => {
         cell.soldiers.forEach(soldier => {
             if (soldier.color === currTurn) count++
@@ -329,7 +328,7 @@ function canExit(cells,currTurn){
 }
 
 function isEndGame(cells,currTurn) {
-    var count = (currTurn === 'white')? cells[blackOutCellId].soldiers.length : cells[whiteOutCellId].soldiers.length
+    let count = (currTurn === 'white')? cells[blackOutCellId].soldiers.length : cells[whiteOutCellId].soldiers.length
     return (count === 15)? true : false
 }
 

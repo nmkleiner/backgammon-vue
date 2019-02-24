@@ -188,9 +188,10 @@ $board-color: #deb887;
         height: calc(34vh + 20px);
         .soldier {
             border-radius: 5px!important;
-            height: 1.4vw!important;
+            height: 2.6vh!important;
             @media (min-width: 850px) {
                 margin-top: 1px!important;
+                height: calc(2.2vh - 1px)!important;
             }
         }
     }

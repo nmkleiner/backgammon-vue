@@ -71,6 +71,8 @@ export default ({
             // var boardMap = {'26': {amount: 2, color: 'white'},'27': {amount: 2, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // no possible moves
             // var boardMap = {'26': {amount: 2, color: 'white'},'4': {amount: 2, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 2, color: 'black'},'5': {amount: 2, color: 'black'},'6': {amount: 2, color: 'black'},'15': {amount: 2, color: 'black'},'1': {amount: 2, color: 'black'}}
+            // no possible moves & exiting, bug from hell!!!
+            // boardMap = {'24': { amount: 1, color: 'white' },'2': { amount: 4, color: 'white' },'0': { amount: 8, color: 'black' },'25': { amount: 10, color: 'white' },'3': { amount: 5, color: 'black' },'1': { amount: 2, color: 'black' }}
 
             for (var cell in boardMap) {
                 state.cells[cell].soldiers.push(...gameService.createSoldiers(boardMap[cell].amount, boardMap[cell].color))
@@ -157,11 +159,8 @@ export default ({
         updateScore(state) {
             state.score[state.currTurn]++
         },
-        noPossibleMovesOn(state) {
-            state.noPossibleMoves = true
-        },
-        noPossibleMovesOff(state) {
-            state.noPossibleMoves = false
+        setNoPossibleMoves(state, payload) {
+            state.noPossibleMoves = payload
         },
     },
     actions: {
@@ -170,7 +169,7 @@ export default ({
             commit('startTurn')
             commit('setDicesNums')
             commit('calcPossibleMoves')
-            
+
             await setTimeout(() => {
                 commit('unrollDices')
             }, 1000)
@@ -178,8 +177,8 @@ export default ({
             if (!state.possibleMoves.length) {
                 await setTimeout(() => {
                     commit('endTurn')
-                    commit('noPossibleMovesOn')
-                    setTimeout(() => commit('noPossibleMovesOff'), 1800)
+                    commit('setNoPossibleMoves', true)
+                    setTimeout(() => commit('setNoPossibleMoves', false), 1800)
                 }, 1500)
             }
             return state.dices
@@ -224,7 +223,7 @@ export default ({
                 commit('calcPossibleMoves')
             }
         },
-        selectSoldier({commit},{soldier}) {
+        selectSoldier({ commit }, { soldier }) {
 
             commit("unselectSoldiers");
             commit("showNoPossibleMoves");
@@ -233,7 +232,6 @@ export default ({
                 possibleMoves: soldier.possibleMoves,
                 soldier
             });
-            console.log(soldier)
             commit({ type: "selectSoldier", soldierId: soldier.id });
         },
         async moveSoldier({ state, commit }, { targetCell }) {
@@ -257,10 +255,10 @@ export default ({
 
             let promise = new Promise(res => {
                 setTimeout(() => {
-                    console.log('problem')
                     srcCell.soldiers.pop()
                     targetCell.soldiers.push(state.selectedSoldier)
                     commit({ type: 'updateDices', srcCell, targetCell })
+                    commit('updateCells')
                     commit('calcPossibleMoves')
 
                     commit('checkWinner')
@@ -271,7 +269,6 @@ export default ({
                         }
                         return Promise.resolve(true)
                     }
-
                     if (!state.possibleMoves.length) {
                         commit('endTurn')
                     }
@@ -282,16 +279,16 @@ export default ({
             return Promise.resolve(promise)
         },
         win({ state }) {
-            state.currTurn === state.loggedInUser.color ? soundService.play("win") : console.log('lose');
+            if (state.currTurn === state.loggedInUser.color) soundService.play("win");
         },
-        endGame({commit},{winner}) {
+        endGame({ commit }, { winner }) {
             commit({ type: 'endGame', winner });
         },
-        setMars({commit}, {isMars}) {
-            commit({ type: "setMars", isMars: true });
+        setMars({ commit }, { isMars }) {
+            commit({ type: "setMars", isMars });
         },
-        setTurkishMars({commit},{isTurkishMars}) {
-            commit({ type: "setTurkishMars", isTurkishMars: true });
+        setTurkishMars({ commit }, { isTurkishMars }) {
+            commit({ type: "setTurkishMars", isTurkishMars });
         },
         restartGame({ commit }) {
             commit({ type: 'setMars', isMars: false })
@@ -304,8 +301,8 @@ export default ({
             commit({ type: 'setDuringTurn' })
             commit({ type: 'updateScore' })
         },
-        setLoggedInUser({commit}, {user}) {
-            commit({type: 'setLoggedInUser',user})
+        setLoggedInUser({ commit }, { user }) {
+            commit({ type: 'setLoggedInUser', user })
         }
     },
     getters: {
