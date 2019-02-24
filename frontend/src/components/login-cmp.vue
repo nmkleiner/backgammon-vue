@@ -1,6 +1,6 @@
 <template>
   <section
-    class="login-cmp aside-card flex justify-center animated"
+    class="login-cmp aside-card animated" 
     :class="{'hidden': loading,'slideOutRight': !isLoginOpen, 'slideInRight': isLoginOpen}"
   >
     <form @submit.prevent="onSubmit" class="flex flex-column align-center">
@@ -98,7 +98,8 @@ export default {
   align-items: center;
   height: 100vh;
   @media (min-width: 850px) {
-    height: unset;
+    width: 340px;
+    height: calc(400px + 65px + 66px);
   }
   form {
     height: fit-content;

@@ -29,6 +29,7 @@
       v-for="(soldier,idx) in cell.soldiers"
       :key="soldier.id"
       :soldier="soldier"
+      :loggedInUserColor="loggedInUserColor"
       :idx="idx"
     />
   </div>

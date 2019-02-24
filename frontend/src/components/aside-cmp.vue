@@ -172,7 +172,7 @@ export default {
     font-size: 1.2rem;
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
     @media (min-width: 850px) {
-      margin-right: calc(18.4vw - 120px);
+      margin-right: calc(18.4vw - 50px);
     }
     margin-right: calc(100vw - 200px);
   }

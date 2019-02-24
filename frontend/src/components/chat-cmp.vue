@@ -10,21 +10,8 @@
         class="conversation-container"
         ref="conversationRef"
       >
-        <div v-for="(msg, idx) in msgs" :key="idx">
-          <div
-            class="container round msg"
-            :class="{msgOut: nickname === msg.from, msgIn: nickname !== msg.from}"
-          >
-            <div class="img-wrapper">
-              <img v-if="msg.pic" :src="msg.pic">
-              <img v-else src="../../public/img/user.jpg">
-              <soldier :color="msg.color"></soldier>
-            </div>
-            <span class="chat-user-name">{{msg.from}}:</span>
-            <br>
-            {{msg.txt}}
-          </div>
-        </div>
+        <chat-msg v-for="(msg, idx) in msgs" :key="idx" :msg="msg" :nickname="nickname" />
+           
       </div>
 
       <form :class="{'input-focus': isInputFocus}" class="conversation-compose flex align-center">
@@ -50,9 +37,11 @@ import ioClient from "socket.io-client";
 import msgService from "../services/msg.service.js";
 import soundService from "../services/sound.service.js";
 const soldier = () => import("./soldier");
+const chatMsg = () => import("./chat-msg");
 export default {
   components: {
-    soldier
+    soldier,
+    chatMsg
   },
   props: {
     isChatOpen: Boolean
@@ -141,7 +130,7 @@ export default {
     right: 0;
     z-index: 10;
     @media (min-width: 850px) {
-      width: 24vw;
+      width: 360px;
       min-width: 196px;
       border-radius: 6px;
       border-left: 2px solid darken(white, 10%);
@@ -162,102 +151,14 @@ export default {
     }
     padding: 0 15px 15px 15px;
   }
-
-  .container {
-    border: 1px solid black;
-    background-color: white;
-    border-radius: 5px;
-    overflow-wrap: break-word;
-    padding: 5px;
-    margin: 5px 5px;
-    position: relative;
-    width: 40vw;
-    min-height: 78px;
-    font-size: 18px;
-    @media (min-width: 850px) {
-      width: unset;
-    }
-    &::after {
-      content: "";
-      clear: both;
-      display: table;
-    }
-
-    .chat-user-name {
-      font-size: 16px;
-      font-weight: bold;
-    }
-  }
-
-  .msgOut {
-    background-color: lighten(#25d366, 10%);
-    margin: 5px 50px 0px 5px;
-    &::after {
-      content: " ";
-      position: absolute;
-      width: 0;
-      height: 0;
-      left: -20px;
-      right: auto;
-      top: 38px;
-      bottom: auto;
-      border: 12px solid;
-      border-color: lighten(#25d366, 10%) lighten(#25d366, 10%) transparent
-        transparent;
-    }
-  }
-
-  .msgIn {
-    background-color: darken(white, 3%);
-    margin: 5px 5px 0px 50vw;
-    @media (min-width: 850px) {
-      margin: 5px 5px 0px 50px;
-    }
-    &:after {
-      content: " ";
-      position: absolute;
-      width: 0;
-      height: 0;
-      left: auto;
-      right: -20px;
-      top: 38px;
-      bottom: auto;
-      border: 12px solid;
-      border-color: darken(white, 3%) transparent transparent darken(white, 3%);
-    }
-  }
-
-  .round {
-    border-radius: 30px;
-    -webkit-border-radius: 30px;
-    -moz-border-radius: 30px;
-  }
-  .msg {
-    color: black;
-    padding: 10px;
-    .img-wrapper {
-      position: relative;
-      img {
-        border-radius: 50%;
-        width: 48px;
-        height: 48px;
-      }
-      .soldier-section {
-        position: absolute;
-        top: 34px;
-        left: 34px;
-      }
-    }
-  }
-
   .conversation-compose {
-    padding: 3px 0;
+    padding: 3px 20px;
     background-color: lighten(black, 10%);
     width: 100%;
-    justify-content: space-evenly;
+    justify-content: space-between;
     z-index: 1;
     @media (min-width: 850px) {
-      padding: 10px 0;
+      padding: 10px 20px;
     }
     &.input-focus {
       position: fixed;
@@ -276,6 +177,7 @@ export default {
 
     textarea.border-bottom-input {
       height: unset;
+      flex-grow: 1;
       @media (min-width: 850px) {
         height: unset;
       }
@@ -291,6 +193,7 @@ export default {
       border-radius: 50%;
       outline: 0;
       font-size: 16px;
+      margin-left: 25px;
       cursor: pointer;
     }
   }

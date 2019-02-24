@@ -1,9 +1,9 @@
-<template>
+<template functional>
     <section class="msg-wrapper animated 
     fadeInDown
     ">
         <div class="msg-content capitalize">
-            {{this.msg}}
+            {{props.msg}}
         </div>
     </section>
 </template>
@@ -12,12 +12,7 @@
 export default {
     props: {
         msg: String
-    },
-    data() {
-        return {
-            
-        }
-    },
+    }
 }
 </script>
 

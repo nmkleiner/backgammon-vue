@@ -1,19 +1,19 @@
-<template>
+<template functional>
     <section class="soldier-section">
-        <div class="soldier" v-if="soldier"
+        <div class="soldier" v-if="props.soldier"
         :class="{
-            'white': soldier.color === 'white',
-            'black': soldier.color === 'black',
-            'selected': soldier.selected,
-            'animated zoomOut fast': soldier.isMoving && soldier.color !== loggedInUserColor,
-            'animated zoomIn fast': soldier.hasMoved && soldier.color !== loggedInUserColor,
+            'white': props.soldier.color === 'white',
+            'black': props.soldier.color === 'black',
+            'selected': props.soldier.selected,
+            'animated zoomOut fast': props.soldier.isMoving && props.soldier.color !== props.loggedInUserColor,
+            'animated zoomIn fast': props.soldier.hasMoved && props.soldier.color !== props.loggedInUserColor,
         }">
         </div>
         <div 
-            class="soldier-const" v-if="color"
+            class="soldier-const" v-if="props.color"
             :class="{
-                'white': color === 'white',
-                'black': color === 'black',
+                'white': props.color === 'white',
+                'black': props.color === 'black',
                 }"
         >
         </div>
@@ -24,13 +24,9 @@
 export default {
     props: {
         soldier: Object,
-        color: String
-    },
-    computed: {
-        loggedInUserColor() {
-            return this.$store.getters.loggedInUserColor
-        }
-    },
+        color: String,
+        loggedInUserColor: String
+    }
 }
 </script>
 

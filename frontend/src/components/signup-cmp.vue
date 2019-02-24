@@ -61,7 +61,7 @@ export default {
     align-items: center;
     height: 100vh;
     @media (min-width: 850px) {
-      width: calc(18.6vw + 2px);
+      width: 340px;
       height: calc(400px + 65px + 66px);
     }
     width: 100vw;
