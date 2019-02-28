@@ -157,11 +157,11 @@ $board-color: #deb887;
     width: 6.4vw;
     height: calc(50vh - 10px);
     z-index: 1;
+    transition: .3s;
     @media (min-width: 850px) {
         width: 6vw;
         height: 34vh;
     }
-    transition: .3s;
     &.middle{
         flex-direction: column-reverse;
         background-color: darken($board-color, 30%);

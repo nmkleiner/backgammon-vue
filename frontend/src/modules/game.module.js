@@ -9,7 +9,7 @@ export default ({
         currTurn: null,
         dices: { num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false },
         possibleMoves: [],
-        winner: false,
+        winner: false,//true/false
         duringTurn: false,
         loggedInUser: { userName: '', _id: '', pic: '', color: 'white' },
         isMars: false,
@@ -99,7 +99,7 @@ export default ({
             state.possibleMoves = gameService.calcPossibleMoves(state.dices, state.currTurn, state.cells, soldiers)
         },
         checkWinner(state) {
-            state.winner = (gameService.isEndGame(state.cells, state.currTurn)) ? state.currTurn : false
+            state.winner = gameService.isEndGame(state.cells, state.currTurn)? state.currTurn : false
         },
         checkMars(state) {
             state.isMars = gameService.isMars(state.cells, state.currTurn)
@@ -128,7 +128,7 @@ export default ({
             state.dices = gameService.nullDices(state.dices)
         },
         endGame(state, { winner }) {
-            state.winner = winner
+            if (!state.winner) state.winner = winner
         },
         clearBoard(state) {
             state.cells = gameService.clearCells(state.cells)

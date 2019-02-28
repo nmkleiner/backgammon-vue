@@ -95,7 +95,7 @@ function updateCells(cells) {
         updateCell(cell)
     })
 }
-
+  
 function updateCell(cell) {
     let whiteCount = 0
     let blackCount = 0
@@ -329,7 +329,7 @@ function canExit(cells,currTurn){
 
 function isEndGame(cells,currTurn) {
     let count = (currTurn === 'white')? cells[blackOutCellId].soldiers.length : cells[whiteOutCellId].soldiers.length
-    return (count === 15)? true : false
+    return count === 15
 }
 
 function isMars(cells,currTurn) {

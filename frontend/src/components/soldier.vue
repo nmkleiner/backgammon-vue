@@ -1,6 +1,11 @@
 <template functional>
-    <section class="soldier-section">
+
+    <section class="soldier-section" >
+        <!-- @dblclick="listeners.dblclick" -->
         <div class="soldier" v-if="props.soldier"
+        @click="listeners.click"
+        @mouseout="listeners.mouseout"
+        @mouseover="listeners.mouseover"
         :class="{
             'white': props.soldier.color === 'white',
             'black': props.soldier.color === 'black',
@@ -25,7 +30,11 @@ export default {
     props: {
         soldier: Object,
         color: String,
-        loggedInUserColor: String
+        loggedInUserColor: String,
+        const: {
+            type: Boolean,
+            default: false
+        },
     }
 }
 </script>
@@ -72,5 +81,8 @@ export default {
         }
     }
 }
-
 </style>
+
+
+
+

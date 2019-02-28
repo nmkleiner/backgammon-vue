@@ -21,11 +21,11 @@
             'triangle-green': cell.isPossibleMove,
         }"
     ></div>
+      <!-- @dblclick="onSoldierDblClick(soldier)" -->
     <soldier
-      @dblclick.native="onSoldierDblClick(soldier)"
-      @mouseout.native="onSoldierOut()"
-      @mouseover.native="onSoldierHover(soldier)"
-      @click.native="onSoldierClick(soldier,$event)"
+      @mouseout="onSoldierOut()"
+      @mouseover="onSoldierHover(soldier)"
+      @click="onSoldierClick(soldier,$event)"
       v-for="(soldier,idx) in cell.soldiers"
       :key="soldier.id"
       :soldier="soldier"
@@ -64,13 +64,16 @@ export default {
       }
     },
     onSoldierClick(soldier,ev) {
+      console.log(1)
       if (!soldier.isOut && !this.selectedSoldier) {
+      console.log(2)
         this.$store.dispatch({type: 'selectSoldier', soldier})
         ev.stopPropagation()
       } else {
-      }
+        }
     },
     async onSoldierDblClick(soldier) {
+      this.$store.dispatch({type: 'selectSoldier', soldier})
       const targetCellIdx = this.loggedInUserColor === "white" ? 25 : 0;
       let { soldierDidMove, isEating } = await this.$store.dispatch({
         type: "moveSoldier",
