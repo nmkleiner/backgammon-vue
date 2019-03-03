@@ -7,7 +7,7 @@
       @submit.prevent="submitNewUser"
       class="signup-form-container flex flex-column align-center"
     >
-      <h2 class="capitalize">sign up</h2>
+      <h2 class="white-text">Sign Up</h2>
       <input class="border-bottom-input" required type="text" placeholder="Full Name" v-model="newUser.userName">
       <input class="border-bottom-input" required type="password" placeholder="Password" v-model="newUser.password">
       <label class="white-text-btn mb-10" for="file-upload">

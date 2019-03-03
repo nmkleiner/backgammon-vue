@@ -1,7 +1,7 @@
 <template functional>
     <section class="msg-wrapper animated fadeInDown">
-        <div class="msg-content capitalize">
-            {{props.msg}}
+        <div class="msg-content">
+            {{props.msg | capitalize}}
         </div>
     </section>
 </template>

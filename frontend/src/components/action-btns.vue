@@ -3,35 +3,35 @@
     <button
       v-if="showWaitBtn"
       :class="{'lightSpeedIn':showWaitBtn, 'fadeOutUp': !showWaitBtn}"
-      class="animated bold capitalize wait"
+      class="animated bold wait"
     >
-      wait..
+      Wait..
       <span class="animated flash slower infinite">.</span>
     </button>
     <button
       v-if="showDiceBtn"
       :class="{'lightSpeedIn':showDiceBtn, 'fadeOutUp': !showDiceBtn}"
       @click.stop="throwDice"
-      class="animated bold capitalize"
-    >roll</button>
+      class="animated bold"
+    >Roll</button>
     <button
       v-if="showDicesBtn"
       :class="{'lightSpeedIn':showDicesBtn, 'fadeOutUp': !showDicesBtn}"
       @click.stop="throwDices"
-      class="animated bold capitalize"
-    >roll</button>
+      class="animated bold"
+    >Roll</button>
     <button
       v-if="winner && !isRestarting"
       :class="{'lightSpeedIn':winner, 'fadeOutUp': !winner}"
       @click.stop="restartGame"
-      class="animated bold capitalize play-again"
-    >play again</button>
+      class="animated bold play-again"
+    >Play Again</button>
     <button
       v-if="isRestarting"
       :class="{'lightSpeedIn':isRestarting, 'fadeOutUp': !isRestarting}"
-      class="animated bold capitalize restarting"
+      class="animated bold restarting"
     >
-      restarting..
+      Restarting..
       <span class="animated flash slower infinite">.</span>
     </button>
   </div>
