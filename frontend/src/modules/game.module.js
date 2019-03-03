@@ -62,7 +62,7 @@ export default ({
                 '24': { amount: 2, color: 'black' }
             }
             // exiting
-            // boardMap = {'22': {amount: 7, color: 'white'},'24': {amount: 5, color: 'white'},'23': {amount: 1, color: 'white'},'20': {amount: 1, color: 'white'},'19': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
+            // boardMap = { '22': { amount: 7, color: 'white' }, '24': { amount: 5, color: 'white' }, '23': { amount: 1, color: 'white' }, '20': { amount: 1, color: 'white' }, '19': { amount: 1, color: 'white' }, '4': { amount: 5, color: 'black' }, '2': { amount: 3, color: 'black' }, '3': { amount: 5, color: 'black' }, '1': { amount: 2, color: 'black' } }
             // endgame 
             // boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // endgame with mars
@@ -99,7 +99,7 @@ export default ({
             state.possibleMoves = gameService.calcPossibleMoves(state.dices, state.currTurn, state.cells, soldiers)
         },
         checkWinner(state) {
-            state.winner = gameService.isEndGame(state.cells, state.currTurn)? state.currTurn : false
+            state.winner = gameService.isEndGame(state.cells, state.currTurn) ? state.currTurn : false
         },
         checkMars(state) {
             state.isMars = gameService.isMars(state.cells, state.currTurn)
@@ -162,6 +162,9 @@ export default ({
         setNoPossibleMoves(state, payload) {
             state.noPossibleMoves = payload
         },
+        pushSoldier(state,{soldier,cell}) {
+            cell.soldiers.push(soldier)
+        }
     },
     actions: {
         async throwDices({ commit, state }) {
@@ -249,8 +252,10 @@ export default ({
                 const eatenSoldier = targetCell.soldiers.pop()
                 eatenSoldier.isEaten = true
                 const middleCell = gameService.getMiddleCell(eatenSoldier.color, state.cells)
-                middleCell.soldiers.push(eatenSoldier)
-                gameService.updateCell(middleCell)
+                commit({ type: 'pushSoldier', cell: middleCell, soldier: eatenSoldier })
+                commit('updateCells')
+                // middleCell.soldiers.push(eatenSoldier)
+                // gameService.updateCell(middleCell)
             }
 
             let promise = new Promise(res => {

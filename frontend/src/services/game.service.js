@@ -176,7 +176,7 @@ function updateDices(dices,srcCell,targetCell) {
             dices.num2 = null 
         }
     } else {
-        const stepCount = Math.floor(dist/dices.num1)
+        let stepCount = Math.floor(dist/dices.num1)
         if (dist % dices.num1 !== 0) stepCount++
         dices.doubleCount -= stepCount
         if (!dices.doubleCount) dices.num1 = null
