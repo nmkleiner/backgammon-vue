@@ -14,7 +14,7 @@
         <input @change="getFile" id="file-upload" type="file" style="display:none;">
         Choose Profile Picture
       </label>
-      <button  class="white-text-btn" type="submit">Signup</button>
+      <button class="white-text-btn" type="submit">Signup</button>
     </form>
   </section>
 </template>
