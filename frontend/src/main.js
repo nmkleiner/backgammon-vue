@@ -13,10 +13,10 @@ import './assets/scss/main.scss'
 
 
 
-var socketURL = 'http://localhost:3000'
-if (process.env.NODE_ENV !== "development") {
-  socketURL = "/";
-}
+const socketURL = (process.env.NODE_ENV === "development")? 'http://localhost:3000' : socketURL = "/";
+// if (process.env.NODE_ENV !== "development") {
+//   socketURL = "/";
+// }
 
 Vue.use(Vuex)
 Vue.use(ElementUI);
@@ -33,7 +33,7 @@ Vue.config.productionTip = false
 Vue.crossOrigin = 'true'
 
 
-var config = {
+const config = {
   apiKey: "AIzaSyBsGiGT26GHGbOLcCfR17J-U3oHZhkW1Xk",
   authDomain: "first-project-1540121096472.firebaseapp.com",
   databaseURL: "https://first-project-1540121096472.firebaseio.com",

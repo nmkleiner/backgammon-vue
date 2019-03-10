@@ -15,10 +15,10 @@ function getRandomInt(min, max) {
 }
 
 function makeId(length=3) {
-    var text = '';
-    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   
-    for (var i = 0; i < length; i++)
+    for (let i = 0; i < length; i++)
       text += possible.charAt(Math.floor(Math.random() * possible.length));
   
     return text;
@@ -39,10 +39,10 @@ function getCurrency(currencyCode) {
 
 function makeLorem(length) {
 
-    var randStr = '';
+    let randStr = '';
     while (randStr.length < length) {
-        var wordLength = getRandomInt(3, 6);
-        var word = _createWord(wordLength);
+        const wordLength = getRandomInt(3, 6);
+        let word = _createWord(wordLength);
 
         if (Math.random() > 0.9) word += ',';
 
@@ -55,9 +55,9 @@ function makeLorem(length) {
 }
 
 function _createWord(length) {
-    var word = '';
+    let word = '';
     while (word.length < length) {
-        var randChar = _getRandChar();
+        let randChar = _getRandChar();
         word += randChar;
     }
 
@@ -65,7 +65,7 @@ function _createWord(length) {
 }
 
 function _getRandChar() {
-    var LETTERS = 'abcdefghijklmnopqrstuvwxyz';
-    var randIndex = parseInt(Math.random() * LETTERS.length)
+    const LETTERS = 'abcdefghijklmnopqrstuvwxyz';
+    const randIndex = parseInt(Math.random() * LETTERS.length)
     return LETTERS.charAt(randIndex);
 }

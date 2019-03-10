@@ -3,7 +3,7 @@ export default {
     load
 }
 
-var sounds = {
+const sounds = {
     dice: 'mp3',
     move: 'wav',
     eat: 'wav',

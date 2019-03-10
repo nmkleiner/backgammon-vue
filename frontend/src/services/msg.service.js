@@ -32,10 +32,10 @@ export default {
 
 
 function lorem(size = 5) {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    let text = "";
+    const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-    for (var i = 0; i < size; i++)
+    for (let i = 0; i < size; i++)
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
