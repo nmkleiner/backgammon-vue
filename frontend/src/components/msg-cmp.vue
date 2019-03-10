@@ -1,6 +1,6 @@
 <template functional>
     <section class="msg-wrapper animated fadeInDown">
-        <div class="msg-content">
+        <div class="msg-content capitalize">
             {{props.msg | capitalize}}
         </div>
     </section>
