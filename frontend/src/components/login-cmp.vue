@@ -1,7 +1,5 @@
 <template>
-  <section
-    class="login-cmp aside-card"
-  >
+  <section class="login-cmp aside-card">
     <form @submit.prevent="onSubmit" class="flex flex-column align-center">
       <h2>Login</h2>
       <input

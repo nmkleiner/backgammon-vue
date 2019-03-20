@@ -11,18 +11,10 @@
         <div v-if="middle" class="middle-line"></div>
         <div
                 v-if="!middle"
-                :class="{
-            'triangle-up': cell.id > 12 && cell.id < 25,
-            'triangle': cell.id > 0 && cell.id < 25,
-            'triangle-down': cell.id < 13 && cell.id > 0,
-            'triangle-red': cell.id % 2 === 0,
-            'triangle-black': cell.id % 2 !== 0,
-            'exit-cell': cell.id === 0 || cell.id === 25,
-            'triangle-green': cell.isPossibleMove,
-        }"
+                :class="cellClass"
         ></div>
         <!-- @dblclick="onSoldierDblClick(soldier)" -->
-        <transition-group name="scale" appear>
+        <!--<transition-group name="scale" appear>-->
             <soldier
                     @mouseout.native="onSoldierOut()"
                     @mouseover.native="onSoldierHover(soldier)"
@@ -33,7 +25,7 @@
                     :loggedInUserColor="loggedInUserColor"
                     :idx="idx"
             />
-        </transition-group>
+        <!--</transition-group>-->
     </div>
 </template>
 
@@ -119,18 +111,19 @@
             },
             cells() {
                 return this.$store.getters.cells;
+            },
+            cellClass() {
+                return {
+                    'triangle-up': this.cell.id > 12 && this.cell.id < 25,
+                    'triangle': this.cell.id > 0 && this.cell.id < 25,
+                    'triangle-down': this.cell.id < 13 && this.cell.id > 0,
+                    'triangle-red': this.cell.id % 2 === 0,
+                    'triangle-black': this.cell.id % 2 !== 0,
+                    'exit-cell': this.cell.id === 0 || this.cell.id === 25,
+                    'triangle-green': this.cell.isPossibleMove,
+                }
             }
         }
     };
 </script>
 
-<style scoped lang="scss">
-    .scale-enter-active, .scale-leave-active {
-        transition: .5s ease-out;
-    }
-
-    .scale-enter, .scale-leave-to {
-        opacity: 0;
-        transform: scale(1.3);
-    }
-</style>

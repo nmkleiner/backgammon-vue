@@ -254,8 +254,6 @@ export default ({
                 const middleCell = gameService.getMiddleCell(eatenSoldier.color, state.cells)
                 commit({ type: 'pushSoldier', cell: middleCell, soldier: eatenSoldier })
                 commit('updateCells')
-                // middleCell.soldiers.push(eatenSoldier)
-                // gameService.updateCell(middleCell)
             }
 
             let promise = new Promise(res => {
