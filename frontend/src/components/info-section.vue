@@ -11,6 +11,7 @@
 
 <script>
 const soldier = () => import("./soldier.vue");
+import {mapGetters} from 'vuex'
 
 export default {
     components: {
@@ -18,15 +19,20 @@ export default {
     },
     
     computed: {
-        currTurn() {
-            return this.$store.getters.currTurn
-        },
-        userColor() {
-            return this.$store.getters.loggedInUserColor
-        },
-        score() {
-            return this.$store.getters.score
-        },
+        ...mapGetters({
+            currTurn: 'currTurn',
+            userColor: 'loggedInUserColor',
+            score: 'score',
+        }),
+        // currTurn() {
+        //     return this.$store.getters.currTurn
+        // },
+        // userColor() {
+        //     return this.$store.getters.loggedInUserColor
+        // },
+        // score() {
+        //     return this.$store.getters.score
+        // },
         showScore() {
             return this.score.white || this.score.black
         }

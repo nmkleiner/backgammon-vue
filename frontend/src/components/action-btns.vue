@@ -40,8 +40,9 @@
 </template>
 
 <script>
-    import startGameService from "../services/startGame.service.js";
+    // import startGameService from "../services/startGame.service.js";
     import soundService from "../services/sound.service.js";
+    import {mapGetters} from "vuex";
 
     export default {
         data() {
@@ -57,6 +58,48 @@
             }, 1000);
         },
         computed: {
+            ...mapGetters({
+                dices: 'dices',
+                duringTurn: 'duringTurn',
+                currTurn: 'currTurn',
+                userColor: 'loggedInUserColor',
+                rolling: 'dicesRolling',
+                isGameOn: 'isGameOn',
+                startDice: 'startDice',
+                playersConnected: 'playersConnected',
+                winner: 'winner',
+            }),
+            //
+            // dices() {
+            //     return this.$store.getters.dices;
+            // },
+            // duringTurn() {
+            //     return this.$store.getters.duringTurn;
+            // },
+            // currTurn() {
+            //     return this.$store.getters.currTurn;
+            // },
+            // userColor() {
+            //     return this.$store.getters.loggedInUserColor;
+            // },
+            // rolling() {
+            //     return this.$store.getters.dicesRolling;
+            // },
+            // isGameOn() {
+            //     return this.$store.getters.isGameOn;
+            // },
+            // startDice() {
+            //     return this.$store.getters.startDice;
+            // },
+            // playersConnected() {
+            //     return this.$store.getters.playersConnected;
+            // },
+            // winner() {
+            //     return this.$store.getters.winner;
+            // },
+            waitingForUser() {
+                return !(this.playersConnected === 2);
+            },
             showDicesBtn() {
                 return (
                     this.isGameOn &&
@@ -85,36 +128,6 @@
                     this.waitingForUser
                 );
             },
-            dices() {
-                return this.$store.getters.dices;
-            },
-            duringTurn() {
-                return this.$store.getters.duringTurn;
-            },
-            currTurn() {
-                return this.$store.getters.currTurn;
-            },
-            userColor() {
-                return this.$store.getters.loggedInUserColor;
-            },
-            rolling() {
-                return this.$store.getters.dicesRolling;
-            },
-            isGameOn() {
-                return this.$store.getters.isGameOn;
-            },
-            startDice() {
-                return this.$store.getters.startDice;
-            },
-            playersConnected() {
-                return this.$store.getters.playersConnected;
-            },
-            waitingForUser() {
-                return !(this.playersConnected === 2);
-            },
-            winner() {
-                return this.$store.getters.winner;
-            }
         },
         methods: {
             async throwDices() {

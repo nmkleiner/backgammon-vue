@@ -31,6 +31,7 @@
 
 <script>
     const soldier = () => import("./soldier.vue");
+    import {mapGetters} from 'vuex'
 
     export default {
         props: {
@@ -103,15 +104,20 @@
             }
         },
         computed: {
-            selectedSoldier() {
-                return this.$store.getters.selectedSoldier;
-            },
-            loggedInUserColor() {
-                return this.$store.getters.loggedInUserColor;
-            },
-            cells() {
-                return this.$store.getters.cells;
-            },
+            ...mapGetters({
+                selectedSoldier: 'selectedSoldier',
+                loggedInUserColor: 'loggedInUserColor',
+                cells: 'cells'
+            }),
+            // selectedSoldier() {
+            //     return this.$store.getters.selectedSoldier;
+            // },
+            // loggedInUserColor() {
+            //     return this.$store.getters.loggedInUserColor;
+            // },
+            // cells() {
+            //     return this.$store.getters.cells;
+            // },
             cellClass() {
                 return {
                     'triangle-up': this.cell.id > 12 && this.cell.id < 25,
