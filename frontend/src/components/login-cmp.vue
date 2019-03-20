@@ -1,7 +1,6 @@
 <template>
   <section
-    class="login-cmp aside-card animated" 
-    :class="{'hidden': loading,'slideOutRight': !isLoginOpen, 'slideInRight': isLoginOpen}"
+    class="login-cmp aside-card"
   >
     <form @submit.prevent="onSubmit" class="flex flex-column align-center">
       <h2>Login</h2>

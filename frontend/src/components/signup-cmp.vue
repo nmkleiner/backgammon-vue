@@ -1,7 +1,6 @@
 <template>
   <section 
-    class="signup-cmp aside-card animated"
-    :class="{'hidden': loading,'slideOutRight': !isSignupOpen, 'slideInRight': isSignupOpen}"
+    class="signup-cmp aside-card"
   >
     <form
       @submit.prevent="submitNewUser"

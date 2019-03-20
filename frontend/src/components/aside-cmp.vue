@@ -1,11 +1,16 @@
 <template>
   <section class="aside-cmp">
     <div class="btn-wrapper">
-      <button
+      <router-link
         class="white-text-btn"
         v-if="isChatFullyOpen && !loggedInUser.userName && !isInputFocus"
-        @click="openLogin"
-      >Login</button>
+        to="/login"
+      >Login</router-link>
+      <router-link
+        class="white-text-btn"
+        v-if="isChatFullyOpen && !loggedInUser.userName && !isInputFocus"
+        to="/signup"
+      >Signup</router-link>
       <button
         class="white-text-btn"
         v-if="loggedInUser.userName && isChatFullyOpen"
@@ -21,13 +26,14 @@
         <i class="fas fa-envelope"></i>
       </div>
     </div>
-    <chat-cmp
-      :isChatOpen="isChatOpen"
-      @showNotification="doShowNotification"
-      @onToggleInputFocus="toggleInputFocus"
-    ></chat-cmp>
-    <login-cmp :isLoginOpen="isLoginOpen" @openSignup="openSignup" @closeLogin="closeLogin"></login-cmp>
-    <signup-cmp :isSignupOpen="isSignupOpen" @onCloseSignup="closeSignup"></signup-cmp>
+    <router-view></router-view>
+    <!--<chat-cmp-->
+      <!--:isChatOpen="isChatOpen"-->
+      <!--@showNotification="doShowNotification"-->
+      <!--@onToggleInputFocus="toggleInputFocus"-->
+    <!--&gt;</chat-cmp>-->
+    <!--<login-cmp :isLoginOpen="isLoginOpen" @openSignup="openSignup" @closeLogin="closeLogin"></login-cmp>-->
+    <!--<signup-cmp :isSignupOpen="isSignupOpen" @onCloseSignup="closeSignup"></signup-cmp>-->
   </section>
 </template>
 
