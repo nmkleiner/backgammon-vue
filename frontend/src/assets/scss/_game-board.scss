@@ -69,6 +69,9 @@ $board-color: #deb887;
         .bot-row {
             .game-cell{
                 flex-direction: column-reverse;
+                span {
+                    flex-direction: column-reverse;
+                }
                 &.middle{
                     flex-direction: column
                 }
@@ -164,6 +167,8 @@ $board-color: #deb887;
     }
     span {
         z-index: 2;
+        display: flex;
+        flex-direction: column;
     }
     &.middle{
         flex-direction: column-reverse;

@@ -14,7 +14,7 @@
                 :class="cellClass"
         ></div>
         <!-- @dblclick="onSoldierDblClick(soldier)" -->
-        <!--<transition-group name="scale" appear>-->
+        <transition-group name="scale" appear mode="out-in">
             <soldier
                     @mouseout.native="onSoldierOut()"
                     @mouseover.native="onSoldierHover(soldier)"
@@ -25,7 +25,7 @@
                     :loggedInUserColor="loggedInUserColor"
                     :idx="idx"
             />
-        <!--</transition-group>-->
+        </transition-group>
     </div>
 </template>
 

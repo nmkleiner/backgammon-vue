@@ -30,15 +30,10 @@
 
 
     <transition name="slide">
+      <keep-alive>
       <router-view></router-view>
+      </keep-alive>
     </transition>
-    <!--<chat-cmp-->
-      <!--:isChatOpen="isChatOpen"-->
-      <!--@showNotification="doShowNotification"-->
-      <!--@onToggleInputFocus="toggleInputFocus"-->
-    <!--&gt;</chat-cmp>-->
-    <!--<login-cmp :isLoginOpen="isLoginOpen" @openSignup="openSignup" @closeLogin="closeLogin"></login-cmp>-->
-    <!--<signup-cmp :isSignupOpen="isSignupOpen" @onCloseSignup="closeSignup"></signup-cmp>-->
   </section>
 </template>
 
@@ -155,11 +150,11 @@ export default {
   flex-direction: row-reverse;
   justify-content: space-between;
   align-items: center;
-  width: 320px;
   &.fully-open {
     background-color: black;
     padding: 0 10px;
     border-radius: 40px;
+    width: 320px;
   }
   .open-btn {
     position: relative;
