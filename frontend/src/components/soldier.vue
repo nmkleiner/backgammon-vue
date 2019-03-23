@@ -1,24 +1,21 @@
-<template functional>
+<template>
 
     <section class="soldier-section" >
-        <!-- @dblclick="listeners.dblclick" -->
-        <div class="soldier" v-if="props.soldier"
-        @click="listeners.click"
-        @mouseout="listeners.mouseout"
-        @mouseover="listeners.mouseover"
+        <!-- @dblclick="dblclick" -->
+        <div class="soldier" v-if="soldier"
         :class="{
-            'white': props.soldier.color === 'white',
-            'black': props.soldier.color === 'black',
-            'selected': props.soldier.selected,
-            'animated zoomOut fast': props.soldier.isMoving && props.soldier.color !== props.loggedInUserColor,
-            'animated zoomIn fast': props.soldier.hasMoved && props.soldier.color !== props.loggedInUserColor,
+            'white': soldier.color === 'white',
+            'black': soldier.color === 'black',
+            'selected': soldier.selected,
+            'animated zoomOut fast': soldier.isMoving && soldier.color !== loggedInUserColor,
+            'animated zoomIn fast': soldier.hasMoved && soldier.color !== loggedInUserColor,
         }">
         </div>
         <div 
-            class="soldier-const" v-if="props.color"
+            class="soldier-const" v-if="color"
             :class="{
-                'white': props.color === 'white',
-                'black': props.color === 'black',
+                'white': color === 'white',
+                'black': color === 'black',
                 }"
         >
         </div>

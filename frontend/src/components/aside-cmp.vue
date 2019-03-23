@@ -1,16 +1,7 @@
 <template>
   <section class="aside-cmp">
-    <div class="btn-wrapper">
-      <button
-        class="white-text-btn"
-        v-if="isChatFullyOpen && !loggedInUser.userName && !isInputFocus"
-        @click="openLogin"
-      >Login</button>
-      <button
-        class="white-text-btn"
-        v-if="loggedInUser.userName && isChatFullyOpen"
-        @click="logout"
-      >Logout</button>
+    <div class="btn-wrapper" :class="{'fully-open': isChatFullyOpen}">
+
       <button class="open-btn" v-if="isAsideOpen" @click="closeChat">
         <i class="far fa-times-circle"></i>
       </button>
@@ -20,14 +11,34 @@
       <div class="msg-notification" v-if="showNotification && !isAsideOpen">
         <i class="fas fa-envelope"></i>
       </div>
+      <router-link
+              class="white-text-btn"
+              v-if="isChatFullyOpen && !loggedInUser.userName && !isInputFocus"
+              to="/signup"
+      >Signup</router-link>
+      <router-link
+              class="white-text-btn"
+              v-if="isChatFullyOpen && !loggedInUser.userName && !isInputFocus"
+              to="/login"
+      >Login</router-link>
+      <button
+              class="white-text-btn"
+              v-if="loggedInUser.userName && isChatFullyOpen"
+              @click="logout"
+      >Logout</button>
     </div>
-    <chat-cmp
-      :isChatOpen="isChatOpen"
-      @showNotification="doShowNotification"
-      @onToggleInputFocus="toggleInputFocus"
-    ></chat-cmp>
-    <login-cmp :isLoginOpen="isLoginOpen" @openSignup="openSignup" @closeLogin="closeLogin"></login-cmp>
-    <signup-cmp :isSignupOpen="isSignupOpen" @onCloseSignup="closeSignup"></signup-cmp>
+
+
+    <transition name="slide">
+      <router-view></router-view>
+    </transition>
+    <!--<chat-cmp-->
+      <!--:isChatOpen="isChatOpen"-->
+      <!--@showNotification="doShowNotification"-->
+      <!--@onToggleInputFocus="toggleInputFocus"-->
+    <!--&gt;</chat-cmp>-->
+    <!--<login-cmp :isLoginOpen="isLoginOpen" @openSignup="openSignup" @closeLogin="closeLogin"></login-cmp>-->
+    <!--<signup-cmp :isSignupOpen="isSignupOpen" @onCloseSignup="closeSignup"></signup-cmp>-->
   </section>
 </template>
 
@@ -63,7 +74,7 @@ export default {
     closeChat() {
       this.isChatOpen = false;
       this.isChatFullyOpen = false;
-      setTimeout(() => (this.isChatFullyOpen = false), 900);
+      setTimeout(() => (this.isChatFullyOpen = false), 1000);
       this.isLoginOpen = false;
       this.isSignupOpen = false;
       this.showNotification = false;
@@ -71,7 +82,7 @@ export default {
     },
     openChat() {
       this.isChatOpen = true;
-      setTimeout(() => (this.isChatFullyOpen = true), 900);
+      setTimeout(() => (this.isChatFullyOpen = true), 1000);
       this.isLoginOpen = false;
       this.isSignupOpen = false;
       this.showNotification = false;
@@ -86,31 +97,31 @@ export default {
       this.isChatOpen = false;
       this.isChatFullyOpen = false;
     },
-    openLogin() {
-      this.isLoginOpen = true;
-      this.isChatOpen = false;
-      this.isChatFullyOpen = false;
-      this.isSignupOpen = false;
-      this.showNotification = false;
-    },
+    // openLogin() {
+    //   this.isLoginOpen = true;
+    //   this.isChatOpen = false;
+    //   this.isChatFullyOpen = false;
+    //   this.isSignupOpen = false;
+    //   this.showNotification = false;
+    // },
     closeLogin() {
       this.isChatOpen = true;
       this.isLoginOpen = false;
       this.$router.push("/");
     },
-    closeSignup() {
-      this.isChatOpen = true;
-      this.isSignupOpen = false;
-      this.$router.push("/");
-    },
-    closeAside() {
-      this.isChatOpen = false;
-      this.isChatFullyOpen = false;
-      this.isSignupOpen = false;
-      this.isLoginOpen = false;
-      this.showNotification = false;
-      this.$router.push("/");
-    },
+    // closeSignup() {
+    //   this.isChatOpen = true;
+    //   this.isSignupOpen = false;
+    //   this.$router.push("/");
+    // },
+    // closeAside() {
+    //   this.isChatOpen = false;
+    //   this.isChatFullyOpen = false;
+    //   this.isSignupOpen = false;
+    //   this.isLoginOpen = false;
+    //   this.showNotification = false;
+    //   this.$router.push("/");
+    // },
     toggleInputFocus() {
       this.isInputFocus = !this.isInputFocus;
     }
@@ -141,6 +152,15 @@ export default {
   top: 10px;
   right: 10px;
   display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: center;
+  width: 320px;
+  &.fully-open {
+    background-color: black;
+    padding: 0 10px;
+    border-radius: 40px;
+  }
   .open-btn {
     position: relative;
     padding: 10px;
@@ -171,10 +191,31 @@ export default {
     font-weight: 700;
     font-size: 1.2rem;
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-    @media (min-width: 850px) {
-      margin-right: calc(18.4vw - 50px);
-    }
-    margin-right: calc(100vw - 200px);
+    text-decoration: none;
+    /*@media (min-width: 850px) {*/
+      /*margin-right: calc(18.4vw - 50px);*/
+    /*}*/
+    /*margin-right: calc(100vw - 200px);*/
   }
+}
+
+
+.fade-enter-active, .fade-leave-active {
+  transition: .3s ease-out;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+
+
+.slide-leave-active, .slide-enter-active {
+  transition: 1s;
+  /*z-index: 11;*/
+}
+
+.slide-enter, .slide-leave-to {
+  transform: translateX(100%);
+  /*z-index: 11;*/
 }
 </style>

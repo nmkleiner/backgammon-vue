@@ -162,6 +162,9 @@ $board-color: #deb887;
         width: 6vw;
         height: 34vh;
     }
+    span {
+        z-index: 2;
+    }
     &.middle{
         flex-direction: column-reverse;
         background-color: darken($board-color, 30%);
