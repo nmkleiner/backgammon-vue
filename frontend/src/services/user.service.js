@@ -87,7 +87,7 @@ function getFProvider() {
   return new firebase.auth.FacebookAuthProvider();
 }
 
-function firebaseOnAuthStateChanged(store,emit) {
+function firebaseOnAuthStateChanged(store,router) {
   firebase.auth().onAuthStateChanged(user => {
       if (user) {
         const userName = user.displayName;
@@ -97,7 +97,7 @@ function firebaseOnAuthStateChanged(store,emit) {
           type: "setLoggedInUser",
           user: { userName, pic, _id }
         });
-        emit("onLogin");
+        router.push('/chat')
       } 
     });
 }

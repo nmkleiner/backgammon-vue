@@ -276,7 +276,7 @@ export default ({
                         commit('endTurn')
                     }
                     res({ soldierDidMove: true, isEating })
-                }, 100)
+                }, 0)
             })
             await promise
             return Promise.resolve(promise)

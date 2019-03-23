@@ -1,7 +1,6 @@
 <template>
   <section class="aside-cmp">
     <div class="btn-wrapper" :class="{'fully-open': isChatFullyOpen}">
-
       <button class="open-btn" v-if="isAsideOpen" @click="closeChat">
         <i class="far fa-times-circle"></i>
       </button>
@@ -12,26 +11,25 @@
         <i class="fas fa-envelope"></i>
       </div>
       <router-link
-              class="white-text-btn"
-              v-if="isChatFullyOpen && !loggedInUser.userName && !isInputFocus"
-              to="/signup"
+        class="white-text-btn"
+        v-if="isChatFullyOpen && !loggedInUser.userName && !isInputFocus"
+        to="/signup"
       >Signup</router-link>
       <router-link
-              class="white-text-btn"
-              v-if="isChatFullyOpen && !loggedInUser.userName && !isInputFocus"
-              to="/login"
+        class="white-text-btn"
+        v-if="isChatFullyOpen && !loggedInUser.userName && !isInputFocus"
+        to="/login"
       >Login</router-link>
       <button
-              class="white-text-btn"
-              v-if="loggedInUser.userName && isChatFullyOpen"
-              @click="logout"
+        class="white-text-btn"
+        v-if="loggedInUser.userName && isChatFullyOpen"
+        @click="logout"
       >Logout</button>
     </div>
 
-
     <transition name="slide">
       <keep-alive>
-      <router-view></router-view>
+        <router-view></router-view>
       </keep-alive>
     </transition>
   </section>
@@ -50,80 +48,49 @@ export default {
   },
   data() {
     return {
-      isLoginOpen: false,
       isChatOpen: false,
       isChatFullyOpen: false,
+      isInputFocus: false,
+      isLoginOpen: false,
       isSignupOpen: false,
-      showNotification: false,
-      isInputFocus: false
     };
   },
   methods: {
-    logout() {
-      userService.firebaseLogOut();
-      this.$store.dispatch({
-        type: "setLoggedInUser",
-        user: { userName: "", pic: "", _id: "" }
-      });
-    },
     closeChat() {
       this.isChatOpen = false;
       this.isChatFullyOpen = false;
       setTimeout(() => (this.isChatFullyOpen = false), 1000);
       this.isLoginOpen = false;
       this.isSignupOpen = false;
-      this.showNotification = false;
+      this.$store.commit({ type: "setShowNotification", value: false });
       this.$router.push("/");
     },
     openChat() {
-      this.isChatOpen = true;
       setTimeout(() => (this.isChatFullyOpen = true), 1000);
+      this.isChatOpen = true;
       this.isLoginOpen = false;
       this.isSignupOpen = false;
-      this.showNotification = false;
+
+      this.$store.commit({ type: "setShowNotification", value: false });
       this.$router.push("/chat");
     },
-    doShowNotification() {
-      this.showNotification = true;
-    },
-    openSignup() {
-      this.isSignupOpen = true;
-      this.isLoginOpen = false;
-      this.isChatOpen = false;
-      this.isChatFullyOpen = false;
-    },
-    // openLogin() {
-    //   this.isLoginOpen = true;
-    //   this.isChatOpen = false;
-    //   this.isChatFullyOpen = false;
-    //   this.isSignupOpen = false;
-    //   this.showNotification = false;
-    // },
-    closeLogin() {
-      this.isChatOpen = true;
-      this.isLoginOpen = false;
-      this.$router.push("/");
-    },
-    // closeSignup() {
-    //   this.isChatOpen = true;
-    //   this.isSignupOpen = false;
-    //   this.$router.push("/");
-    // },
-    // closeAside() {
-    //   this.isChatOpen = false;
-    //   this.isChatFullyOpen = false;
-    //   this.isSignupOpen = false;
-    //   this.isLoginOpen = false;
-    //   this.showNotification = false;
-    //   this.$router.push("/");
-    // },
     toggleInputFocus() {
       this.isInputFocus = !this.isInputFocus;
+    },
+    logout() {
+      userService.firebaseLogOut();
+      this.$store.dispatch({
+        type: "setLoggedInUser",
+        user: { userName: "", pic: "", _id: "" }
+      });
     }
   },
   computed: {
     loggedInUser() {
       return this.$store.getters.loggedInUser;
+    },
+    showNotification() {
+      return this.$store.getters.showNotification;
     },
     isAsideOpen() {
       return this.isLoginOpen || this.isChatOpen || this.isSignupOpen;
@@ -187,30 +154,26 @@ export default {
     font-size: 1.2rem;
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
     text-decoration: none;
-    /*@media (min-width: 850px) {*/
-      /*margin-right: calc(18.4vw - 50px);*/
-    /*}*/
-    /*margin-right: calc(100vw - 200px);*/
   }
 }
 
-
-.fade-enter-active, .fade-leave-active {
-  transition: .3s ease-out;
+.fade-enter-active,
+.fade-leave-active {
+  transition: 0.3s ease-out;
 }
 
-.fade-enter, .fade-leave-to {
+.fade-enter,
+.fade-leave-to {
   opacity: 0;
 }
 
-
-.slide-leave-active, .slide-enter-active {
+.slide-leave-active,
+.slide-enter-active {
   transition: 1s;
-  /*z-index: 11;*/
 }
 
-.slide-enter, .slide-leave-to {
+.slide-enter,
+.slide-leave-to {
   transform: translateX(100%);
-  /*z-index: 11;*/
 }
 </style>

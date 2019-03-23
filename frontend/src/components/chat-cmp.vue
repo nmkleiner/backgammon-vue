@@ -99,7 +99,7 @@ export default {
   sockets: {
     renderMsg(msg) {
       soundService.play("msg");
-      this.$emit("showNotification");
+      this.$store.commit({type: 'setShowNotification', value: true})
       this.msgs.push(msg);
     }
   }
@@ -108,7 +108,6 @@ export default {
 
 <style scoped lang='scss'>
 .chat-cmp {
-    width: 340px;
   .empty {
     height: 65px;
     &.input-focus {
@@ -118,25 +117,16 @@ export default {
       }
     }
   }
-  /*height: 100%;*/
   .conversation-container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%;
-    /*background-color: black;*/
-    /*position: fixed;*/
-    /*top: 0;*/
-    /*right: 0;*/
-    /*z-index: 10;*/
+    height: fit-content;
+    z-index: 10;
     @media (min-width: 850px) {
-      /*width: 360px;*/
-      /*min-width: 196px;*/
-      /*border-radius: 6px;*/
-      /*border-left: 2px solid darken(white, 10%);*/
-      /*border-bottom: 2px solid darken(white, 10%);*/
+      width: 360px;
     }
-    /*width: 100vw;*/
+    width: 100vw;
   }
 
   .conversation {

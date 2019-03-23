@@ -1,6 +1,6 @@
 <template>
   <section class="login-cmp aside-card">
-    <form @submit.prevent="onSubmit" class="flex flex-column align-center">
+    <form @submit.prevent="onLogin" class="flex flex-column align-center">
       <h2>Login</h2>
       <input
         class="border-bottom-input"
@@ -54,15 +54,17 @@ export default {
     };
   },
   methods: {
-    async onSubmit() {
+    async onLogin() {
       const user = await this.$store.dispatch({
         type: "login",
         loginData: this.loginData
       });
-      if (!user) this.isWrong = true;
+      if (!user) {
+        this.isWrong = true;
+      }
       else {
         this.isWrong = false;
-        this.$emit("closeLogin");
+        this.$router.push('/chat')
       }
     },
     openSignup() {
@@ -82,7 +84,7 @@ export default {
 
     this.gProvider = userService.getGProvider()
     this.fProvider = userService.getFProvider()
-    userService.firebaseOnAuthStateChanged(this.$store,this.$emit.bind(this))
+    userService.firebaseOnAuthStateChanged(this.$store,this.$router)
   }
 };
 </script>
