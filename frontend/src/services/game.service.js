@@ -6,7 +6,7 @@ export default {
     getSoldierById,
     getCellBySoldierId,
     updateCells,
-    updateCell,
+    // updateCell,
     isPossibleMove,
     passTurn,
     checkIsEating,
@@ -21,6 +21,7 @@ export default {
     isTurkishMars,
     nullDices,
     clearCells,
+    getCellById
 }
 const whiteOutCellId = 0
 const blackOutCellId = 25
@@ -29,14 +30,14 @@ const blackEatenCellId = 27
 
 
 
-function createSoldiers(amount,color) {
+function createSoldiers(amount, color) {
     const res = []
     for (let i = 0; i < amount; i++) {
         res.push(createSoldier(color))
-    }   
+    }
     return res
 }
-    
+
 let soldierId = 0
 function createSoldier(color) {
     const soldier = {
@@ -56,16 +57,16 @@ function createSoldier(color) {
 function getAllSoldiers(cells) {
     const res = []
     cells
-    .map(cell => cell.soldiers)
-    .forEach(soldiers => {
-        soldiers.forEach(soldier => {
-            res.push(soldier)
+        .map(cell => cell.soldiers)
+        .forEach(soldiers => {
+            soldiers.forEach(soldier => {
+                res.push(soldier)
+            })
         })
-    })
     return res
 }
 
-function getSoldierById(cells,soldierId) {
+function getSoldierById(cells, soldierId) {
     let reqSoldier
     cells.find(cell => {
         reqSoldier = cell.soldiers.find((soldier) => soldier.id === soldierId)
@@ -74,10 +75,10 @@ function getSoldierById(cells,soldierId) {
     return reqSoldier
 }
 
-function getCellById(cells,cellId) {
+function getCellById(cells, cellId) {
     return cells.find(cell => cell.id === cellId)
 }
-function getCellBySoldierId(cells,soldierId) {
+function getCellBySoldierId(cells, soldierId) {
     return cells.find(cell => {
         return cell.soldiers.find((soldier) => {
             return soldier.id === soldierId
@@ -85,9 +86,9 @@ function getCellBySoldierId(cells,soldierId) {
     })
 }
 
-function getMiddleCell(soldierColor,cells) {
-    const middleCellId = (soldierColor === 'white')? whiteEatenCellId : blackEatenCellId
-    return getCellById(cells,middleCellId)
+function getMiddleCell(soldierColor, cells) {
+    const middleCellId = (soldierColor === 'white') ? whiteEatenCellId : blackEatenCellId
+    return getCellById(cells, middleCellId)
 }
 
 function updateCells(cells) {
@@ -95,11 +96,11 @@ function updateCells(cells) {
         updateCell(cell)
     })
 }
-  
+
 function updateCell(cell) {
     let whiteCount = 0
     let blackCount = 0
-    cell.soldiers.forEach((soldier,idx) => {
+    cell.soldiers.forEach((soldier, idx) => {
         soldier.possibleMoves = []
         soldier.isLastInCell = (idx === cell.soldiers.length - 1)
         soldier.selected = false
@@ -117,30 +118,30 @@ function updateCell(cell) {
     }
 }
 
-function isPossibleMove(targetCellId,selectedSoldier) {
-    return (selectedSoldier.possibleMoves.find(move => move === targetCellId) !== undefined)? true : false
+function isPossibleMove(targetCellId, selectedSoldier) {
+    return (selectedSoldier.possibleMoves.find(move => move === targetCellId) !== undefined) ? true : false
 }
 
 function passTurn(currTurn) {
-    return (currTurn === 'white')? 'black' : 'white'
+    return (currTurn === 'white') ? 'black' : 'white'
 }
 
-function checkIsEating(targetCell,currTurn) {
-    return (targetCell.soldiers.length && targetCell.soldiers[0].color !== currTurn)? true : false
+function checkIsEating(targetCell, currTurn) {
+    return (targetCell.soldiers.length && targetCell.soldiers[0].color !== currTurn) ? true : false
 }
 
-function hasEatenSoldiers(currTurn,soldiers) {
+function hasEatenSoldiers(currTurn, soldiers) {
     soldiers = soldiers.filter(soldier => soldier.color === currTurn)
     return !!soldiers.find(soldier => soldier.isEaten)
 }
 
 function isMiddleCell(srcCell) {
-    return (srcCell.id === whiteEatenCellId || srcCell.id === blackEatenCellId)? true : false
+    return (srcCell.id === whiteEatenCellId || srcCell.id === blackEatenCellId) ? true : false
 }
 
 function setDicesNums(dices) {
-    dices.num1 = utilService.getRandomInt(1,7)
-    dices.num2 = utilService.getRandomInt(1,7)
+    dices.num1 = utilService.getRandomInt(1, 7)
+    dices.num2 = utilService.getRandomInt(1, 7)
     // dices.num1 = 1
     // dices.num2 = 5
     // doubles!!!
@@ -162,21 +163,21 @@ function setDicesNums(dices) {
     return dices
 }
 
-function updateDices(dices,srcCell,targetCell) {
+function updateDices(dices, srcCell, targetCell) {
     let srcCellId = srcCell.id
     if (srcCellId === whiteEatenCellId) srcCellId = whiteOutCellId
     else if (srcCellId === blackEatenCellId) srcCellId = blackOutCellId
     const dist = Math.abs(srcCellId - targetCell.id)
-    
+
     if (!dices.doubleCount) {
         if (dist <= dices.num1) dices.num1 = null
         else if (dist <= dices.num2) dices.num2 = null
         else {
-            dices.num1 = null 
-            dices.num2 = null 
+            dices.num1 = null
+            dices.num2 = null
         }
     } else {
-        let stepCount = Math.floor(dist/dices.num1)
+        let stepCount = Math.floor(dist / dices.num1)
         if (dist % dices.num1 !== 0) stepCount++
         dices.doubleCount -= stepCount
         if (!dices.doubleCount) dices.num1 = null
@@ -191,42 +192,43 @@ function nullDices(dices) {
     return dices
 }
 
-function calcPossibleMoves(dices,currTurn,cells,soldiers) {
-    soldiers = getPossibleSoldiers(cells,soldiers,currTurn)
-    const direction = (currTurn === 'white')? 1 : -1
+function calcPossibleMoves(dices, currTurn, cells, soldiers) {
+    soldiers = getPossibleSoldiers(cells, soldiers, currTurn)
+    const direction = (currTurn === 'white') ? 1 : -1
     let possibleMoves = []
     soldiers.forEach(soldier => {
-        const srcCell = getCellBySoldierId(cells,soldier.id)
+        const srcCell = getCellBySoldierId(cells, soldier.id)
         let moves = []
-            moves = calcSoldierMoves(dices,srcCell,direction)
-            moves = removeSrcCellMoves(srcCell,moves)
-            moves = removeHousesMoves(cells,moves,currTurn)
-            moves = removeBasedOnHousesMoves(dices,moves)
-            moves = removeBasedOnOutsideMoves(moves)
-            if (!canExit(cells,currTurn)) {
-                moves = removeExitMoves(moves,currTurn)
-            }
+        moves = calcSoldierMoves(dices, srcCell, direction)
+        moves = removeSrcCellMoves(srcCell, moves)
+        moves = removeHousesMoves(cells, moves, currTurn)
+        moves = removeBasedOnHousesMoves(dices, moves)
+        moves = removeBasedOnOutsideMoves(moves)
+        if (!canExit(cells, currTurn)) {
+            moves = removeExitMoves(moves, currTurn)
+        }
+        moves = removeNulls(moves)
         soldier.possibleMoves = moves
-        possibleMoves.push({soldierId: soldier.id, moves})
+        possibleMoves.push({ soldierId: soldier.id, moves })
     })
-    if (!hasPossibleMoves(possibleMoves)) {
+    if (!isPlayerHavePossibleMoves(possibleMoves)) {
         possibleMoves = []
     }
     return possibleMoves
 }
 
 
-function getPossibleSoldiers(cells,soldiers,currTurn) {
-    if (!hasEatenSoldiers(currTurn,soldiers)) {
+function getPossibleSoldiers(cells, soldiers, currTurn) {
+    if (!hasEatenSoldiers(currTurn, soldiers)) {
         return soldiers.filter(soldier => soldier.color === currTurn && soldier.isLastInCell && !soldier.isOut)
     } else {
-        return (currTurn === 'white')? 
-        [getCellById(cells,whiteEatenCellId).soldiers[getCellById(cells,whiteEatenCellId).soldiers.length -1]] :
-        [getCellById(cells,blackEatenCellId).soldiers[getCellById(cells,blackEatenCellId).soldiers.length -1]]
+        return (currTurn === 'white') ?
+            [getCellById(cells, whiteEatenCellId).soldiers[getCellById(cells, whiteEatenCellId).soldiers.length - 1]] :
+            [getCellById(cells, blackEatenCellId).soldiers[getCellById(cells, blackEatenCellId).soldiers.length - 1]]
     }
 }
 
-function calcSoldierMoves(dices,srcCell,direction) {
+function calcSoldierMoves(dices, srcCell, direction) {
     let moves = []
     let srcCellId = srcCell.id
     let isGettingOut = true
@@ -236,54 +238,54 @@ function calcSoldierMoves(dices,srcCell,direction) {
     if (!dices.doubleCount) {
         if (!dices.num1 && !dices.num2) {
             moves = []
-        }else if (!isGettingOut) {
+        } else if (!isGettingOut) {
             moves = [
-                srcCellId + direction*dices.num1,
-                srcCellId + direction*dices.num2,
-                srcCellId + direction*(dices.num1 + dices.num2)
+                srcCellId + direction * dices.num1,
+                srcCellId + direction * dices.num2,
+                srcCellId + direction * (dices.num1 + dices.num2)
             ]
         } else {
             moves = [
-                srcCellId + direction*dices.num1,
-                srcCellId + direction*dices.num2,
+                srcCellId + direction * dices.num1,
+                srcCellId + direction * dices.num2,
                 null
             ]
         }
     } else {
         for (let i = 1; i <= dices.doubleCount; i++) {
-            moves.push(srcCellId + direction*dices.num1 * i)
+            moves.push(srcCellId + direction * dices.num1 * i)
         }
     }
     return moves
 }
 // when dice is null soldiers get their srcCell as possibleMove
-function removeSrcCellMoves(srcCell,moves) {
+function removeSrcCellMoves(srcCell, moves) {
     let srcCellId = srcCell.id
     if (srcCell.id === blackEatenCellId) srcCellId = blackOutCellId
     else if (srcCell.id === whiteEatenCellId) srcCellId = whiteOutCellId
-    return moves.map(move => (move === srcCellId)? null : move)
+    return moves.map(move => (move === srcCellId) ? null : move)
 }
 // remove moves that step on enemy's houses
-function removeHousesMoves(cells,moves,currTurn) {
-    cells = moves.map(move => getCellById(cells,move))
-    cells.forEach((cell,idx) => {
+function removeHousesMoves(cells, moves, currTurn) {
+    cells = moves.map(move => getCellById(cells, move))
+    cells.forEach((cell, idx) => {
         if (cell && currTurn === 'white' && cell.isHouseOf === 'black' ||
             cell && currTurn === 'black' && cell.isHouseOf === 'white') {
-                moves[idx] = null
+            moves[idx] = null
         }
     })
     return moves
 }
 // remove steps that are based on sum of both dices, when both moves are
 // stepping on enemy's houses 
-function removeBasedOnHousesMoves(dices,moves){
+function removeBasedOnHousesMoves(dices, moves) {
     if (!dices.doubleCount) {
         if (moves[0] === null && moves[1] === null) moves[2] = null
         return moves
     } else {
         const idx = moves.findIndex(move => move === null)
         if (idx !== -1) {
-            moves = moves.map((move,i) => (i > idx)? null : move)
+            moves = moves.map((move, i) => (i > idx) ? null : move)
         }
         return moves
     }
@@ -298,50 +300,57 @@ function removeBasedOnOutsideMoves(moves) {
     const idx = moves.findIndex(move => move === blackOutCellId || move === whiteOutCellId)
     // this if is always true, but what does it do inside?
     if (idx !== -1) {
-        moves = moves.map((move,i) => (i > idx)? null : move)
+        moves = moves.map((move, i) => (i > idx) ? null : move)
     }
     return moves
 }
 // remove all moves outside of board when exiting is not allowed
 function removeExitMoves(moves) {
-    return moves.map(move => (move >= blackOutCellId || move <= whiteOutCellId)? null : move)
+    return moves.map(move => (move >= blackOutCellId || move <= whiteOutCellId) ? null : move)
 }
 
-function hasPossibleMoves(possibleMoves) {
+function removeNulls(moves) {
+    return moves.filter(move => move !== null)
+}
+
+function isPlayerHavePossibleMoves(possibleMoves) {
     return possibleMoves.find(soldier => {
-        if (soldier.moves.length) {
-            return (soldier.moves.find(move => move !== null) !== undefined)? true : false
-        } 
-        return false
+        // if (soldier.moves.length) {
+        //     return (soldier.moves.find(move => move !== null) !== undefined) ? true : false
+        // }
+        // return false
+        return !!soldier.moves.length
     })
 }
 
-function canExit(cells,currTurn){
-    cells = (currTurn === 'white')? cells.slice(19,26) : cells.slice(0,7)
+function canExit(cells, currTurn) {
+    cells = (currTurn === 'white') ? cells.slice(19, 26) : cells.slice(0, 7)
     let count = 0
     cells.forEach(cell => {
         cell.soldiers.forEach(soldier => {
             if (soldier.color === currTurn) count++
         })
     })
-    return (count === 15)? true : false
+    return (count === 15) ? true : false
 }
 
-function isEndGame(cells,currTurn) {
-    let count = (currTurn === 'white')? cells[blackOutCellId].soldiers.length : cells[whiteOutCellId].soldiers.length
+function isEndGame(cells, currTurn) {
+    let count = (currTurn === 'white') ? cells[blackOutCellId].soldiers.length : cells[whiteOutCellId].soldiers.length
     return count === 15
 }
 
-function isMars(cells,currTurn) {
-    return (currTurn === 'white')? 
-    (!cells[whiteOutCellId].soldiers.length) :
-    (!cells[blackOutCellId].soldiers.length)  
+function isMars(cells, currTurn) {
+    return (currTurn === 'white') ?
+        (!cells[whiteOutCellId].soldiers.length) :
+        (!cells[blackOutCellId].soldiers.length)
+            (!cells[blackOutCellId].soldiers.length)
+            (!cells[blackOutCellId].soldiers.length)
 }
 
-function isTurkishMars(cells,currTurn) {
+function isTurkishMars(cells, currTurn) {
     let count = 0
-    cells = (currTurn === 'white')? cells.slice(0,7): cells.slice(19,26)
-    cells.forEach(cell => count += cell.soldiers.length) 
+    cells = (currTurn === 'white') ? cells.slice(0, 7) : cells.slice(19, 26)
+    cells.forEach(cell => count += cell.soldiers.length)
     return count < 15
 }
 

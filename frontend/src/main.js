@@ -29,11 +29,11 @@ Vue.crossOrigin = 'true'
 
 import config from './config/config'
 
-  firebase.initializeApp(config);
+firebase.initializeApp(config);
 
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')

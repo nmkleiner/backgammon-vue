@@ -17,3 +17,5 @@ TODO:
 or find better solution (why did i wanted that?)
 in case someone refreshes, or disconnects and reconnects take the current game state from other player
 
+bug found:
+    calcPossibleMoves returns [null,null,null] instead of []

@@ -64,6 +64,7 @@
                     !this.rolling &&
                     this.currTurn === this.userColor
                 );
+                // return true
             },
             showDiceBtn() {
                 return (
@@ -76,6 +77,7 @@
                 );
             },
             showWaitBtn() {
+                // return false
                 return (
                     !this.isGameOn &&
                     ((!this.startDice.white && this.userColor === "white") ||
