@@ -1,24 +1,24 @@
-import gameService from '@/services/game.service.js'
-import userService from '@/services/user.service.js'
-import soundService from '@/services/sound.service.js'
+import gameService from '../services/game.service.js';
+import userService from '../services/user.service.js';
+import soundService from '../services/sound.service.js';
 
 export default ({
     state: {
         cells: [],
         selectedSoldier: null,
         currTurn: null,
-        dices: { num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false },
+        dices: {num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false},
         possibleMoves: [],
         winner: false,//true/false
         duringTurn: false,
-        loggedInUser: { userName: '', _id: '', pic: '', color: 'white' },
+        loggedInUser: {userName: '', _id: '', pic: '', color: 'white'},
         isMars: false,
         isTurkishMars: false,
-        score: { white: 0, black: 0 },
+        score: {white: 0, black: 0},
         noPossibleMoves: false
     },
     mutations: {
-        setLoggedInUser(state, { user }) {
+        setLoggedInUser(state, {user}) {
             state.loggedInUser.userName = user.userName
             state.loggedInUser._id = user._id
             state.loggedInUser.pic = user.pic
@@ -34,7 +34,7 @@ export default ({
             soldiers.forEach(soldier => soldier.selected = false)
             state.selectedSoldier = null
         },
-        selectSoldier(state, { soldierId }) {
+        selectSoldier(state, {soldierId}) {
             const soldier = gameService.getSoldierById(state.cells, soldierId)
             const soldiers = gameService.getAllSoldiers(state.cells)
             if (soldier.color !== state.currTurn ||
@@ -46,20 +46,20 @@ export default ({
         },
         setCells(state) {
             for (let i = 0; i <= 27; i++) {
-                state.cells.push({ id: i, soldiers: [], isHouseOf: false, isPossibleMove: false })
+                state.cells.push({id: i, soldiers: [], isHouseOf: false, isPossibleMove: false})
             }
         },
         setSoldiers(state) {
             // regular board
             let boardMap = {
-                '1': { amount: 2, color: 'white' },
-                '6': { amount: 5, color: 'black' },
-                '8': { amount: 3, color: 'black' },
-                '12': { amount: 5, color: 'white' },
-                '13': { amount: 5, color: 'black' },
-                '17': { amount: 3, color: 'white' },
-                '19': { amount: 5, color: 'white' },
-                '24': { amount: 2, color: 'black' }
+                '1': {amount: 2, color: 'white'},
+                '6': {amount: 5, color: 'black'},
+                '8': {amount: 3, color: 'black'},
+                '12': {amount: 5, color: 'white'},
+                '13': {amount: 5, color: 'black'},
+                '17': {amount: 3, color: 'white'},
+                '19': {amount: 5, color: 'white'},
+                '24': {amount: 2, color: 'black'}
             }
             // exiting
             // boardMap = { '22': { amount: 7, color: 'white' }, '24': { amount: 5, color: 'white' }, '23': { amount: 1, color: 'white' }, '20': { amount: 1, color: 'white' }, '19': { amount: 1, color: 'white' }, '4': { amount: 5, color: 'black' }, '2': { amount: 3, color: 'black' }, '3': { amount: 5, color: 'black' }, '1': { amount: 2, color: 'black' } }
@@ -79,7 +79,7 @@ export default ({
             }
             gameService.updateCells(state.cells)
         },
-        showPossibleMoves(state, { possibleMoves, soldier }) {
+        showPossibleMoves(state, {possibleMoves, soldier}) {
             if (!state.selectedSoldier && soldier.color === state.currTurn) {
                 state.cells.filter(cell => possibleMoves.includes(cell.id))
                     .forEach(cell => cell.isPossibleMove = true);
@@ -91,7 +91,7 @@ export default ({
         selectedSoldierNotEaten(state) {
             state.selectedSoldier.isEaten = false
         },
-        updateDices(state, { srcCell, targetCell }) {
+        updateDices(state, {srcCell, targetCell}) {
             state.dices = gameService.updateDices(state.dices, srcCell, targetCell)
         },
         calcPossibleMoves(state) {
@@ -104,13 +104,13 @@ export default ({
         checkMars(state) {
             state.isMars = gameService.isMars(state.cells, state.currTurn)
         },
-        setMars(state, { isMars }) {
+        setMars(state, {isMars}) {
             state.isMars = isMars
         },
         checkTurkishMars(state) {
             state.isTurkishMars = gameService.isTurkishMars(state.cells, state.currTurn)
         },
-        setTurkishMars(state, { isTurkishMars }) {
+        setTurkishMars(state, {isTurkishMars}) {
             state.isTurkishMars = isTurkishMars
         },
         startTurn(state) {
@@ -127,13 +127,13 @@ export default ({
         nullDices(state) {
             state.dices = gameService.nullDices(state.dices)
         },
-        endGame(state, { winner }) {
+        endGame(state, {winner}) {
             if (!state.winner) state.winner = winner
         },
         clearBoard(state) {
             state.cells = gameService.clearCells(state.cells)
         },
-        setNewSoldiers(state, { cells }) {
+        setNewSoldiers(state, {cells}) {
             state.cells = cells
         },
         updateCells(state) {
@@ -149,11 +149,11 @@ export default ({
         setDicesNums(state) {
             state.dices = gameService.setDicesNums(state.dices)
         },
-        dicesRes(state, { dices }) {
+        dicesRes(state, {dices}) {
             state.dices.num1ToShow = dices.num1ToShow
             state.dices.num2ToShow = dices.num2ToShow
         },
-        setCurrTurn(state, { startingColor }) {
+        setCurrTurn(state, {startingColor}) {
             state.currTurn = startingColor
         },
         updateScore(state) {
@@ -162,12 +162,12 @@ export default ({
         setNoPossibleMoves(state, payload) {
             state.noPossibleMoves = payload
         },
-        pushSoldier(state,{soldier,cell}) {
+        pushSoldier(state, {soldier, cell}) {
             cell.soldiers.push(soldier)
-        }
+        },
     },
     actions: {
-        async throwDices({ commit, state }) {
+        async throwDices({commit, state}) {
             commit("rollDices")
             commit('startTurn')
             commit('setDicesNums')
@@ -186,38 +186,16 @@ export default ({
             }
             return state.dices
         },
-        getLoggedInUser({ commit }) {
-            userService.getLoggedInUser().then(loggedInUser => {
-                commit({ type: 'setLoggedInUser', user: loggedInUser })
-            })
-        },
-        login({ commit }, { loginData }) {
-            return userService.login(loginData).then(user => {
-                if (user) {
-                    commit({ type: 'setLoggedInUser', user })
-                }
-                return user
-            })
-        },
-        googleLogin({ commit }, { loginData }) {
-            commit({ type: 'setLoggedInUser', user: { userName: loginData.userName } })
-        },
-        logout({ commit }) {
-            userService.logout();
-            commit('logOutUser');
-            return Promise.resolve();
-        },
-        setBoard({ state, commit }, { soldierId, cells, isEating }) {
+        setBoard({state, commit}, {soldierId, cells, isEating}) {
             if (!cells) {
                 commit('setCells')
                 commit('setSoldiers')
                 commit('setChoosingColors')
-            }
-            else {
+            } else {
                 let movedSoldier = gameService.getSoldierById(state.cells, soldierId)
                 movedSoldier.isMoving = true
                 commit('clearBoard')
-                commit({ type: 'setNewSoldiers', cells })
+                commit({type: 'setNewSoldiers', cells})
                 movedSoldier = gameService.getSoldierById(state.cells, soldierId)
                 movedSoldier.hasMoved = true
                 let sound = !isEating ? 'move' : 'eat'
@@ -226,8 +204,7 @@ export default ({
                 commit('calcPossibleMoves')
             }
         },
-        selectSoldier({ commit }, { soldier }) {
-
+        selectSoldier({commit}, {soldier}) {
             commit("unselectSoldiers");
             commit("showNoPossibleMoves");
             commit({
@@ -235,9 +212,9 @@ export default ({
                 possibleMoves: soldier.possibleMoves,
                 soldier
             });
-            commit({ type: "selectSoldier", soldierId: soldier.id });
+            commit({type: "selectSoldier", soldierId: soldier.id});
         },
-        async moveSoldier({ state, commit }, { targetCell }) {
+        async moveSoldier({state, commit}, {targetCell}) {
             const isPossibleMove = gameService.isPossibleMove(targetCell.id, state.selectedSoldier)
             if (!isPossibleMove) return false
             const srcCell = gameService.getCellBySoldierId(state.cells, state.selectedSoldier.id)
@@ -252,7 +229,7 @@ export default ({
                 const eatenSoldier = targetCell.soldiers.pop()
                 eatenSoldier.isEaten = true
                 const middleCell = gameService.getMiddleCell(eatenSoldier.color, state.cells)
-                commit({ type: 'pushSoldier', cell: middleCell, soldier: eatenSoldier })
+                commit({type: 'pushSoldier', cell: middleCell, soldier: eatenSoldier})
                 commit('updateCells')
             }
 
@@ -260,7 +237,7 @@ export default ({
                 setTimeout(() => {
                     srcCell.soldiers.pop()
                     targetCell.soldiers.push(state.selectedSoldier)
-                    commit({ type: 'updateDices', srcCell, targetCell })
+                    commit({type: 'updateDices', srcCell, targetCell})
                     commit('updateCells')
                     commit('calcPossibleMoves')
 
@@ -275,38 +252,56 @@ export default ({
                     if (!state.possibleMoves.length) {
                         commit('endTurn')
                     }
-                    res({ soldierDidMove: true, isEating })
+                    res({soldierDidMove: true, isEating})
                 }, 0)
             })
             await promise
             return Promise.resolve(promise)
         },
-        win({ state }) {
+        win({state}) {
             if (state.currTurn === state.loggedInUser.color) soundService.play("win");
         },
-        endGame({ commit }, { winner }) {
-            commit({ type: 'endGame', winner });
+        endGame({commit}, {winner}) {
+            commit({type: 'endGame', winner});
         },
-        setMars({ commit }, { isMars }) {
-            commit({ type: "setMars", isMars });
+        setMars({commit}, {isMars}) {
+            commit({type: "setMars", isMars});
         },
-        setTurkishMars({ commit }, { isTurkishMars }) {
-            commit({ type: "setTurkishMars", isTurkishMars });
+        setTurkishMars({commit}, {isTurkishMars}) {
+            commit({type: "setTurkishMars", isTurkishMars});
         },
-        restartGame({ commit }) {
-            commit({ type: 'setMars', isMars: false })
-            commit({ type: 'setTurkishMars', isTurkishMars: false })
-            commit({ type: 'clearBoard' })
-            commit({ type: 'setSoldiers' })
-            commit({ type: 'nullDices' })
-            commit({ type: 'calcPossibleMoves' })
-            commit({ type: 'checkWinner' })
-            commit({ type: 'setDuringTurn' })
-            commit({ type: 'updateScore' })
+        restartGame({commit}) {
+            commit({type: 'setMars', isMars: false})
+            commit({type: 'setTurkishMars', isTurkishMars: false})
+            commit({type: 'clearBoard'})
+            commit({type: 'setSoldiers'})
+            commit({type: 'nullDices'})
+            commit({type: 'calcPossibleMoves'})
+            commit({type: 'checkWinner'})
+            commit({type: 'setDuringTurn'})
+            commit({type: 'updateScore'})
         },
-        setLoggedInUser({ commit }, { user }) {
-            commit({ type: 'setLoggedInUser', user })
-        }
+        setLoggedInUser({commit}, {user}) {
+            commit({type: 'setLoggedInUser', user})
+        },
+        getLoggedInUser({commit}) {
+            userService.getLoggedInUser().then(loggedInUser => {
+                commit({type: 'setLoggedInUser', user: loggedInUser})
+            })
+        },
+        login({commit}, {loginData}) {
+            return userService.login(loginData).then(user => {
+                if (user) {
+                    commit({type: 'setLoggedInUser', user})
+                }
+                return user
+            })
+        },
+        logout({commit}) {
+            userService.logout();
+            commit('logOutUser');
+            return Promise.resolve();
+        },
     },
     getters: {
         cells: state => state.cells,

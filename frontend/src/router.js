@@ -1,12 +1,12 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 import VueRouter from 'vue-router';
-const homePage = () => import('./views/home-page.vue')
-const loginCmp = () => import('./components/login-cmp')
-const signupCmp = () => import('./components/signup-cmp')
-const chatCmp = () => import('./components/chat-cmp')
+const homePage = () => import('./views/home-page.vue');
+const loginCmp = () => import('./components/login-cmp');
+const signupCmp = () => import('./components/signup-cmp');
+const chatCmp = () => import('./components/chat-cmp');
 
-Vue.use(Router)
+Vue.use(Router);
 
 
 const router = new VueRouter({
@@ -29,6 +29,6 @@ const router = new VueRouter({
       ]
     },
   ]
-})
+});
 
 export default router

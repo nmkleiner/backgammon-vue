@@ -6,7 +6,7 @@ export default {
     getSoldierById,
     getCellBySoldierId,
     updateCells,
-    updateCell,
+    // updateCell,
     isPossibleMove,
     passTurn,
     checkIsEating,
@@ -21,6 +21,7 @@ export default {
     isTurkishMars,
     nullDices,
     clearCells,
+    getCellById
 }
 const whiteOutCellId = 0
 const blackOutCellId = 25

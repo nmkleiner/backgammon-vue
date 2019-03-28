@@ -112,7 +112,7 @@
             cellClass() {
                 return {
                     "triangle-up": this.cell.id > 12 && this.cell.id < 25,
-                    triangle: this.cell.id > 0 && this.cell.id < 25,
+                    'triangle': this.cell.id > 0 && this.cell.id < 25,
                     "triangle-down": this.cell.id < 13 && this.cell.id > 0,
                     "triangle-red": this.cell.id % 2 === 0,
                     "triangle-black": this.cell.id % 2 !== 0,
@@ -121,12 +121,19 @@
                 };
             },
             isPossibleMoveInCell() {
-                return true
+                const {soldiers} = this.cell
+                if (soldiers[soldiers.length - 1]) {
+                    return soldiers[soldiers.length - 1].possibleMoves.length
+                }
+                else return false
+                // return true
             }
-        }
+        },
+        // created() {
+            // if (this.cell.id % 2 === 1) {
+            //     console.log('cell id: ',this.cell.id)
+            //     this.$store.commit({type: 'pushMoves', cellId: this.cell.id})
+            // }
+        // }
     };
 </script>
-
-<style lang="scss" scoped>
-
-</style>
