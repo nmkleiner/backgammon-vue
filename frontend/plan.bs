@@ -18,5 +18,5 @@ or find better solution (why did i wanted that?)
 in case someone refreshes, or disconnects and reconnects take the current game state from other player
 
 V-fix play again btn size in mobile
--animation for indicators
+V-animation for indicators
 -middle indicators

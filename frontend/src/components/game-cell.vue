@@ -129,7 +129,7 @@
                 // return true
             },
             isIndicatorOn() {
-                return !this.middle && !this.exit && this.isPossibleMoveInCell
+                return !this.exit && this.isPossibleMoveInCell
             }
         },
         // created() {
