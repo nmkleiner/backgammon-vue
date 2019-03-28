@@ -1,6 +1,9 @@
 <template>
   <section class="aside-cmp">
-    <div class="btn-wrapper" :class="{'fully-open': isChatFullyOpen}">
+    <div 
+      class="btn-wrapper" 
+      :class="{'fully-open': isChatFullyOpen, 'input-focus': isInputFocus}"
+    >
       <button class="open-btn" v-if="isAsideOpen" @click="closeChat">
         <i class="far fa-times-circle"></i>
       </button>
@@ -22,7 +25,7 @@
       >Login</router-link>
       <button
         class="white-text-btn"
-        v-if="loggedInUser.userName && isChatFullyOpen"
+        v-if="loggedInUser.userName && isChatFullyOpen && !isInputFocus"
         @click="logout"
       >Logout</button>
     </div>
@@ -50,9 +53,8 @@ export default {
     return {
       isChatOpen: false,
       isChatFullyOpen: false,
-      isInputFocus: false,
       isLoginOpen: false,
-      isSignupOpen: false,
+      isSignupOpen: false
     };
   },
   methods: {
@@ -74,9 +76,6 @@ export default {
       this.$store.commit({ type: "setShowNotification", value: false });
       this.$router.push("/chat");
     },
-    toggleInputFocus() {
-      this.isInputFocus = !this.isInputFocus;
-    },
     logout() {
       userService.firebaseLogOut();
       this.$store.dispatch({
@@ -91,6 +90,9 @@ export default {
     },
     showNotification() {
       return this.$store.getters.showNotification;
+    },
+    isInputFocus() {
+      return this.$store.getters.isInputFocus;
     },
     isAsideOpen() {
       return this.isLoginOpen || this.isChatOpen || this.isSignupOpen;
@@ -109,7 +111,7 @@ export default {
 
 <style lang="scss" scoped>
 .btn-wrapper {
-  position: fixed;
+  position: absolute;
   z-index: 11;
   top: 10px;
   right: 10px;
@@ -122,6 +124,11 @@ export default {
     padding: 0 10px;
     border-radius: 40px;
     width: 320px;
+  }
+  &.input-focus {
+    width: unset;
+    background-color: transparent;
+
   }
   .open-btn {
     position: relative;

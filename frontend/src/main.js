@@ -8,12 +8,10 @@ import * as firebase from 'firebase'
 import 'element-ui/lib/theme-chalk/index.css'
 import VueSocketIO from 'vue-socket.io'
 import Vuex from 'vuex'
-import './registerServiceWorker'
+// import './registerServiceWorker'
 import './assets/scss/main.scss'
 
-
-
-const socketURL = (process.env.NODE_ENV === "development")? 'http://localhost:3000' : socketURL = "/";
+const socketURL = (process.env.NODE_ENV === "development")? 'http://localhost:3000' : "/";
 
 Vue.use(Vuex)
 Vue.use(ElementUI);

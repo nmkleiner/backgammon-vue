@@ -94,7 +94,6 @@ export default {
       });
     },
     serverGameEnded(winner) {
-      console.log('winner from server',winner)
       this.$store.dispatch({ type: "endGame", winner });
     },
     serverIsMars() {

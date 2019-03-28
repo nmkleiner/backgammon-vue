@@ -1,13 +1,13 @@
 <template>
   <section class="chat-cmp aside-card">
-      <div class="empty"></div>
+    <!-- <div class="empty"></div> -->
     <div class="conversation-container">
-      <!--<div :class="{'input-focus': isInputFocus}" class="empty"></div>-->
+      <div :class="{'input-focus': isInputFocus}" class="empty"></div>
       <div :class="{'input-focus': isInputFocus}" class="conversation" ref="conversationRef">
         <chat-msg v-for="(msg, idx) in msgs" :key="idx" :msg="msg" :nickname="nickname"/>
       </div>
 
-      <form :class="{'input-focus': isInputFocus}" class="conversation-compose flex align-center">
+      <form :class="{'input-focus': isInputFocus}" class="conversation-compose">
         <textarea
           v-model="newMsg.txt"
           @focus="toggleInputFocus"
@@ -45,8 +45,7 @@ export default {
       msgs: [],
       newMsg: {},
       typeMsg: "",
-      loading: true,
-      isInputFocus: false
+      loading: true
     };
   },
   methods: {
@@ -64,11 +63,11 @@ export default {
       this.newMsg = msgService.createEmptyMsg(this.nickname);
       this.pushMsgToHistory(this.newMsg);
     },
-    // scrollToEnd() {
-    //   var container = this.$refs.conversationRef;
-    //   var scrollHeight = container.scrollHeight;
-    //   container.scrollTop = scrollHeight;
-    // },
+    scrollToEnd() {
+      var container = this.$refs.conversationRef;
+      var scrollHeight = container.scrollHeight;
+      container.scrollTop = scrollHeight;
+    },
     // scrollIntoView() {
     //   var container = this.$refs.conversationRef;
     //   container.scrollIntoView();
@@ -77,8 +76,7 @@ export default {
       this.$emit("pushMsgToHistory", msg);
     },
     toggleInputFocus() {
-      this.isInputFocus = !this.isInputFocus;
-      this.$emit("onToggleInputFocus");
+      this.$store.commit('toggleInputFocus')
     }
   },
   async created() {
@@ -94,13 +92,17 @@ export default {
     },
     nickname() {
       return this.loggedInUser.userName ? this.loggedInUser.userName : "guest";
+    },
+    isInputFocus() {
+      return this.$store.getters.isInputFocus;
     }
   },
   sockets: {
     renderMsg(msg) {
       soundService.play("msg");
-      this.$store.commit({type: 'setShowNotification', value: true})
+      this.$store.commit({ type: "setShowNotification", value: true });
       this.msgs.push(msg);
+      this.scrollToEnd()
     }
   }
 };
@@ -139,6 +141,7 @@ export default {
     &.input-focus {
       @media (max-width: 850px) {
         height: calc(100vh);
+        z-index: 12;
       }
     }
 
@@ -146,18 +149,22 @@ export default {
   }
 
   .conversation-compose {
+    display: flex;
+    align-items: center;
     padding: 3px 20px;
     background-color: lighten(black, 10%);
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
     z-index: 1;
     @media (min-width: 850px) {
       padding: 10px 20px;
     }
 
     &.input-focus {
+      align-items: flex-end;
       position: fixed;
       bottom: 0;
+      z-index: 12;
       @media (min-width: 500px) {
         height: 100vh;
       }
@@ -173,7 +180,7 @@ export default {
 
     textarea.border-bottom-input {
       height: unset;
-      flex-grow: 1;
+      width: 70%;
       @media (min-width: 850px) {
         height: unset;
       }

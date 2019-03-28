@@ -270,7 +270,7 @@ export default ({
                         if (state.isMars) {
                             commit('checkTurkishMars')
                         }
-                        return Promise.resolve(true)
+                        return Promise.resolve({ soldierDidMove: true, isEating })
                     }
                     if (!state.possibleMoves.length) {
                         commit('endTurn')
