@@ -1,8 +1,8 @@
 <template>
     <div class="action-btns" :class="{'hidden': loading}">
         <button
-                v-if="showWaitBtn"
                 :class="{'lightSpeedIn':showWaitBtn, 'fadeOutUp': !showWaitBtn}"
+                v-if="showWaitBtn"
                 class="animated bold wait"
         >
             Wait..<span class="animated flash slower infinite">.</span>
@@ -22,8 +22,8 @@
         >Roll
         </button>
         <button
-                v-if="winner && !isRestarting"
                 :class="{'lightSpeedIn':winner, 'fadeOutUp': !winner}"
+                v-if="showPlayAgainBtn"
                 @click.stop="restartGame"
                 class="animated bold play-again"
         >Play Again
@@ -64,7 +64,9 @@
                     !this.rolling &&
                     this.currTurn === this.userColor
                 );
-                // return true
+            },
+            showPlayAgainBtn() {
+                return this.winner && !this.isRestarting
             },
             showDiceBtn() {
                 return (
@@ -77,7 +79,6 @@
                 );
             },
             showWaitBtn() {
-                // return false
                 return (
                     !this.isGameOn &&
                     ((!this.startDice.white && this.userColor === "white") ||
