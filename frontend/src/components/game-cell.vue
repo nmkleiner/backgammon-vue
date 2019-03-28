@@ -10,7 +10,7 @@
     >
         <div v-if="middle" class="middle-line"></div>
         <div v-if="!middle" :class="cellClass"></div>
-        <div v-if="isIndicatorOn" class="indicator"></div>
+        <div v-if="isIndicatorOn" class="indicator animated half-flash faster infinite"></div>
         <!-- @dblclick="onSoldierDblClick(soldier)" -->
         <transition-group name="scale" appear mode="out-in">
             <soldier
