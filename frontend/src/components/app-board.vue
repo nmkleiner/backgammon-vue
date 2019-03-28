@@ -65,7 +65,7 @@ export default {
       if (this.winner && this.mars)
         return this.isWinner ? "you won! mars!" : "you lost! mars!";
       if (this.winner) return this.isWinner ? "you won!" : "you lost!";
-      // return "test test"
+      // return "you lost!\n turkish mars"
     }
   },
   created() {

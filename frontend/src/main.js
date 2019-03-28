@@ -12,8 +12,7 @@ import './registerServiceWorker'
 import './assets/scss/main.scss'
 
 
-
-const socketURL = (process.env.NODE_ENV === "development")? 'http://localhost:3000' : socketURL = "/";
+const socketURL = (process.env.NODE_ENV === "development") ? 'http://localhost:3000' : socketURL = "/";
 
 Vue.use(Vuex)
 Vue.use(ElementUI);
@@ -31,11 +30,11 @@ Vue.crossOrigin = 'true'
 
 import config from './config/config'
 
-  firebase.initializeApp(config);
+firebase.initializeApp(config);
 
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')

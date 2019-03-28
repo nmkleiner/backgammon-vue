@@ -9,250 +9,299 @@ $board-color: #deb887;
 // $info-width-mobile: 8vw;
 // $middle-width: 3vw;
 // $app-board-width: 5vw + 12*6vw + 3vw + 20px + 10px + 8vw (+5vw)(shoolaim)
-.app-board{
-    background-color: #e4bf8e;
-    position: relative;
-    display: flex;
-    flex-direction: column;
+.app-board {
+  background-color: #e4bf8e;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  @media (min-width: 850px) {
+    width: calc(5vw + 72vw + 3vw + 20px + 10px + 8vw);
+    margin: 0 auto;
+    margin-top: 80px;
+  }
+
+  .rotate-screen {
+    height: 100vh;
     width: 100%;
-    
-    @media (min-width: 850px) {
-        width: calc(5vw + 72vw + 3vw + 20px + 10px + 8vw);
-        margin: 0 auto;
-        margin-top: 80px;
+    font-size: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @media screen and (orientation: landscape) {
+      display: none;
     }
-    .rotate-screen {
-        height: 100vh;
-        width: 100%;
-        font-size: 100px;
-        display: flex;
-        align-items: center;
-        justify-content: center;        
-        @media screen and (orientation:landscape) {
-            display: none;
-        }
+  }
+
+  .game-board {
+    @media screen and (orientation: portrait) {
+      display: none;
     }
-    
-    .game-board{
-        @media screen and (orientation:portrait) {
-            display: none;
-        }
-        
-        .board-cells {
-            background-color: $board-color;
-        }
-        &.flipped-board {
-            transform: rotateX(180deg);
-            .win{
-                transform: rotateX(180deg);
-            }
-            .action-btns {
-                transform: rotateX(180deg);
-            }
-            .dices-section{
-                transform: rotateX(180deg);
-            }
-        }
-        .top-row{
-            .board-cells {
-                @media (min-width: 850px) {
-                    border-top: $board-border solid darken($board-color,30%);
-                    border-left: $board-border solid darken($board-color,30%);
-                    border-right: $board-border solid darken($board-color,30%);
-                }
-                border-right: $thin-board-border solid darken($board-color,30%);
-                border-left: $thin-board-border solid darken($board-color,30%);
-                border-top: $thin-board-border solid darken($board-color,30%);
-            }
-        }
-        
-        .bot-row {
-            .game-cell{
-                flex-direction: column-reverse;
-                span {
-                    flex-direction: column-reverse;
-                }
-                &.middle{
-                    flex-direction: column
-                }
-            }
-            flex-direction: row-reverse;
-            align-items: flex-end;
-            .board-cells {
-                @media (min-width: 850px) {
-                    border-bottom: $board-border solid darken($board-color,30%);
-                    border-left: $board-border solid darken($board-color,30%);
-                    border-right: $board-border solid darken($board-color,30%);
-                }
-                border-left: $thin-board-border solid darken($board-color,30%);
-                border-right: $thin-board-border solid darken($board-color,30%);
-                border-bottom: $thin-board-border solid darken($board-color,30%);
-                flex-direction: row-reverse;
-                align-items: flex-end;
-            }
-        }
-        .board-wrapper {
-            position: absolute;
-            width: 38.4vw;
-            top: 45vh;
-            z-index: 2;
-            @media (min-width: 850px) {
-                width: 36vw;
-                top: 33vh;
-                height: fit-content;    
-            }
-        }
-        .right-side-wrapper {
-            
-            left: calc(12vw + 38.4vw + 3vw - 29px + 10px);
-            @media (min-width: 850px) {
-                left: calc(5vw + 36vw + 3vw + 20px);
-            }
-            .action-btns {
-                @media (min-width: 850px) {
-                    font-size: 1.5rem;
-                }
-                button {
-                    padding: 0 15px;
-                    
-                    height: 5vw;
-                    background-color: rgb(31, 185, 31);
-                    border: 1px solid rgb(84, 245, 84);
-                    font-size: 2.5vw;
-                    border-radius: 5px;
-                    @media (min-width: 850px) {
-                        width: 10rem;
-                    }
-                    &.play-again {
-                        background-color: rgb(190, 64, 32);
-                        border: 1px solid rgb(199, 40, 0);
-                        @media (min-width: 850px) {
-                            width: 20rem;
-                        }
-                    }
-                    &.restarting {
-                        background-color: rgb(169, 172, 169);
-                        border: 1px solid rgb(180, 184, 180);
-                        @media (min-width: 850px) {
-                            width: 20rem;
-                        }
-                    }
-                    &.wait {
-                        background-color: rgb(169, 172, 169);
-                        border: 1px solid rgb(180, 184, 180);
-                    }
-                }    
-            }
-        }
-        .left-side-wrapper {
-            left: calc(12vw - 29px + 10px);
-            @media (min-width: 850px) {
-                left: calc(5vw + 20px);
-            }
-           
-        }
+
+    .board-cells {
+      background-color: $board-color;
     }
+
+    &.flipped-board {
+      transform: rotateX(180deg);
+
+      .win {
+        transform: rotateX(180deg);
+      }
+
+      .action-btns {
+        transform: rotateX(180deg);
+      }
+
+      .dices-section {
+        transform: rotateX(180deg);
+      }
+    }
+
+    .top-row {
+      .board-cells {
+        @media (min-width: 850px) {
+          border-top: $board-border solid darken($board-color, 30%);
+          border-left: $board-border solid darken($board-color, 30%);
+          border-right: $board-border solid darken($board-color, 30%);
+        }
+        border-right: $thin-board-border solid darken($board-color, 30%);
+        border-left: $thin-board-border solid darken($board-color, 30%);
+        border-top: $thin-board-border solid darken($board-color, 30%);
+      }
+    }
+
+    .bot-row {
+      .game-cell {
+        flex-direction: column-reverse;
+
+        span {
+          flex-direction: column-reverse;
+        }
+
+        .indicator {
+          top: unset;
+          bottom: -8px;
+          @media (min-width: 850px) {
+            bottom: -15px;
+          }
+        }
+
+        &.middle {
+          flex-direction: column
+        }
+      }
+
+      flex-direction: row-reverse;
+      align-items: flex-end;
+
+      .board-cells {
+        @media (min-width: 850px) {
+          border-bottom: $board-border solid darken($board-color, 30%);
+          border-left: $board-border solid darken($board-color, 30%);
+          border-right: $board-border solid darken($board-color, 30%);
+        }
+        border-left: $thin-board-border solid darken($board-color, 30%);
+        border-right: $thin-board-border solid darken($board-color, 30%);
+        border-bottom: $thin-board-border solid darken($board-color, 30%);
+        flex-direction: row-reverse;
+        align-items: flex-end;
+      }
+    }
+
+    .board-wrapper {
+      position: absolute;
+      width: 38.4vw;
+      top: 45vh;
+      z-index: 2;
+      @media (min-width: 850px) {
+        width: 36vw;
+        top: 33vh;
+        height: fit-content;
+      }
+    }
+
+    .right-side-wrapper {
+
+      left: calc(12vw + 38.4vw + 3vw - 29px + 10px);
+      @media (min-width: 850px) {
+        left: calc(5vw + 36vw + 3vw + 20px);
+      }
+
+      .action-btns {
+        @media (min-width: 850px) {
+          font-size: 1.5rem;
+        }
+
+        button {
+          //padding: 0 15px;
+          width: 18vw;
+          height: 12vh;
+          background-color: rgb(31, 185, 31);
+          border: 1px solid rgb(84, 245, 84);
+          font-size: 3.5vw;
+          border-radius: 5px;
+          @media (min-width: 850px) {
+            width: 10rem;
+            height: 8vh;
+            font-size: 3vw;
+          }
+
+          &.play-again {
+            background-color: rgb(190, 64, 32);
+            border: 1px solid rgb(199, 40, 0);
+            @media (min-width: 850px) {
+              width: 20rem;
+            }
+          }
+
+          &.restarting {
+            background-color: rgb(169, 172, 169);
+            border: 1px solid rgb(180, 184, 180);
+            @media (min-width: 850px) {
+              width: 20rem;
+            }
+          }
+
+          &.wait {
+            background-color: rgb(169, 172, 169);
+            border: 1px solid rgb(180, 184, 180);
+          }
+        }
+      }
+    }
+
+    .left-side-wrapper {
+      left: calc(12vw - 29px + 10px);
+      @media (min-width: 850px) {
+        left: calc(5vw + 20px);
+      }
+
+    }
+  }
 }
 
 .game-cell {
-    background-color: transparent;
-    flex-wrap: wrap;
-    width: 6.4vw;
-    height: calc(50vh - 10px);
-    z-index: 1;
-    transition: .3s;
+  position: relative;
+  background-color: transparent;
+  flex-wrap: wrap;
+  width: 6.4vw;
+  height: calc(50vh - 10px);
+  z-index: 1;
+  transition: .3s;
+  @media (min-width: 850px) {
+    width: 6vw;
+    height: 34vh;
+  }
+
+  span {
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .indicator {
+    position: absolute;
+    top: -8px;
+    width: 6px;
+    height: 6px;
+    background-color: #1fee00;
+    border-radius: 50%;
     @media (min-width: 850px) {
-        width: 6vw;
-        height: 34vh;
+      width: 10px;
+      height: 10px;
+      top: -15px;
     }
-    span {
-        z-index: 2;
-        display: flex;
-        flex-direction: column;
-    }
-    &.middle{
-        flex-direction: column-reverse;
-        background-color: darken($board-color, 30%);
-        width: 3vw;
-        .middle-line {
-            background-color: darken(#df372b,70%);
-            position: absolute;
-            height: calc(50vh);
-            width: 1px;
-            @media (min-width:850px){
-                width: 2px;
-                height: calc(33vh + 30px);
+  }
 
-            }
-        }
-    }
-    &.exit{
-        background-color: transparent;
-        opacity: 0.7;
-        width: calc(12vw - 29px);
-        @media (min-width: 850px) {
-            width: 5vw;
-        }
-        height: calc(34vh + 20px);
-        .soldier {
-            border-radius: 5px!important;
-            height: 2.6vh!important;
-            @media (min-width: 850px) {
-                margin-top: 1px!important;
-                height: calc(2.2vh - 1px)!important;
-            }
-        }
-    }
-    
-    .triangle-up {
-        position: absolute;
-        border-left: 3vw solid transparent;
-        border-right: 3vw solid transparent;
-        border-bottom: 32vh solid;
-        @media (min-width: 850px) {
-            border-bottom: 26vh solid;
-        }
-    }
+  &.middle {
+    flex-direction: column-reverse;
+    background-color: darken($board-color, 30%);
+    width: 3vw;
 
-    .exit-cell {
-        position: absolute;
-        @media (min-width: 850px) {
-            width: 5vw;
-            height: calc(34vh + 20px);
-        }
-        width: calc(12vw - 29px);
-        height: 50vh;
-        transition: 0.3s;
-        &.triangle-green {
-            background-color: darken($board-color, 30%);
-        }
-        
-    }
+    .middle-line {
+      background-color: darken(#df372b, 70%);
+      position: absolute;
+      height: calc(50vh);
+      width: 1px;
+      @media (min-width: 850px) {
+        width: 2px;
+        height: calc(33vh + 30px);
 
-    .triangle-down {
-        position: absolute;
-        border-left: 3vw solid transparent;
-        border-right: 3vw solid transparent;
-        border-top: 32vh solid;
-        @media (min-width: 850px) {
-            border-left: 3vw solid transparent;
-            border-right: 3vw solid transparent;
-            border-top: 26vh solid;
-        }
+      }
+    }
+  }
+
+  &.exit {
+    background-color: transparent;
+    opacity: 0.7;
+    width: calc(12vw - 29px);
+    @media (min-width: 850px) {
+      width: 5vw;
+    }
+    height: calc(34vh + 20px);
+
+    .soldier {
+      border-radius: 5px !important;
+      height: 2.6vh !important;
+      @media (min-width: 850px) {
+        margin-top: 1px !important;
+        height: calc(2.2vh - 1px) !important;
+      }
+    }
+  }
+
+  .triangle-up {
+    position: absolute;
+    border-left: 3vw solid transparent;
+    border-right: 3vw solid transparent;
+    border-bottom: 32vh solid;
+    @media (min-width: 850px) {
+      border-bottom: 26vh solid;
+    }
+  }
+
+  .exit-cell {
+    position: absolute;
+    @media (min-width: 850px) {
+      width: 5vw;
+      height: calc(34vh + 20px);
+    }
+    width: calc(12vw - 29px);
+    height: 50vh;
+    transition: 0.3s;
+
+    &.triangle-green {
+      background-color: darken($board-color, 30%);
     }
 
-    .triangle-black {
-        border-bottom-color: darken(#df372b,70%);
-        border-top-color: darken(#df372b,70%);
-    }
+  }
 
-    .triangle-red {
-        border-bottom-color: darken(#df372b,10%);
-        border-top-color: darken(#df372b,10%);
+  .triangle-down {
+    position: absolute;
+    border-left: 3vw solid transparent;
+    border-right: 3vw solid transparent;
+    border-top: 32vh solid;
+    @media (min-width: 850px) {
+      border-left: 3vw solid transparent;
+      border-right: 3vw solid transparent;
+      border-top: 26vh solid;
     }
+  }
 
-    .triangle-green {
-        border-bottom-color: rgb(60, 206, 47);
-        border-top-color: rgb(60, 206, 47);
-    }
+  .triangle-black {
+    border-bottom-color: darken(#df372b, 70%);
+    border-top-color: darken(#df372b, 70%);
+  }
+
+  .triangle-red {
+    border-bottom-color: darken(#df372b, 10%);
+    border-top-color: darken(#df372b, 10%);
+  }
+
+  .triangle-green {
+    border-bottom-color: rgb(60, 206, 47);
+    border-top-color: rgb(60, 206, 47);
+  }
 }
