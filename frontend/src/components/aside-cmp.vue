@@ -15,7 +15,6 @@ const loginCmp = () => import("./login-cmp");
 const signupCmp = () => import("./signup-cmp");
 const chatCmp = () => import("./chat-cmp");
 const asideBtn = () => import("./aside-btn");
-import userService from "../services/user.service.js";
 export default {
   components: {
     chatCmp,

@@ -21,7 +21,7 @@ V-fix play again btn size in mobile
 V-animation for indicators
 V-middle indicators
 
-1-btn-wrapper => cmp
+V-btn-wrapper => cmp
 2-add restart btn that shows when admin is connected
 3-restart btn funcionality 
 4-btns and links with v-for in array from data

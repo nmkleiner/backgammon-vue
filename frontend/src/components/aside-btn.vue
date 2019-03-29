@@ -9,25 +9,20 @@
     <div class="msg-notification" v-if="showNotification && !isAsideOpen">
       <i class="fas fa-envelope"></i>
     </div>
-    <router-link
-      class="white-text-btn"
-      v-if="isChatFullyOpen && !loggedInUser.userName && !isInputFocus"
-      to="/signup"
-    >Signup</router-link>
-    <router-link
-      class="white-text-btn"
-      v-if="isChatFullyOpen && !loggedInUser.userName && !isInputFocus"
-      to="/login"
-    >Login</router-link>
-    <button
-      class="white-text-btn"
-      v-if="loggedInUser.userName && isChatFullyOpen && !isInputFocus"
-      @click="logout"
-    >Logout</button>
+
+    <template v-if="isLoginShowing">
+      <router-link class="white-text-btn" to="/signup">Signup</router-link>
+      <router-link class="white-text-btn" to="/login">Login</router-link>
+    </template>
+    <template v-if="isLogoutShowing">
+      <button class="white-text-btn" @click="logout">Logout</button>
+      <button v-if="isRestartShowing" class="white-text-btn" @click="restartGame">Restart</button>
+    </template>
   </div>
 </template>
-
 <script>
+import userService from "../services/user.service.js";
+
 export default {
   data() {
     return {
@@ -38,6 +33,10 @@ export default {
     };
   },
   methods: {
+    restartGame() {
+        // dispatch(restart)
+        return false
+    },
     logout() {
       userService.firebaseLogOut();
       this.$store.dispatch({
@@ -76,6 +75,21 @@ export default {
     },
     isAsideOpen() {
       return this.isLoginOpen || this.isChatOpen || this.isSignupOpen;
+    },
+    isLoginShowing() {
+      return (
+        this.isChatFullyOpen &&
+        !this.loggedInUser.userName &&
+        !this.isInputFocus
+      );
+    },
+    isLogoutShowing() {
+      return (
+        this.loggedInUser.userName && this.isChatFullyOpen && !this.isInputFocus
+      );
+    },
+    isRestartShowing() {
+      return this.loggedInUser.userName === "Noam Kleiner" || this.loggedInUser.userName === "Noam Klainer";
     }
   },
   watch: {
@@ -108,7 +122,6 @@ export default {
   &.input-focus {
     width: unset;
     background-color: transparent;
-
   }
   .open-btn {
     position: relative;
@@ -143,5 +156,4 @@ export default {
     text-decoration: none;
   }
 }
-
 </style>
