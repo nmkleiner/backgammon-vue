@@ -34,8 +34,9 @@ export default {
   },
   methods: {
     restartGame() {
-        // dispatch(restart)
-        return false
+      this.$store.dispatch("restartGame");
+      const room = 1;
+      this.$socket.emit("clientRestartGame", room);
     },
     logout() {
       userService.firebaseLogOut();
@@ -89,7 +90,10 @@ export default {
       );
     },
     isRestartShowing() {
-      return this.loggedInUser.userName === "Noam Kleiner" || this.loggedInUser.userName === "Noam Klainer";
+      return (
+        this.loggedInUser.userName === "Noam Kleiner" ||
+        this.loggedInUser.userName === "Noam Klainer"
+      );
     }
   },
   watch: {

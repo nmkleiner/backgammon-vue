@@ -22,6 +22,6 @@ V-animation for indicators
 V-middle indicators
 
 V-btn-wrapper => cmp
-2-add restart btn that shows when admin is connected
+V-add restart btn that shows when admin is connected
 3-restart btn funcionality 
 4-btns and links with v-for in array from data

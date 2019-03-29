@@ -103,7 +103,7 @@ export default {
       this.$store.dispatch({ type: "setTurkishMars", isTurkishMars: true });
     },
     serverRestartGame() {
-      this.$store.dispatch({ type: "restartGame", isTurkishMars: true });
+      this.$store.dispatch({ type: "restartGame" });
     }
   },
   watch: {
