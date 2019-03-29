@@ -23,5 +23,5 @@ V-middle indicators
 
 V-btn-wrapper => cmp
 V-add restart btn that shows when admin is connected
-3-restart btn funcionality 
+V-restart btn funcionality 
 4-btns and links with v-for in array from data
