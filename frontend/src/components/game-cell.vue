@@ -84,7 +84,6 @@
                     room
                 });
                 this.$store.commit("unselectSoldiers");
-                // this.$store.commit("showNoPossibleMoves");
             },
             onSoldierHover(soldier) {
                 if (soldier.possibleMoves.length) {
@@ -132,11 +131,5 @@
                 return !this.exit && this.isPossibleMoveInCell
             }
         },
-        // created() {
-            // if (this.cell.id % 2 === 1) {
-            //     console.log('cell id: ',this.cell.id)
-            //     this.$store.commit({type: 'pushMoves', cellId: this.cell.id})
-            // }
-        // }
     };
 </script>

@@ -19,4 +19,9 @@ in case someone refreshes, or disconnects and reconnects take the current game s
 
 V-fix play again btn size in mobile
 V-animation for indicators
--middle indicators
+V-middle indicators
+
+1-btn-wrapper => cmp
+2-add restart btn that shows when admin is connected
+3-restart btn funcionality 
+4-btns and links with v-for in array from data
