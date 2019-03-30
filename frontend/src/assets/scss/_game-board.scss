@@ -179,7 +179,9 @@ $board-color: #deb887;
 .game-cell {
   position: relative;
   background-color: transparent;
-  flex-wrap: wrap;
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
   width: 6.4vw;
   height: calc(50vh - 10px);
   z-index: 1;
@@ -188,11 +190,14 @@ $board-color: #deb887;
     width: 6vw;
     height: 34vh;
   }
-
+  
   span {
     z-index: 2;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    height: 100%;
   }
 
   .indicator {

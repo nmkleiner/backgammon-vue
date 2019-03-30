@@ -1,6 +1,6 @@
 <template>
     <div
-            class="game-cell flex flex-column align-center wrap"
+            class="game-cell"
             :class="{
         'middle': middle,
         'exit': exit,
