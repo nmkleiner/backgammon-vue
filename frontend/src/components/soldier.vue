@@ -24,9 +24,9 @@ export default {
           black: this.soldier.color === "black",
           selected: this.soldier.selected,
           "animated zoomOut fast":
-            this.soldier.isMoving && soldier.color !== this.loggedInUserColor,
+            this.soldier.isMoving && this.soldier.color !== this.loggedInUserColor,
           "animated zoomIn fast":
-            this.soldier.hasMoved && soldier.color !== this.loggedInUserColor
+            this.soldier.hasMoved && this.soldier.color !== this.loggedInUserColor
         };
       } else {
         return {
@@ -46,7 +46,6 @@ export default {
   align-self: center;
   height: 5.9vh;
   width: 5.9vh;
-  margin-bottom: -2.5vh;
   @media (min-width: 850px) {
     height: 4.9vh;
     width: 4.9vh;

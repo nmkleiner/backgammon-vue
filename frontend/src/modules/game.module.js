@@ -62,11 +62,12 @@ export default ({
                 '24': { amount: 2, color: 'black' }
             }
             // exiting
-            // boardMap = { '22': { amount: 7, color: 'white' }, '24': { amount: 5, color: 'white' }, '23': { amount: 1, color: 'white' }, '20': { amount: 1, color: 'white' }, '19': { amount: 1, color: 'white' }, '4': { amount: 5, color: 'black' }, '2': { amount: 3, color: 'black' }, '3': { amount: 5, color: 'black' }, '1': { amount: 2, color: 'black' } }
+            // boardMap = { '22': { amount: 7, color: 'white' }, '24': { amount: 6, color: 'white' }, '23': { amount: 0, color: 'white' }, '20': { amount: 1, color: 'white' }, '19': { amount: 1, color: 'white' }, '4': { amount: 5, color: 'black' }, '2': { amount: 3, color: 'black' }, '3': { amount: 5, color: 'black' }, '1': { amount: 2, color: 'black' } }
+            boardMap = { '22': { amount: 7, color: 'white' }, '24': { amount: 5, color: 'white' }, '23': { amount: 6, color: 'white' }, '21': { amount: 8, color: 'white' }, '20': { amount: 11, color: 'white' }, '4': { amount: 5, color: 'black' }, '2': { amount: 3, color: 'black' }, '3': { amount: 5, color: 'black' }, '1': { amount: 2, color: 'black' } }
             // many in one cell
             // boardMap = { '22': { amount: 15, color: 'white' }, '4': { amount: 5, color: 'black' }, '2': { amount: 3, color: 'black' }, '3': { amount: 5, color: 'black' }, '1': { amount: 2, color: 'black' } }
             // endgame 
-            boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
+            // boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // endgame with mars
             // boardMap = {'24': {amount: 1, color: 'white'},'6': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // eaten soldiers

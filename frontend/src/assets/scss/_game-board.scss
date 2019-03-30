@@ -70,6 +70,19 @@ $board-color: #deb887;
         border-left: $thin-board-border solid darken($board-color, 30%);
         border-top: $thin-board-border solid darken($board-color, 30%);
       }
+
+      .game-cell {
+        &.crowded {
+          .soldier {
+            margin-bottom: -1vh;
+          }
+        }
+        &.very-crowded {
+          .soldier {
+            margin-bottom: -2vh;
+          }
+        }
+      }
     }
 
     .bot-row {
@@ -79,7 +92,16 @@ $board-color: #deb887;
         span {
           flex-direction: column-reverse;
         }
-
+        &.crowded {
+          .soldier {
+            margin-top: -1vh;
+          }
+        }
+        &.very-crowded {
+          .soldier {
+            margin-top: -2vh;
+          }
+        }
         .indicator {
           top: unset;
           bottom: -8px;
@@ -196,7 +218,7 @@ $board-color: #deb887;
     flex-direction: column;
     align-items: center;
     flex-wrap: wrap;
-    height: 100%;
+    height: 85%;
   }
 
   .indicator {
