@@ -224,6 +224,7 @@ $board-color: #deb887;
   .indicator {
     position: absolute;
     top: -8px;
+    left: calc(3.4vw - 3px);
     width: 6px;
     height: 6px;
     background-color: #1fee00;
@@ -232,6 +233,7 @@ $board-color: #deb887;
       width: 10px;
       height: 10px;
       top: -15px;
+      left: calc(3vw - 5px);
     }
   }
 
