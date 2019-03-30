@@ -47,7 +47,7 @@ export default {
     font-weight: bold;
         padding-top: 20px;
     
-    .soldier-section {
+    .soldier-const {
         display: block;
         margin-top: 3vh;
 

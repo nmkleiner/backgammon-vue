@@ -181,7 +181,6 @@ $board-color: #deb887;
   background-color: transparent;
   display: flex;
   flex-direction: column;
-  // align-items: center;
   width: 6.4vw;
   height: calc(50vh - 10px);
   z-index: 1;
@@ -222,6 +221,7 @@ $board-color: #deb887;
     .middle-line {
       background-color: darken(#df372b, 70%);
       position: absolute;
+      left: 1.5vw;
       height: calc(50vh);
       width: 1px;
       @media (min-width: 850px) {

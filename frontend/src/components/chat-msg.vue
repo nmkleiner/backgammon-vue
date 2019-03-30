@@ -103,7 +103,7 @@ export default {
       width: 48px;
       height: 48px;
     }
-    .soldier-section {
+    .soldier-const {
       position: absolute;
       top: 34px;
       left: 34px;

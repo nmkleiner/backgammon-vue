@@ -24,4 +24,14 @@ V-middle indicators
 V-btn-wrapper => cmp
 V-add restart btn that shows when admin is connected
 V-restart btn funcionality 
-4-btns and links with v-for in array from data
+
+
+4-btns and links with v-for in array from data- GAVE UP
+
+1-too many soldier in cell make moving immpossible
+V-research when it happens
+V-add flex wrap back
+4-above 5 in cell put soldiers above each other
+
+-restart button will dispatch action strongRestart that will restart also the startgame module state
+-nothing shows in info section

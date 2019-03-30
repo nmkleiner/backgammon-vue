@@ -66,7 +66,7 @@ export default ({
             // many in one cell
             // boardMap = { '22': { amount: 15, color: 'white' }, '4': { amount: 5, color: 'black' }, '2': { amount: 3, color: 'black' }, '3': { amount: 5, color: 'black' }, '1': { amount: 2, color: 'black' } }
             // endgame 
-            // boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
+            boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // endgame with mars
             // boardMap = {'24': {amount: 1, color: 'white'},'6': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // eaten soldiers
