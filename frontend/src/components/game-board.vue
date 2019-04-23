@@ -14,12 +14,12 @@
           <game-cell v-for="idx in 6" :cell="cells[idx+6]" :key="idx+6"></game-cell>
         </div>
       </div>
-      <div class="board-wrapper left-side-wrapper flex space-around align-center">
+      <div class="board-wrapper left-side-wrapper">
         <dices-section v-if="!winner"></dices-section>
       </div>
 
       <div class="board-wrapper right-side-wrapper flex space-around align-center">
-        <action-btns></action-btns>
+        <ActionBtns></ActionBtns>
       </div>
       <div class="board-row bot-row flex space-between">
         <div class="board-cells flex space-between">
@@ -35,7 +35,7 @@
 
 <script>
 import gameCell from "./game-cell.vue";
-const actionBtns = () => import("./action-btns");
+const ActionBtns = () => import("./actionBtns/ActionBtns");
 const dicesSection = () => import("./dices-section");
 export default {
   props: {
@@ -44,7 +44,7 @@ export default {
   components: {
     gameCell,
     dicesSection,
-    actionBtns
+    ActionBtns
   },
   created() {},
   methods: {

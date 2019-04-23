@@ -6,7 +6,6 @@ export default {
     getSoldierById,
     getCellBySoldierId,
     updateCells,
-    // updateCell,
     isPossibleMove,
     passTurn,
     checkIsEating,
@@ -14,6 +13,8 @@ export default {
     isMiddleCell,
     calcPossibleMoves,
     setDicesNums,
+    setDicesWidth,
+    setDicesHeight,
     updateDices,
     getMiddleCell,
     isEndGame,
@@ -21,7 +22,6 @@ export default {
     isTurkishMars,
     nullDices,
     clearCells,
-    getCellById
 }
 const whiteOutCellId = 0
 const blackOutCellId = 25
@@ -161,6 +161,14 @@ function setDicesNums(dices) {
         dices.doubleCount = 0
     }
     return dices
+}
+
+function setDicesWidth() {
+    return utilService.getRandomInt(14,33)
+}
+
+function setDicesHeight() {
+    return utilService.getRandomInt(6,9)
 }
 
 function updateDices(dices, srcCell, targetCell) {
