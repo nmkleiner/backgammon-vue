@@ -13,6 +13,8 @@ export default {
     isMiddleCell,
     calcPossibleMoves,
     setDicesNums,
+    setDicesNumsToShow,
+    setDicesNumsToDicesNumsToShow,
     setDicesWidth,
     setDicesHeight,
     updateDices,
@@ -160,6 +162,18 @@ function setDicesNums(dices) {
     } else {
         dices.doubleCount = 0
     }
+    return dices
+}
+
+function setDicesNumsToShow(dices) {
+    dices.num1ToShow = utilService.getRandomInt(1, 7)
+    dices.num2ToShow = utilService.getRandomInt(1, 7)
+    return dices
+}
+
+function setDicesNumsToDicesNumsToShow(dices) {
+    dices.num1 = dices.num1ToShow
+    dices.num2 = dices.num2ToShow
     return dices
 }
 

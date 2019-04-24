@@ -35,14 +35,11 @@
         },
         sockets: {
             serverDicesRolling() {
-                this.$store.dispatch('rollDices');
+                this.$store.commit('rollDices');
             },
             serverDicesUnrolling(dices) {
-                setTimeout(() => {
-                    this.$store.commit('unrollDices');
-                    console.log('dices from server: ', dices);
-                    this.$store.commit({type: 'dicesRes', dices});
-                }, 1000);
+                this.$store.commit('unrollDices');
+                this.$store.commit({type: 'dicesRes', dices});
             },
             async serverDiceUnrolling(dice) {
                 await setTimeout(() => {

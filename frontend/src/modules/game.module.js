@@ -161,6 +161,12 @@ export default ({
         setDicesNums(state) {
             state.dices = gameService.setDicesNums(state.dices)
         },
+        setDicesNumsToShow(state) {
+            state.dices = gameService.setDicesNumsToShow(state.dices)
+        },
+        setDicesNumsToDicesNumsToShow(state) {
+            state.dices = gameService.setDicesNumsToDicesNumsToShow(state.dices)
+        },
         dicesRes(state, {dices}) {
             state.dices.num1ToShow = dices.num1ToShow
             state.dices.num2ToShow = dices.num2ToShow
@@ -182,12 +188,13 @@ export default ({
     },
     actions: {
         async throwDices({commit, state, dispatch}) {
+            commit('setDicesNums')
             dispatch("rollDices")
             const dices = await new Promise((resolve) => {
                 setTimeout(() => {
                     commit('startTurn')
-                    commit('setDicesNums')
                     commit('calcPossibleMoves')
+                    commit('setDicesNumsToDicesNumsToShow')
                     if (!state.possibleMoves.length) {
                         setTimeout(() => {
                             commit('endTurn')
@@ -328,7 +335,7 @@ export default ({
         logout({commit}) {
             userService.logout();
             commit('logOutUser');
-            console.log('asdaasdsd');
+            console.log('asas');
             return Promise.resolve();
         },
     },
