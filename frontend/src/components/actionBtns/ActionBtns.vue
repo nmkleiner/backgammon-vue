@@ -40,13 +40,13 @@
                     {
                         class: {lightSpeedIn: this.showDiceBtn, fadeOutUp: !this.showDiceBtn},
                         isShowing: this.showDiceBtn,
-                        html: 'Roll',
+                        html: 'Roll dice',
                         onClick: this.throwDice
                     },
                     {
                         class: {lightSpeedIn: this.showDicesBtn, fadeOutUp: !this.showDicesBtn},
                         isShowing: this.showDicesBtn,
-                        html: 'Roll',
+                        html: 'Roll dices',
                         onClick: this.throwDices
                     },
                     {
@@ -66,7 +66,7 @@
                 return (
                     this.isGameOn &&
                     !this.duringTurn &&
-                    !this.rolling &&
+                    !this.isRolling &&
                     this.currTurn === this.loggedInUserColor
                 );
             },
@@ -101,7 +101,7 @@
                 'playersConnected',
                 'startDice',
                 'isGameOn',
-                'rolling',
+                'isRolling',
                 'loggedInUserColor',
                 'currTurn',
                 'duringTurn',
@@ -118,7 +118,7 @@
             async throwDice() {
                 const room = 1;
                 this.$socket.emit("clientRollDices", room);
-                let userColor = this.userColor === "white" ? "black" : "white";
+                let userColor = this.loggedInUserColor === "white" ? "black" : "white";
                 await this.$store.dispatch({type: "diceRes", userColor});
                 this.$socket.emit("clientStartDiceRes", room, this.startDice.dice);
             },
