@@ -111,7 +111,11 @@ $board-color: #deb887;
         }
 
         &.middle {
-          flex-direction: column
+          flex-direction: column;
+
+          > span {
+            flex-direction: column;
+          }
         }
       }
 
@@ -189,6 +193,8 @@ $board-color: #deb887;
     }
 
     .left-side-wrapper {
+      display: flex;
+      justify-content: center;
       left: calc(12vw - 29px + 10px);
       @media (min-width: 850px) {
         left: calc(5vw + 20px);
