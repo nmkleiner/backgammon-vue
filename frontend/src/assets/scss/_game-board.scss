@@ -77,7 +77,6 @@ $board-color: #deb887;
             margin-bottom: -1vh;
           }
         }
-
         &.very-crowded {
           .soldier {
             margin-bottom: -2vh;
@@ -93,19 +92,16 @@ $board-color: #deb887;
         span {
           flex-direction: column-reverse;
         }
-
         &.crowded {
           .soldier {
             margin-top: -1vh;
           }
         }
-
         &.very-crowded {
           .soldier {
             margin-top: -2vh;
           }
         }
-
         .indicator {
           top: unset;
           bottom: -8px;
@@ -115,11 +111,7 @@ $board-color: #deb887;
         }
 
         &.middle {
-          flex-direction: column;
-
-          > span {
-            flex-direction: column;
-          }
+          flex-direction: column
         }
       }
 
@@ -165,6 +157,8 @@ $board-color: #deb887;
         }
 
         button {
+          //padding: 0 15px;
+          // width: 18vw;
           padding: 0 3vw;
           height: 12vh;
           background-color: rgb(31, 185, 31);
@@ -196,13 +190,10 @@ $board-color: #deb887;
 
     .left-side-wrapper {
       left: calc(12vw - 29px + 10px);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0 20px;
       @media (min-width: 850px) {
         left: calc(5vw + 20px);
       }
+
     }
   }
 }
@@ -220,7 +211,7 @@ $board-color: #deb887;
     width: 6vw;
     height: 34vh;
   }
-
+  
   span {
     z-index: 2;
     display: flex;
@@ -250,6 +241,9 @@ $board-color: #deb887;
     flex-direction: column-reverse;
     background-color: darken($board-color, 30%);
     width: 3vw;
+    .indicator {
+      left: calc(1.5vw - 3px)
+    }
     > span {
       flex-direction: column-reverse;
     }
