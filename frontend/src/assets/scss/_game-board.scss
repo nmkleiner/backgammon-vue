@@ -224,7 +224,7 @@ $board-color: #deb887;
   .indicator {
     position: absolute;
     top: -8px;
-    left: calc(3.4vw - 3px);
+    left: calc(3.2vw - 3px);
     width: 6px;
     height: 6px;
     background-color: #1fee00;
@@ -241,7 +241,9 @@ $board-color: #deb887;
     flex-direction: column-reverse;
     background-color: darken($board-color, 30%);
     width: 3vw;
-
+    .indicator {
+      left: calc(1.5vw - 3px)
+    }
     .middle-line {
       background-color: darken(#df372b, 70%);
       position: absolute;
@@ -250,7 +252,7 @@ $board-color: #deb887;
       width: 1px;
       @media (min-width: 850px) {
         width: 2px;
-        height: calc(33vh + 30px);
+        height: calc(33vh + 27px);
 
       }
     }
