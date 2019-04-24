@@ -16,9 +16,11 @@ export default ({
             state.isGameOn = true
         },
         setStartDice(state, { color }) {
+            console.log('setStartDice',color);
             state.startDice.dice = state.startDice[color] = startGameService.setStartDice(state.startDice.dice)
         },
         setStartDiceTo(state, { dice, color }) {
+            console.log('setStartDiceTo',color, dice);
             state.startDice.dice = state.startDice[color] = dice
         },
         nullDice(state) {

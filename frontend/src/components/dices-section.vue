@@ -46,8 +46,7 @@
                 await setTimeout(() => {
                     this.$store.commit('unrollDices');
                 }, 1000);
-                const {loggedInUserColor} = this;
-                await this.$store.dispatch({type: 'diceRes', dice, loggedInUserColor});
+                await this.$store.dispatch({type: 'diceRes', dice, userColor : this.loggedInUserColor});
             },
             serverEndTurn() {
                 setTimeout(() => {
@@ -89,7 +88,6 @@
                 }
             },
             isRolling(newVal) {
-                console.log();
                 if (newVal) {
                     this.width = gameService.setDicesWidth()
                     this.height = gameService.setDicesHeight()

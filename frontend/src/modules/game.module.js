@@ -323,7 +323,6 @@ export default ({
         },
         logout({commit}) {
             userService.logout();
-            console.log('baba');
             commit('logOutUser');
             return Promise.resolve();
         },
