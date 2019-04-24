@@ -22,6 +22,7 @@
 
 <script>
     import gameService from "../services/game.service";
+
     const dice = () => import('./dice.vue');
     const soldier = () => import('./soldier');
     import ioClient from 'socket.io-client';
@@ -33,12 +34,13 @@
             soldier
         },
         sockets: {
-            serverisRolling() {
+            serverDicesRolling() {
                 this.$store.dispatch('rollDices');
             },
             serverDicesUnrolling(dices) {
                 setTimeout(() => {
                     this.$store.commit('unrollDices');
+                    console.log('dices from server: ', dices);
                     this.$store.commit({type: 'dicesRes', dices});
                 }, 1000);
             },
@@ -46,7 +48,7 @@
                 await setTimeout(() => {
                     this.$store.commit('unrollDices');
                 }, 1000);
-                await this.$store.dispatch({type: 'diceRes', dice, userColor : this.loggedInUserColor});
+                await this.$store.dispatch({type: 'diceRes', dice, userColor: this.loggedInUserColor});
             },
             serverEndTurn() {
                 setTimeout(() => {
@@ -55,15 +57,16 @@
             }
         },
         data() {
-          return {
-              width: 12,
-              height: 5
-          }
+            return {
+                width: 12,
+                height: 5
+            }
         },
         computed: {
             ...mapGetters([
                 'dices',
                 'duringTurn',
+                'currTurn',
                 'loggedInUserColor',
                 'isShaking',
                 'isRolling',
@@ -78,17 +81,32 @@
                 }
             },
         },
+        methods: {
+            resetDicesWrapperDimensions() {
+                this.width = 12
+                this.height = 5
+            }
+        },
         watch: {
-            duringTurn: function (newVal) {
-                if (newVal === false) {
-                    const room = 1;
-                    this.$socket.emit('clientEndTurn', room);
-                    this.width = 12
-                    this.height = 5
+            isGameOn: function (newIsGameOn) {
+                if (newIsGameOn) {
+                    this.resetDicesWrapperDimensions()
                 }
             },
-            isRolling(newVal) {
-                if (newVal) {
+            currTurn: function (newCurrTurn) {
+                if (newCurrTurn === this.loggedInUserColor) {
+                    this.resetDicesWrapperDimensions()
+                }
+            },
+            duringTurn: function (newDuringTurn) {
+                if (newDuringTurn === false) {
+                    const room = 1;
+                    this.$socket.emit('clientEndTurn', room);
+                    this.resetDicesWrapperDimensions()
+                }
+            },
+            isRolling(newIsRolling) {
+                if (newIsRolling) {
                     this.width = gameService.setDicesWidth()
                     this.height = gameService.setDicesHeight()
                 }
@@ -135,9 +153,11 @@
         .two-dices-wrapper {
             width: 100%;
         }
+
         .dice1 {
             align-self: flex-start;
         }
+
         .dice2 {
             align-self: flex-end;
         }

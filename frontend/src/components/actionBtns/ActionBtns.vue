@@ -15,7 +15,7 @@
 
     export default {
         components: {
-          Button
+            Button
         },
         data() {
             return {
@@ -40,13 +40,13 @@
                     {
                         class: {lightSpeedIn: this.showDiceBtn, fadeOutUp: !this.showDiceBtn},
                         isShowing: this.showDiceBtn,
-                        html: 'Roll dice',
+                        html: 'Roll',
                         onClick: this.throwDice
                     },
                     {
                         class: {lightSpeedIn: this.showDicesBtn, fadeOutUp: !this.showDicesBtn},
                         isShowing: this.showDicesBtn,
-                        html: 'Roll dices',
+                        html: 'Roll',
                         onClick: this.throwDices
                     },
                     {
@@ -110,10 +110,10 @@
         },
         methods: {
             async throwDices() {
-                this.$store.dispatch("throwDices");
                 const room = 1;
                 this.$socket.emit("clientRollDices", room);
-                this.$socket.emit("clientDicesRes", room, this.dices);
+                const dices = await this.$store.dispatch("throwDices");
+                this.$socket.emit("clientDicesRes", room, dices);
             },
             async throwDice() {
                 const room = 1;

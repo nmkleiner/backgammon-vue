@@ -7,7 +7,7 @@ export default ({
     state: {
         cells: [],
         selectedSoldier: null,
-        currTurn: null,//'white',
+        currTurn: null,//null,
         dices: {num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false, shaking: false},
         possibleMoves: [],
         winner: false,
@@ -125,6 +125,7 @@ export default ({
             state.duringTurn = false
             state.dices = gameService.nullDices(state.dices)
             state.currTurn = gameService.passTurn(state.currTurn)
+            gameService.updateCells(state.cells)
         },
         setDuringTurn(state) {
             state.duringTurn = false
@@ -180,6 +181,25 @@ export default ({
         },
     },
     actions: {
+        async throwDices({commit, state, dispatch}) {
+            dispatch("rollDices")
+            const dices = await new Promise((resolve) => {
+                setTimeout(() => {
+                    commit('startTurn')
+                    commit('setDicesNums')
+                    commit('calcPossibleMoves')
+                    if (!state.possibleMoves.length) {
+                        setTimeout(() => {
+                            commit('endTurn')
+                            commit('setNoPossibleMoves', true)
+                            setTimeout(() => commit('setNoPossibleMoves', false), 1800)
+                        }, 1500)
+                    }
+                    resolve(state.dices)
+                }, 2 * second + 1)
+            })
+            return {...dices}
+        },
         async rollDices({state, commit}) {
             commit('shakeDices')
             const interval = setInterval(() => {
@@ -193,22 +213,6 @@ export default ({
                     commit('unrollDices')
                 }, second)
             }, second)
-        },
-        async throwDices({commit, state, dispatch}) {
-            dispatch("rollDices")
-            await setTimeout(() => {
-                commit('startTurn')
-                commit('setDicesNums')
-                commit('calcPossibleMoves')
-                if (!state.possibleMoves.length) {
-                    setTimeout(() => {
-                        commit('endTurn')
-                        commit('setNoPossibleMoves', true)
-                        setTimeout(() => commit('setNoPossibleMoves', false), 1800)
-                    }, 1500)
-                }
-                return state.dices
-            }, 2 * second)
         },
         setBoard({state, commit}, {soldierId, cells, isEating}) {
             if (!cells) {
@@ -324,6 +328,7 @@ export default ({
         logout({commit}) {
             userService.logout();
             commit('logOutUser');
+            console.log('asdaasdsd');
             return Promise.resolve();
         },
     },
@@ -334,10 +339,10 @@ export default ({
         isMars: state => state.isMars,
         winner: state => state.winner,
         currTurn: state => state.currTurn,
-        duringTurn: state => state.duringTurn,
-        loggedInUser: state => state.loggedInUser,
         isRolling: state => state.dices.rolling,
         isShaking: state => state.dices.shaking,
+        duringTurn: state => state.duringTurn,
+        loggedInUser: state => state.loggedInUser,
         isTurkishMars: state => state.isTurkishMars,
         isLoggedInUser: state => !!state.loggedInUser,
         selectedSoldier: state => state.selectedSoldier,

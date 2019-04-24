@@ -2,13 +2,13 @@ import startGameService from '@/services/startGame.service.js'
 
 export default ({
     state: {
-        isGameOn: false,
+        isGameOn: false,//false
         startDice: {
             dice: 6,
             white: null,
             black: null
         },
-        choosingColors: true,
+        choosingColors: true,//true
         playersConnected: 1
     },
     mutations: {
@@ -16,11 +16,9 @@ export default ({
             state.isGameOn = true
         },
         setStartDice(state, { color }) {
-            console.log('setStartDice',color);
             state.startDice.dice = state.startDice[color] = startGameService.setStartDice(state.startDice.dice)
         },
         setStartDiceTo(state, { dice, color }) {
-            console.log('setStartDiceTo',color, dice);
             state.startDice.dice = state.startDice[color] = dice
         },
         nullDice(state) {
