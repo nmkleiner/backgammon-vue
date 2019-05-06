@@ -14,11 +14,11 @@
           <game-cell v-for="idx in 6" :cell="cells[idx+6]" :key="idx+6"></game-cell>
         </div>
       </div>
-      <div class="board-wrapper left-side-wrapper flex space-around align-center">
+      <div class="board-wrapper left-side-wrapper">
         <dices-section v-if="!winner"></dices-section>
       </div>
 
-      <div class="board-wrapper right-side-wrapper flex space-around align-center">
+      <div class="board-wrapper right-side-wrapper">
         <action-btns></action-btns>
       </div>
       <div class="board-row bot-row flex space-between">

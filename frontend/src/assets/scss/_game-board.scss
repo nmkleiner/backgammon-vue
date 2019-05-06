@@ -153,8 +153,10 @@ $board-color: #deb887;
     }
 
     .right-side-wrapper {
-
       left: calc(12vw + 38.4vw + 3vw - 29px + 10px);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
       @media (min-width: 850px) {
         left: calc(5vw + 36vw + 3vw + 20px);
       }
@@ -198,6 +200,9 @@ $board-color: #deb887;
 
     .left-side-wrapper {
       left: calc(12vw - 29px + 10px);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
       @media (min-width: 850px) {
         left: calc(5vw + 20px);
       }
