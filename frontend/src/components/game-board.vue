@@ -35,7 +35,7 @@
 
 <script>
 import gameCell from "./game-cell.vue";
-const actionBtns = () => import("./action-btns");
+const actionBtns = () => import("./ActionBtns");
 const dicesSection = () => import("./dices-section");
 export default {
   props: {
