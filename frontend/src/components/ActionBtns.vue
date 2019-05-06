@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import soundService from "../../services/sound.service.js";
+    import soundService from "../services/sound.service";
     import {mapGetters} from 'vuex'
     import Button from "./Button";
 
