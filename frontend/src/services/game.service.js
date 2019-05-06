@@ -1,12 +1,12 @@
 'use strict'
 import utilService from './util.service.js'
+
 export default {
     createSoldiers,
     getAllSoldiers,
     getSoldierById,
     getCellBySoldierId,
     updateCells,
-    // updateCell,
     isPossibleMove,
     passTurn,
     checkIsEating,
@@ -21,13 +21,13 @@ export default {
     isTurkishMars,
     nullDices,
     clearCells,
-    getCellById
+    setDicesWidth,
+    setDicesHeight,
 }
 const whiteOutCellId = 0
 const blackOutCellId = 25
 const whiteEatenCellId = 26
 const blackEatenCellId = 27
-
 
 
 function createSoldiers(amount, color) {
@@ -39,6 +39,7 @@ function createSoldiers(amount, color) {
 }
 
 let soldierId = 0
+
 function createSoldier(color) {
     const soldier = {
         color: color,
@@ -78,6 +79,7 @@ function getSoldierById(cells, soldierId) {
 function getCellById(cells, cellId) {
     return cells.find(cell => cell.id === cellId)
 }
+
 function getCellBySoldierId(cells, soldierId) {
     return cells.find(cell => {
         return cell.soldiers.find((soldier) => {
@@ -163,6 +165,14 @@ function setDicesNums(dices) {
     return dices
 }
 
+function setDicesWidth() {
+    return utilService.getRandomInt(14, 33)
+}
+
+function setDicesHeight() {
+    return utilService.getRandomInt(6, 9)
+}
+
 function updateDices(dices, srcCell, targetCell) {
     let srcCellId = srcCell.id
     if (srcCellId === whiteEatenCellId) srcCellId = whiteOutCellId
@@ -209,7 +219,7 @@ function calcPossibleMoves(dices, currTurn, cells, soldiers) {
         }
         moves = removeNulls(moves)
         soldier.possibleMoves = moves
-        possibleMoves.push({ soldierId: soldier.id, moves })
+        possibleMoves.push({soldierId: soldier.id, moves})
     })
     if (!isPlayerHavePossibleMoves(possibleMoves)) {
         possibleMoves = []
@@ -258,6 +268,7 @@ function calcSoldierMoves(dices, srcCell, direction) {
     }
     return moves
 }
+
 // when dice is null soldiers get their srcCell as possibleMove
 function removeSrcCellMoves(srcCell, moves) {
     let srcCellId = srcCell.id
@@ -265,6 +276,7 @@ function removeSrcCellMoves(srcCell, moves) {
     else if (srcCell.id === whiteEatenCellId) srcCellId = whiteOutCellId
     return moves.map(move => (move === srcCellId) ? null : move)
 }
+
 // remove moves that step on enemy's houses
 function removeHousesMoves(cells, moves, currTurn) {
     cells = moves.map(move => getCellById(cells, move))
@@ -276,6 +288,7 @@ function removeHousesMoves(cells, moves, currTurn) {
     })
     return moves
 }
+
 // remove steps that are based on sum of both dices, when both moves are
 // stepping on enemy's houses 
 function removeBasedOnHousesMoves(dices, moves) {
@@ -290,6 +303,7 @@ function removeBasedOnHousesMoves(dices, moves) {
         return moves
     }
 }
+
 // remove unneeded moves outside of board
 function removeBasedOnOutsideMoves(moves) {
     moves = moves.map(move => {
@@ -304,6 +318,7 @@ function removeBasedOnOutsideMoves(moves) {
     }
     return moves
 }
+
 // remove all moves outside of board when exiting is not allowed
 function removeExitMoves(moves) {
     return moves.map(move => (move >= blackOutCellId || move <= whiteOutCellId) ? null : move)
@@ -343,8 +358,8 @@ function isMars(cells, currTurn) {
     return (currTurn === 'white') ?
         (!cells[whiteOutCellId].soldiers.length) :
         (!cells[blackOutCellId].soldiers.length)
-            (!cells[blackOutCellId].soldiers.length)
-            (!cells[blackOutCellId].soldiers.length)
+        (!cells[blackOutCellId].soldiers.length)
+        (!cells[blackOutCellId].soldiers.length)
 }
 
 function isTurkishMars(cells, currTurn) {
