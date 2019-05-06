@@ -167,8 +167,6 @@ $board-color: #deb887;
         }
 
         button {
-          //padding: 0 15px;
-          // width: 18vw;
           padding: 0 3vw;
           height: 12vh;
           background-color: rgb(31, 185, 31);
@@ -203,6 +201,7 @@ $board-color: #deb887;
       display: flex;
       justify-content: space-around;
       align-items: center;
+      padding: 0 20px;
       @media (min-width: 850px) {
         left: calc(5vw + 20px);
       }

@@ -19,7 +19,7 @@
       </div>
 
       <div class="board-wrapper right-side-wrapper">
-        <action-btns></action-btns>
+        <ActionBtns></ActionBtns>
       </div>
       <div class="board-row bot-row flex space-between">
         <div class="board-cells flex space-between">
@@ -35,7 +35,7 @@
 
 <script>
 import gameCell from "./game-cell.vue";
-const actionBtns = () => import("./ActionBtns");
+const ActionBtns = () => import("./ActionBtns");
 const dicesSection = () => import("./dices-section");
 export default {
   props: {
@@ -44,7 +44,7 @@ export default {
   components: {
     gameCell,
     dicesSection,
-    actionBtns
+    ActionBtns
   },
   created() {},
   methods: {
