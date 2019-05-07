@@ -184,7 +184,7 @@ export default ({
             commit('shakeDices')
             const interval = setInterval(() => {
                 commit('setDicesNums')
-            }, 5)
+            }, 100)
             setTimeout(() => {
                 commit('unshakeDices')
                 commit('rollDices')
@@ -334,6 +334,7 @@ export default ({
         ,
         logout({commit}) {
             userService.logout();
+            console.log('ba');
             commit('logOutUser');
             return Promise.resolve();
         }

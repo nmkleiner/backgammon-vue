@@ -15,10 +15,14 @@ export default ({
         gameOn(state) {
             state.isGameOn = true
         },
-        setStartDice(state, { color }) {
-            state.startDice.dice = state.startDice[color] = startGameService.setStartDice(state.startDice.dice)
+        setStartDice(state, {color}) {
+            const res = startGameService.setStartDice(state.startDice.dice)
+            console.log('color:', color);
+            state.startDice.dice = res
+            state.startDice[color] = res
         },
-        setStartDiceTo(state, { dice, color }) {
+        setStartDiceTo(state, {dice, color}) {
+            console.log('setStartDiceTo', dice, color);
             state.startDice.dice = state.startDice[color] = dice
         },
         nullDice(state) {
@@ -33,20 +37,24 @@ export default ({
 
     },
     actions: {
-        diceRes({ commit }, { dice, userColor }) {
-            commit("rollDices");
-
-            const color = (userColor === 'white') ? 'black' : 'white'
-            if (dice) commit({ type: 'setStartDiceTo', color, dice })
-            else commit({ type: 'setStartDice', color })
+        diceRes({commit, rootState}, {dice}) {
+            commit({type: 'rollDices', isStartDice: true})
+            if (dice) {//diceRes called from socket
+                const color = (rootState.gameModule.loggedInUser.color === 'white') ? 'black' : 'white';
+                commit({type: 'setStartDiceTo', color, dice});
+            }
+            else {
+                const color = rootState.gameModule.loggedInUser.color;
+                commit({type: 'setStartDice', color});
+            }
             setTimeout(() => {
                 commit("unrollDices");
             }, 1000);
         },
-        setTwoPlayersConnected({ commit }) {
+        setTwoPlayersConnected({commit}) {
             commit('setTwoPlayersConnected')
         },
-        changeMyColor({ commit }) {
+        changeMyColor({commit}) {
             commit('changeMyColor');
         }
 

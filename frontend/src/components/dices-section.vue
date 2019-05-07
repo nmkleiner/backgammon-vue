@@ -89,8 +89,7 @@
                 }
             },
             isRolling(newVal) {
-                console.log();
-                if (newVal) {
+                if (newVal && this.isGameOn) {
                     this.width = gameService.setDicesWidth()
                     this.height = gameService.setDicesHeight()
                 }

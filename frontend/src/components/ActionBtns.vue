@@ -75,12 +75,10 @@
             showDiceBtn() {
                 return (
                     !this.isGameOn &&
-                    ((!this.startDice.white && this.loggedInUserColor === "white") ||
-                        (this.startDice.white &&
-                            !this.startDice.black &&
-                            this.loggedInUserColor === "black")) &&
-                    !this.waitingForUser
-                );
+                    (
+                        (this.loggedInUserColor === "white" && !this.startDice.white) ||
+                        (this.loggedInUserColor === "black" && this.startDice.white && !this.startDice.black)
+                    ) && !this.waitingForUser);
             },
             showWaitBtn() {
                 return (
@@ -100,7 +98,7 @@
                 'playersConnected',
                 'startDice',
                 'isGameOn',
-                'rolling',
+                'isRolling',
                 'loggedInUserColor',
                 'currTurn',
                 'duringTurn',
