@@ -64,7 +64,7 @@
         border-radius: 5px;
         border: 1px solid black;
         @media (min-width: 850px) {
-            border-radius: 10px;
+            border-radius: 8px;
         }
 
         &:hover {
@@ -100,8 +100,8 @@
             visibility: hidden;
 
             @media (min-width: 850px) {
-                width: 8px;
-                height: 8px;
+                width: 6px;
+                height: 6px;
             }
             &.show {
                 visibility: visible;;
