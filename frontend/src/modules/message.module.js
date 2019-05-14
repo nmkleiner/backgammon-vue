@@ -1,25 +1,25 @@
 export default ({
     state: {
-        msgs: [],
+        messages: [],
         showNotification: false,
         isInputFocus: false
     },
     mutations: {
-        pushMsgToHistory(state, {msg}){
-            state.currEvent.msgs.push(msg);
+        pushMsgToHistory(state, {message}){
+            state.messages.push(message);
         },
         setShowNotification(state, {value}) {
             state.showNotification = value
         },
         toggleInputFocus(state) {
             state.isInputFocus = !state.isInputFocus
-        }
+        },
     },
     actions: {
       
     },
     getters: {
-        msgs: state => state.msgs,
+        messages: state => state.messages,
         isInputFocus: state => state.isInputFocus,
         showNotification: state => state.showNotification,
         

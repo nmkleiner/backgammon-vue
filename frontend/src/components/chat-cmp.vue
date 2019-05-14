@@ -64,16 +64,12 @@ export default {
       this.pushMsgToHistory(this.newMsg);
     },
     scrollToEnd() {
-      var container = this.$refs.conversationRef;
-      var scrollHeight = container.scrollHeight;
+      const container = this.$refs.conversationRef;
+      const scrollHeight = container.scrollHeight;
       container.scrollTop = scrollHeight;
     },
-    // scrollIntoView() {
-    //   var container = this.$refs.conversationRef;
-    //   container.scrollIntoView();
-    // },
-    pushMsgToHistory(msg) {
-      this.$emit("pushMsgToHistory", msg);
+    pushMsgToHistory(message) {
+      this.$emit("pushMsgToHistory", message);
     },
     toggleInputFocus() {
       this.$store.commit('toggleInputFocus')
@@ -97,14 +93,6 @@ export default {
       return this.$store.getters.isInputFocus;
     }
   },
-  sockets: {
-    renderMsg(msg) {
-      soundService.play("msg");
-      this.$store.commit({ type: "setShowNotification", value: true });
-      this.msgs.push(msg);
-      this.scrollToEnd()
-    }
-  }
 };
 </script>
 

@@ -22,6 +22,7 @@
 <script>
     import userService from "../services/user.service.js";
     import msgNotification from "./msgNotification";
+    import soundService from "../services/sound.service";
 
     export default {
         components: {
@@ -103,11 +104,18 @@
             }
         },
         watch: {
-            $route(to, from) {
+            $route(to) {
                 switch (to.path) {
                     case "/":
                         this.closeChat();
                 }
+            }
+        },
+        sockets: {
+            renderMsg(message) {
+                soundService.play("msg");
+                this.$store.commit({ type: "setShowNotification", value: true });
+                this.$store.commit({type: 'pushMsgToHistory', message});
             }
         }
     };
