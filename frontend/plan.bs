@@ -31,7 +31,9 @@ V-restart btn funcionality
 1-too many soldier in cell make moving immpossible
 V-research when it happens
 V-add flex wrap back
-4-above 5 in cell put soldiers above each other
+V-above 5 in cell put soldiers above each other
+-middle cell indicator is too much left
+
 
 -restart button will dispatch action strongRestart that will restart also the startgame module state
 -nothing shows in info section
