@@ -43,11 +43,11 @@ V-above 5 in cell put soldiers above each other
 -how to implement?
 
 game-cell
-- 2 - create random function in sender that will sometimes not send the move
+V - 2 - create random function in sender that will sometimes not send the move
 game-cell
-- 4 - use interval to resend move to 2nd player, 
+V - 4 - use interval to resend move to 2nd player, 
 gameModule
-- 5 - kill interval when it's 1st player's turn again
+V - 5 - kill interval when it's 1st player's turn again
 appboard && game-cell
 - 6 - 2nd player will not use sent move if he already got it (moves will have unique ids)
 aside-btn

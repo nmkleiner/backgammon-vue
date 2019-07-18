@@ -38,6 +38,11 @@ export default {
     middle: Boolean,
     exit: Boolean
   },
+  data() {
+    return {
+      sendMoveDtoInterval: null,
+    }
+  },
   components: {
     soldier
   },
@@ -87,7 +92,7 @@ export default {
         room
       };
 
-      const sendMoveDtoInterval = setInterval(() => {
+      this.sendMoveDtoInterval = setInterval(() => {
         let count = 0;
         if (Math.random() > 0.5) {
           this.$socket.emit("clientSoldierMoved",moveDto);
@@ -118,6 +123,9 @@ export default {
     loggedInUserColor() {
       return this.$store.getters.loggedInUserColor;
     },
+    currentTurn() {
+      return this.$store.getters.currentTurn;
+    },
     cells() {
       return this.$store.getters.cells;
     },
@@ -141,6 +149,13 @@ export default {
     },
     isIndicatorOn() {
       return !this.exit && this.isPossibleMoveInCell;
+    }
+  },
+  watch: {
+    currentTurn(currentTurn) {
+      if (currentTurn === this.loggedInUserColor) {
+        clearInterval(this.sendMoveDtoInterval);
+      }
     }
   }
 };
