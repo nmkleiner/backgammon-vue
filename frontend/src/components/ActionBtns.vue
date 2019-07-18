@@ -1,7 +1,8 @@
 <template>
     <div class="action-btns" :class="{'hidden': loading}">
         <Button
-                v-for="button in buttons"
+                v-for="(button,idx) in buttons"
+                :key="idx"
                 :button="button"
         ></Button>
     </div>

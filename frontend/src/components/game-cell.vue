@@ -78,13 +78,24 @@ export default {
     afterSoldierMove(soldier, isEating) {
       const room = 1;
       const cells = this.cells;
-      this.$socket.emit("clientSoldierMoved", {
+      const moveDto = {
+        // id: 
         soldierId: soldier.id,
         targetCell: this.cell,
         cells,
         isEating,
         room
-      });
+      };
+
+      const sendMoveDtoInterval = setInterval(() => {
+        let count = 0;
+        if (Math.random() > 0.5) {
+          this.$socket.emit("clientSoldierMoved",moveDto);
+        } else {
+          console.log('moveDto Not sent ', count);
+          count++
+        }
+      },500);
       this.$store.commit("unselectSoldiers");
     },
     onSoldierHover(soldier) {

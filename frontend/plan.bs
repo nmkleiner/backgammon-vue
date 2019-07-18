@@ -37,3 +37,18 @@ V-above 5 in cell put soldiers above each other
 
 -restart button will dispatch action strongRestart that will restart also the startgame module state
 -nothing shows in info section
+
+
+-resend 1st player's move to 2nd player in case move wasn't delivered correctly
+-how to implement?
+
+game-cell
+- 2 - create random function in sender that will sometimes not send the move
+game-cell
+- 4 - use interval to resend move to 2nd player, 
+gameModule
+- 5 - kill interval when it's 1st player's turn again
+appboard && game-cell
+- 6 - 2nd player will not use sent move if he already got it (moves will have unique ids)
+aside-btn
+- 7 - cancel reset button
