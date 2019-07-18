@@ -48,7 +48,8 @@ game-cell
 V - 4 - use interval to resend move to 2nd player, 
 gameModule
 V - 5 - kill interval when it's 1st player's turn again
-appboard && game-cell
-- 6 - 2nd player will not use sent move if he already got it (moves will have unique ids)
-aside-btn
-- 7 - cancel reset button
+appboard && game-cell && gameModule
+V - 6 - 2nd player will not use sent move if he already got it 
+V - moves will have unique ids
+V - last moves will be saved in gamemodule on every move that is received
+V - last moves will be emptied when it's player's turn again 

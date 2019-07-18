@@ -16,9 +16,34 @@ export default ({
         isMars: false,
         isTurkishMars: false,
         score: {white: 0, black: 0},
-        noPossibleMoves: false
+        noPossibleMoves: false,
+        lastMovesIds: [],
+    },
+    getters: {
+        cells: state => state.cells,
+        score: state => state.score,
+        dices: state => state.dices,
+        isMars: state => state.isMars,
+        winner: state => state.winner,
+        currTurn: state => state.currTurn,
+        duringTurn: state => state.duringTurn,
+        isRolling: state => state.dices.rolling,
+        isShaking: state => state.dices.shaking,
+        lastMovesIds: state => state.lastMovesIds,  
+        loggedInUser: state => state.loggedInUser,
+        isTurkishMars: state => state.isTurkishMars,
+        isLoggedInUser: state => !!state.loggedInUser,
+        selectedSoldier: state => state.selectedSoldier,
+        noPossibleMoves: state => state.noPossibleMoves,
+        loggedInUserColor: state => state.loggedInUser.color,
     },
     mutations: {
+        pushLastMoveToLastMovesIds(state, {lastMove}) {
+            state.lastMovesIds.push(lastMove)
+        },
+        emptyLastMovesIds(state) {
+            state.lastMovesIds.length = 0;
+        },
         setLoggedInUser(state, {user}) {
             state.loggedInUser.userName = user.userName
             state.loggedInUser._id = user._id
@@ -210,13 +235,23 @@ export default ({
                 return state.dices
             }, 2 * second)
         },
-        setBoard({state, commit}, {soldierId, cells, isEating}) {
+        setBoard({state, commit}, {soldierId, cells, isEating, moveId}) {
+            // if move already executed don't execute again
+            if (state.lastMovesIds.includes(moveId)) {
+                return;
+            }
+            console.log('setBoard: soldierId, cells, iseatigf, moveid', soldierId, cells, isEating, moveId)
+            if (moveId) {
+                commit({type: 'pushLastMoveToLastMovesIds', moveId})
+            }
             if (!cells) {
                 commit('setCells')
                 commit('setSoldiers')
                 commit('setChoosingColors')
             } else {
                 let movedSoldier = gameService.getSoldierById(state.cells, soldierId)
+                // console.log('movedSoldier: ',movedSoldier)
+                // if (!movedSoldier) {return;}
                 movedSoldier.isMoving = true
                 commit('clearBoard')
                 commit({type: 'setNewSoldiers', cells})
@@ -227,8 +262,7 @@ export default ({
                 commit('updateCells')
                 commit('calcPossibleMoves')
             }
-        }
-        ,
+        },
         selectSoldier({commit}, {soldier}) {
             commit("unselectSoldiers");
             commit("showNoPossibleMoves");
@@ -238,8 +272,7 @@ export default ({
                 soldier
             });
             commit({type: "selectSoldier", soldierId: soldier.id});
-        }
-        ,
+        },
         async moveSoldier({state, commit}, {targetCell}) {
             const isPossibleMove = gameService.isPossibleMove(targetCell.id, state.selectedSoldier)
             if (!isPossibleMove) return false
@@ -283,24 +316,19 @@ export default ({
             })
             await promise
             return Promise.resolve(promise)
-        }
-        ,
+        },
         win({state}) {
             if (state.currTurn === state.loggedInUser.color) soundService.play("win");
-        }
-        ,
+        },
         endGame({commit}, {winner}) {
             commit({type: 'endGame', winner});
-        }
-        ,
+        },
         setMars({commit}, {isMars}) {
             commit({type: "setMars", isMars});
-        }
-        ,
+        },
         setTurkishMars({commit}, {isTurkishMars}) {
             commit({type: "setTurkishMars", isTurkishMars});
-        }
-        ,
+        },
         restartGame({commit, dispatch}) {
             dispatch({type: 'setMars', isMars: false})
             dispatch({type: 'setTurkishMars', isTurkishMars: false})
@@ -311,18 +339,15 @@ export default ({
             commit({type: 'checkWinner'})
             commit({type: 'setDuringTurn'})
             commit({type: 'updateScore'})
-        }
-        ,
+        },
         setLoggedInUser({commit}, {user}) {
             commit({type: 'setLoggedInUser', user})
-        }
-        ,
+        },
         getLoggedInUser({commit}) {
             userService.getLoggedInUser().then(loggedInUser => {
                 commit({type: 'setLoggedInUser', user: loggedInUser})
             })
-        }
-        ,
+        },
         login({commit}, {loginData}) {
             return userService.login(loginData).then(user => {
                 if (user) {
@@ -330,32 +355,13 @@ export default ({
                 }
                 return user
             })
-        }
-        ,
+        },
         logout({commit}) {
             userService.logout();
             console.log('baba');
             commit('logOutUser');
             return Promise.resolve();
-        }
-        ,
-    },
-    getters: {
-        cells: state => state.cells,
-        score: state => state.score,
-        dices: state => state.dices,
-        isMars: state => state.isMars,
-        winner: state => state.winner,
-        currTurn: state => state.currTurn,
-        duringTurn: state => state.duringTurn,
-        isRolling: state => state.dices.rolling,
-        isShaking: state => state.dices.shaking,
-        loggedInUser: state => state.loggedInUser,
-        isTurkishMars: state => state.isTurkishMars,
-        isLoggedInUser: state => !!state.loggedInUser,
-        selectedSoldier: state => state.selectedSoldier,
-        noPossibleMoves: state => state.noPossibleMoves,
-        loggedInUserColor: state => state.loggedInUser.color,
+        },
     }
 })
 

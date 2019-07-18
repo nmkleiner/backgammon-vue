@@ -84,13 +84,14 @@ export default {
       this.$store.dispatch("changeMyColor");
       this.$store.dispatch("setTwoPlayersConnected");
     },
-    serverSoldierMoved({ soldierId, targetCell, cells, isEating }) {
+    serverSoldierMoved({ soldierId, targetCell, cells, isEating, moveId }) {
       this.$store.dispatch({
         type: "setBoard",
         soldierId,
         targetCell,
         cells,
-        isEating
+        isEating,
+        moveId
       });
     },
     serverGameEnded(winner) {

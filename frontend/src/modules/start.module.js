@@ -17,12 +17,10 @@ export default ({
         },
         setStartDice(state, {color}) {
             const res = startGameService.setStartDice(state.startDice.dice)
-            console.log('color:', color);
             state.startDice.dice = res
             state.startDice[color] = res
         },
         setStartDiceTo(state, {dice, color}) {
-            console.log('setStartDiceTo', dice, color);
             state.startDice.dice = state.startDice[color] = dice
         },
         nullDice(state) {

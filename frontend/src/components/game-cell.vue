@@ -31,7 +31,7 @@
 
 <script>
 const soldier = () => import("./soldier.vue");
-
+import utilService from "../services/util.service"
 export default {
   props: {
     cell: Object,
@@ -84,7 +84,7 @@ export default {
       const room = 1;
       const cells = this.cells;
       const moveDto = {
-        // id: 
+        moveId: utilService.getUniqueId(),
         soldierId: soldier.id,
         targetCell: this.cell,
         cells,
@@ -94,13 +94,13 @@ export default {
 
       this.sendMoveDtoInterval = setInterval(() => {
         let count = 0;
-        if (Math.random() > 0.5) {
+        if (Math.random() > 0.9) {
           this.$socket.emit("clientSoldierMoved",moveDto);
         } else {
           console.log('moveDto Not sent ', count);
           count++
         }
-      },500);
+      },1000);
       this.$store.commit("unselectSoldiers");
     },
     onSoldierHover(soldier) {
@@ -153,8 +153,10 @@ export default {
   },
   watch: {
     currentTurn(currentTurn) {
+      console.log('currentTurn : ',console.log())
       if (currentTurn === this.loggedInUserColor) {
         clearInterval(this.sendMoveDtoInterval);
+        this.$store.commit('emptyLastMovesIds');
       }
     }
   }
