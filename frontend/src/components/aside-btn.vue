@@ -16,7 +16,6 @@
     </template>
     <template v-if="isLogoutShowing">
       <button class="white-text-btn" @click="logout">Logout</button>
-      <button v-if="isRestartShowing" class="white-text-btn" @click="restartGame">Restart</button>
     </template>
   </div>
 </template>
@@ -33,11 +32,6 @@ export default {
     };
   },
   methods: {
-    restartGame() {
-      this.$store.dispatch("restartGame");
-      const room = 1;
-      this.$socket.emit("clientRestartGame", room);
-    },
     logout() {
       userService.firebaseLogOut();
       this.$store.dispatch({
@@ -87,12 +81,6 @@ export default {
     isLogoutShowing() {
       return (
         this.loggedInUser.userName && this.isChatFullyOpen && !this.isInputFocus
-      );
-    },
-    isRestartShowing() {
-      return (
-        this.loggedInUser.userName === "Noam Kleiner" ||
-        this.loggedInUser.userName === "Noam Klainer"
       );
     }
   },

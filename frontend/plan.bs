@@ -21,13 +21,20 @@ example:
 -moves ids are timestamps therefore are 100% unique
 -no real need to empty movesIds array but will empty it in watch if length grows over 10
 
+
 -next problem is, other things that are sent on socket might have connectivity issues 
 and will also destroy the game
 -possible solution is to get rid of some of the things sent on the socket and 
 use the moves for more situations like endTurn and endGame etc.
 -will need to think about each case and send more data with moveDto 
 
-
+-steps:
+- map all sockets
+- see what can be sent along with moveDto
+- cancel unnecessary sockets while preserving the logic surrounding them
+- sockets that cannot be sent along with moveDto will need to also be sent with interval
+- intervals will be cleared at the same watch with one dispatch
+- more dtosIds will be saved in store and cleared at some point in watch
 
 
 
