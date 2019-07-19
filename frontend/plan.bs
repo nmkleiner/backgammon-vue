@@ -30,6 +30,25 @@ use the moves for more situations like endTurn and endGame etc.
 
 -steps:
 - map all sockets
+sent only once (
+    clientGameJoined
+    clientAlreadyHere
+)
+sent robust (
+    clientSoldierMoved
+)
+can be sent with move (
+    clientEndTurn
+    clientEndGame
+    clientMars
+    clientTurkishMars
+)
+clientRollDices
+clientDicesRes
+clientStartDiceRes
+clientRestartGame
+assignMsg
+
 - see what can be sent along with moveDto
 - cancel unnecessary sockets while preserving the logic surrounding them
 - sockets that cannot be sent along with moveDto will need to also be sent with interval

@@ -41,6 +41,11 @@ export default ({
     mutations: {
         setSendMoveDtoInterval(state, { socket, moveDto }) {
             moveDto.cells = state.cells
+            // moveDto.isMars = state.cells
+            // moveDto.isTurkishMars = state.cells
+            // moveDto.isEndTurn = state.cells
+            // moveDto.isEndGame = state.cells
+
             state.sendMoveDtoInterval = setInterval(() => {
                 socket.emit("clientSoldierMoved", moveDto)
             }, 200);
