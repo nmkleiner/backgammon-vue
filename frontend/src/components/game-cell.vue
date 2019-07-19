@@ -67,13 +67,13 @@ export default {
     afterSoldierMove(soldier, isEating) {
       const room = 1;
       const moveDto = {
-        moveId: Date.now(),
+        id: Date.now(),
         room,
         isEating,
         soldierId: soldier.id,
         targetCell: this.cell,
       };
-      
+
       this.$store.commit({type: 'setSendMoveDtoInterval', socket: this.$socket, moveDto})
       this.$store.commit("unselectSoldiers");
     },

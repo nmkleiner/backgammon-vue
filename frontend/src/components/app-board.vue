@@ -19,7 +19,7 @@ const msgCmp = () => import("./msg-cmp");
 const ioClient = () => import("socket.io-client");
 
 export default {
-  name: 'appBoard',
+  name: "appBoard",
   components: {
     gameBoard,
     soldier,
@@ -28,15 +28,15 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'cells',
-      'winner',
-      'isMars',
-      'currentTurn',
-      'lastMovesIds',
-      'isTurkisMars',
-      'endGameDtoIds',
-      'noPossibleMoves',
-      'loggedInUserColor'
+      "cells",
+      "winner",
+      "isMars",
+      "currentTurn",
+      "lastMovesIds",
+      "isTurkisMars",
+      "endGameDtoIds",
+      "noPossibleMoves",
+      "loggedInUserColor"
     ]),
     isWinner() {
       return this.winner === this.loggedInUserColor;
@@ -47,36 +47,43 @@ export default {
     },
     msg() {
       if (!this.showMsg) return;
-      if (this.noPossibleMoves) return 'No Possible Moves';
+      if (this.noPossibleMoves) return "No Possible Moves";
       if (this.winner && this.isTurkishMars)
         return this.isWinner
-          ? 'you won! turkish mars!'
-          : 'you lost! turkish mars!';
+          ? "you won! turkish mars!"
+          : "you lost! turkish mars!";
       if (this.winner && this.isMars)
-        return this.isWinner ? 'you won! mars!' : 'you lost! mars!';
-      if (this.winner) return this.isWinner ? 'you won!' : 'you lost!';
+        return this.isWinner ? "you won! mars!" : "you lost! mars!";
+      if (this.winner) return this.isWinner ? "you won!" : "you lost!";
       // return 'you lost!\n turkish mars'
     }
   },
   created() {
-    this.$store.dispatch({ type: 'setBoard' });
+    this.$store.dispatch({ type: "setBoard" });
     const room = 1;
-    this.$socket.emit('clientGameJoined', room);
+    this.$socket.emit("clientGameJoined", room);
   },
   sockets: {
+    serverSoldierMoveReceived(moveReceivedDto) {
+      this.$store.commit("clearSendMoveDtoInterval");
+    },
     serverUserJoined() {
       const room = 1;
-      this.$socket.emit('clientAlreadyHere', room);
+      this.$socket.emit("clientAlreadyHere", room);
 
-      this.$store.dispatch('setTwoPlayersConnected');
+      this.$store.dispatch("setTwoPlayersConnected");
     },
     serverSomeoneAlreadyHere() {
-      this.$store.dispatch('changeMyColor');
-      this.$store.dispatch('setTwoPlayersConnected');
+      this.$store.dispatch("changeMyColor");
+      this.$store.dispatch("setTwoPlayersConnected");
     },
     serverSoldierMoved(moveDto) {
+      this.$socket.emit("clientSoldierMoveReceived", {
+        id: moveDto.id,
+        room: moveDto.room
+      });
       this.$store.dispatch({
-        type: 'setBoard',
+        type: "setBoard",
         moveDto
       });
     },
@@ -85,14 +92,14 @@ export default {
         return;
       }
       this.$store.commit({
-        type: 'pushEndGameDtoIdToEndGameDtoIds',
+        type: "pushEndGameDtoIdToEndGameDtoIds",
         endGameDtoId: endGameDto.id
       });
-      this.$store.dispatch({ type: 'endGame', winner: endGameDto.winner });
+      this.$store.dispatch({ type: "endGame", winner: endGameDto.winner });
       if (endGameDto.isMars) {
-        this.$store.dispatch({ type: 'setMars', isMars: true });
+        this.$store.dispatch({ type: "setMars", isMars: true });
         if (endGameDto.isTurkishMars) {
-          this.$store.dispatch({ type: 'setTurkishMars', isTurkishMars: true });
+          this.$store.dispatch({ type: "setTurkishMars", isTurkishMars: true });
         }
       }
     },
@@ -104,11 +111,11 @@ export default {
     // },
     serverEndTurn() {
       setTimeout(() => {
-        this.$store.commit('endTurn');
+        this.$store.commit("endTurn");
       }, 1500);
     },
     serverRestartGame() {
-      this.$store.dispatch({ type: 'restartGame' });
+      this.$store.dispatch({ type: "restartGame" });
     }
   },
   watch: {
@@ -121,11 +128,11 @@ export default {
           winner: true
         };
         this.$store.commit({
-          type: 'setEndGameDtoInterval',
+          type: "setEndGameDtoInterval",
           socket: this.$socket,
           endGameDto
         });
-        this.$store.dispatch('win');
+        this.$store.dispatch("win");
       }
     },
     isMars: function(newVal) {
@@ -137,7 +144,7 @@ export default {
           isMars: true
         };
         this.$store.commit({
-          type: 'setEndGameDtoInterval',
+          type: "setEndGameDtoInterval",
           socket: this.$socket,
           endGameDto
         });
@@ -152,7 +159,7 @@ export default {
           isTurkishMars: true
         };
         this.$store.commit({
-          type: 'setEndGameDtoInterval',
+          type: "setEndGameDtoInterval",
           socket: this.$socket,
           endGameDto
         });
@@ -160,10 +167,10 @@ export default {
     },
     currentTurn: function(currentTurnColor) {
       if (currentTurnColor === this.loggedInUserColor) {
-        this.$store.dispatch('clearSendSocketIntervals')
+        this.$store.dispatch("clearSendSocketIntervals");
       } else {
         if (this.lastMovesIds.length > 10) {
-          this.$store.commit('emptyLastMovesIds');
+          this.$store.commit("emptyLastMovesIds");
         }
       }
     }

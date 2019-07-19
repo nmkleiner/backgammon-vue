@@ -57,13 +57,13 @@ export default ({
             moveDto.cells = state.cells
             state.sendMoveDtoInterval = setInterval(() => {
                 socket.emit("clientSoldierMoved", moveDto)
-            }, 200);
+            }, 500);
         },
         clearSendMoveDtoInterval(state) {
             clearInterval(state.sendMoveDtoInterval);
         },
-        pushLastMoveToLastMovesIds(state, { moveId }) {
-            state.lastMovesIds.push(moveId)
+        pushLastMoveToLastMovesIds(state, { id }) {
+            state.lastMovesIds.push(id)
         },
         emptyLastMovesIds(state) {
             state.lastMovesIds.length = 0;
@@ -260,12 +260,12 @@ export default ({
             }, 2 * second)
         },
         setBoard({ state, commit }, { moveDto }) {
-            if (moveDto && moveDto.moveId) {
+            if (moveDto && moveDto.id) {
                 // if move already executed don't execute again
-                if (state.lastMovesIds.includes(moveDto.moveId)) {
+                if (state.lastMovesIds.includes(moveDto.id)) {
                     return;
                 } else {
-                    commit({ type: 'pushLastMoveToLastMovesIds', moveId: moveDto.moveId })
+                    commit({ type: 'pushLastMoveToLastMovesIds', id: moveDto.id })
                 }
             }
             if (!moveDto) {
@@ -383,12 +383,11 @@ export default ({
         },
         logout({ commit }) {
             userService.logout();
-            console.log('ba')
+            console.log('babababa')
             commit('logOutUser');
             return Promise.resolve();
         },
         clearSendSocketIntervals({ commit }) {
-            commit("clearSendMoveDtoInterval");
             commit("clearEndGameDtoInterval");
         }
     }
