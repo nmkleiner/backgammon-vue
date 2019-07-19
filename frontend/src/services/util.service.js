@@ -13,5 +13,17 @@ function getRandomInt(min, max) {
 }
 
 function getUniqueId() {
-    return getRandomInt(0,999999999)
+    return makeid(20)
+}
+
+
+function makeid(length) {
+    let id = "";
+    const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (let i = 0; i < length; i++) {
+        id += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+
+    return id;
 }

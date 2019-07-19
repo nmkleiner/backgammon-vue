@@ -31,17 +31,12 @@
 
 <script>
 const soldier = () => import("./soldier.vue");
-import utilService from "../services/util.service"
+import utilService from "../services/util.service";
 export default {
   props: {
     cell: Object,
     middle: Boolean,
     exit: Boolean
-  },
-  data() {
-    return {
-      sendMoveDtoInterval: null,
-    }
   },
   components: {
     soldier
@@ -69,38 +64,22 @@ export default {
         ev.stopPropagation();
       }
     },
-    // async onSoldierDblClick(soldier) {
-    //     this.$store.dispatch({type: 'selectSoldier', soldier})
-    //     const targetCellIdx = this.loggedInUserColor === "white" ? 25 : 0;
-    //     let {soldierDidMove, isEating} = await this.$store.dispatch({
-    //         type: "moveSoldier",
-    //         targetCell: this.cells.find(cell => cell.id === targetCellIdx)
-    //     });
-    //     if (soldierDidMove) {
-    //         this.afterSoldierMove(soldier, false);
-    //     }
-    // },
     afterSoldierMove(soldier, isEating) {
       const room = 1;
-      const cells = this.cells;
+      // const cells = this.cells;
       const moveDto = {
-        moveId: utilService.getUniqueId(),
+        moveId: Date.now(),
+        room,
+        isEating,
         soldierId: soldier.id,
         targetCell: this.cell,
-        cells,
-        isEating,
-        room
+        // cells
       };
 
-      this.sendMoveDtoInterval = setInterval(() => {
-        let count = 0;
-        if (Math.random() > 0.9) {
-          this.$socket.emit("clientSoldierMoved",moveDto);
-        } else {
-          console.log('moveDto Not sent ', count);
-          count++
-        }
-      },1000);
+      // this.sendMoveDtoInterval = setInterval(() => {
+      //   this.$socket.emit("clientSoldierMoved", moveDto);
+      // }, 1500);
+      this.$store.commit({type: 'setSendMoveDtoInterval', socket: this.$socket, moveDto})
       this.$store.commit("unselectSoldiers");
     },
     onSoldierHover(soldier) {
@@ -149,15 +128,6 @@ export default {
     },
     isIndicatorOn() {
       return !this.exit && this.isPossibleMoveInCell;
-    }
-  },
-  watch: {
-    currentTurn(currentTurn) {
-      console.log('currentTurn : ',console.log())
-      if (currentTurn === this.loggedInUserColor) {
-        clearInterval(this.sendMoveDtoInterval);
-        this.$store.commit('emptyLastMovesIds');
-      }
     }
   }
 };

@@ -8,7 +8,6 @@
       <div class="board-row top-row flex space-between">
         <game-cell :exit="true" :cell="cells[0]"></game-cell>
         <div class="board-cells flex space-between">
-          <!--<game-cell v-for="idx in 13" :middle="idx === 7" :cell="idx === 7? cells[26] : cells[idx]" :key="idx"></game-cell>-->
           <game-cell v-for="idx in 6" :cell="cells[idx]" :key="idx"></game-cell>
           <game-cell :middle="true" :cell="cells[26]"></game-cell>
           <game-cell v-for="idx in 6" :cell="cells[idx+6]" :key="idx+6"></game-cell>
@@ -46,7 +45,6 @@ export default {
     dicesSection,
     ActionBtns
   },
-  created() {},
   methods: {
     unselect() {
       this.$store.commit("showNoPossibleMoves");

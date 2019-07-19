@@ -67,7 +67,7 @@
                     this.isGameOn &&
                     !this.duringTurn &&
                     !this.rolling &&
-                    this.currTurn === this.loggedInUserColor
+                    this.currentTurn === this.loggedInUserColor
                 );
             },
             showPlayAgainBtn() {
@@ -101,7 +101,7 @@
                 'isGameOn',
                 'isRolling',
                 'loggedInUserColor',
-                'currTurn',
+                'currentTurn',
                 'duringTurn',
                 'dices',
             ])

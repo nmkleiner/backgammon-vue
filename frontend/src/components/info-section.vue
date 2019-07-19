@@ -18,8 +18,8 @@ export default {
     },
     
     computed: {
-        currTurn() {
-            return this.$store.getters.currTurn
+        currentTurn() {
+            return this.$store.getters.currentTurn
         },
         userColor() {
             return this.$store.getters.loggedInUserColor

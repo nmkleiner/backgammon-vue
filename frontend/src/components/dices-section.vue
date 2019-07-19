@@ -102,7 +102,7 @@
                     }
                     const startingColor =
                         this.startDice.white > this.startDice.black ? 'white' : 'black';
-                    this.$store.commit({type: 'setCurrTurn', startingColor});
+                    this.$store.commit({type: 'setcurrentTurn', startingColor});
                     setTimeout(() => {
                         this.$store.commit('gameOn');
                     }, 2000);
@@ -116,7 +116,7 @@
                     }
                     const startingColor =
                         this.startDice.white > this.startDice.black ? 'white' : 'black';
-                    this.$store.commit({type: 'setCurrTurn', startingColor});
+                    this.$store.commit({type: 'setcurrentTurn', startingColor});
                     setTimeout(() => {
                         this.$store.commit('gameOn');
                     }, 2000);

@@ -12,6 +12,7 @@
 </template>
 <script>
 import gameBoard from "./game-board";
+import { mapGetters } from "vuex";
 const infoSection = () => import("./info-section");
 const soldier = () => import("./soldier");
 const msgCmp = () => import("./msg-cmp");
@@ -25,31 +26,19 @@ export default {
     infoSection,
     msgCmp
   },
-  methods: {},
   computed: {
-    cells() {
-      return this.$store.getters.cells;
-    },
-    currTurn() {
-      return this.$store.getters.currTurn;
-    },
+    ...mapGetters([
+      "cells",
+      "winner",
+      "isMars",
+      "currentTurn",
+      "lastMovesIds",
+      "isTurkisMars",
+      "noPossibleMoves",
+      "loggedInUserColor",
+    ]),
     isWinner() {
-      return this.winner === this.userColor;
-    },
-    userColor() {
-      return this.$store.getters.loggedInUserColor;
-    },
-    winner() {
-      return this.$store.getters.winner;
-    },
-    mars() {
-      return this.$store.getters.isMars;
-    },
-    turkishMars() {
-      return this.$store.getters.isTurkishMars;
-    },
-    noPossibleMoves() {
-      return this.$store.getters.noPossibleMoves;
+      return this.winner === this.loggedInUserColor;
     },
     showMsg() {
       return this.winner || this.noPossibleMoves;
@@ -58,11 +47,11 @@ export default {
     msg() {
       if (!this.showMsg) return;
       if (this.noPossibleMoves) return "No Possible Moves";
-      if (this.winner && this.turkishMars)
+      if (this.winner && this.isTurkishMars)
         return this.isWinner
           ? "you won! turkish mars!"
           : "you lost! turkish mars!";
-      if (this.winner && this.mars)
+      if (this.winner && this.isMars)
         return this.isWinner ? "you won! mars!" : "you lost! mars!";
       if (this.winner) return this.isWinner ? "you won!" : "you lost!";
       // return "you lost!\n turkish mars"
@@ -84,14 +73,10 @@ export default {
       this.$store.dispatch("changeMyColor");
       this.$store.dispatch("setTwoPlayersConnected");
     },
-    serverSoldierMoved({ soldierId, targetCell, cells, isEating, moveId }) {
+    serverSoldierMoved(moveDto) {
       this.$store.dispatch({
         type: "setBoard",
-        soldierId,
-        targetCell,
-        cells,
-        isEating,
-        moveId
+        moveDto
       });
     },
     serverGameEnded(winner) {
@@ -116,16 +101,25 @@ export default {
         this.$store.dispatch("win");
       }
     },
-    mars: function(newVal) {
+    isMars: function(newVal) {
       if (newVal) {
         const room = 1;
         this.$socket.emit("clientMars", room);
       }
     },
-    turkishMars: function(newVal) {
+    isTurkishMars: function(newVal) {
       if (newVal) {
         const room = 1;
         this.$socket.emit("clientTurkishMars", room);
+      }
+    },
+    currentTurn: function(currentTurnColor) {
+      if (currentTurnColor === this.loggedInUserColor) {
+        this.$store.commit("clearSendMoveDtoInterval");
+      } else {
+        if (lastMovesIds.length > 10) { 
+          this.$store.commit("emptyLastMovesIds");
+        }
       }
     }
   }
