@@ -18,7 +18,9 @@ export default ({
         score: { white: 0, black: 0 },
         noPossibleMoves: false,
         lastMovesIds: [],
-        sendMoveDtoInterval: null
+        sendMoveDtoInterval: null,
+        endGameDtoIds: [],
+        sendEndGameDtoInterval: null,
     },
     getters: {
         cells: state => state.cells,
@@ -26,19 +28,31 @@ export default ({
         dices: state => state.dices,
         isMars: state => state.isMars,
         winner: state => state.winner,
-        currentTurn: state => state.currentTurn,
         duringTurn: state => state.duringTurn,
+        currentTurn: state => state.currentTurn,
         isRolling: state => state.dices.rolling,
         isShaking: state => state.dices.shaking,
         lastMovesIds: state => state.lastMovesIds,
         loggedInUser: state => state.loggedInUser,
         isTurkishMars: state => state.isTurkishMars,
+        endGameDtoIds: state => state.endGameDtoIds,
         isLoggedInUser: state => !!state.loggedInUser,
         selectedSoldier: state => state.selectedSoldier,
         noPossibleMoves: state => state.noPossibleMoves,
         loggedInUserColor: state => state.loggedInUser.color,
     },
     mutations: {
+        setEndGameDtoInterval(state, { socket, endGameDto }) {
+            state.sendEndGameDtoInterval = setInterval(() => {
+                socket.emit("clientEndGame", endGameDto)
+            }, 200);
+        },
+        clearEndGameDtoInterval(state) {
+            clearInterval(state.sendEndGameDtoInterval);
+        },
+        pushEndGameDtoIdToEndGameDtoIds(state, { endGameDtoId }) {
+            state.endGameDtoIds.push(endGameDtoId)
+        },
         setSendMoveDtoInterval(state, { socket, moveDto }) {
             moveDto.cells = state.cells
             state.sendMoveDtoInterval = setInterval(() => {
@@ -331,6 +345,7 @@ export default ({
             if (state.currentTurn === state.loggedInUser.color) soundService.play("win");
         },
         endGame({ commit }, { winner }) {
+            commit({ type: '', endGameDtoId })
             commit({ type: 'endGame', winner });
         },
         setMars({ commit }, { isMars }) {
@@ -372,6 +387,10 @@ export default ({
             commit('logOutUser');
             return Promise.resolve();
         },
+        clearSendSocketIntervals({ commit }) {
+            commit("clearSendMoveDtoInterval");
+            commit("clearEndGameDtoInterval");
+        }
     }
 })
 
