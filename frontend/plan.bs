@@ -37,21 +37,20 @@ sent only once (
 sent robust (
     clientSoldierMoved
 )
-can be sent with move (
-    clientEndTurn
+can be sent with endGame (
     clientEndGame
     clientMars
     clientTurkishMars
 )
+clientEndTurn
 clientRollDices
 clientDicesRes
 clientStartDiceRes
 clientRestartGame
 assignMsg
 
-- see what can be sent along with moveDto
-- cancel unnecessary sockets while preserving the logic surrounding them
-- sockets that cannot be sent along with moveDto will need to also be sent with interval
+- send endGame robustcially like clientSoldierMoved with mars and turkish mars
+- see what can be done with other sockets
 - intervals will be cleared at the same watch with one dispatch
 - more dtosIds will be saved in store and cleared at some point in watch
 

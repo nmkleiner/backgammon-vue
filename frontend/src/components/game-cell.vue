@@ -66,19 +66,14 @@ export default {
     },
     afterSoldierMove(soldier, isEating) {
       const room = 1;
-      // const cells = this.cells;
       const moveDto = {
         moveId: Date.now(),
         room,
         isEating,
         soldierId: soldier.id,
         targetCell: this.cell,
-        // cells
       };
-
-      // this.sendMoveDtoInterval = setInterval(() => {
-      //   this.$socket.emit("clientSoldierMoved", moveDto);
-      // }, 1500);
+      
       this.$store.commit({type: 'setSendMoveDtoInterval', socket: this.$socket, moveDto})
       this.$store.commit("unselectSoldiers");
     },

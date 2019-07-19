@@ -48,11 +48,6 @@
                 }, 1000);
                 const {loggedInUserColor} = this;
                 await this.$store.dispatch({type: 'diceRes', dice, loggedInUserColor});
-            },
-            serverEndTurn() {
-                setTimeout(() => {
-                    this.$store.commit('endTurn');
-                }, 1500);
             }
         },
         data() {

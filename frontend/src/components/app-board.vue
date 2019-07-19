@@ -35,7 +35,7 @@ export default {
       "lastMovesIds",
       "isTurkisMars",
       "noPossibleMoves",
-      "loggedInUserColor",
+      "loggedInUserColor"
     ]),
     isWinner() {
       return this.winner === this.loggedInUserColor;
@@ -79,14 +79,25 @@ export default {
         moveDto
       });
     },
-    serverGameEnded(winner) {
-      this.$store.dispatch({ type: "endGame", winner });
+    serverGameEnded(endGameDto) {
+      this.$store.dispatch({ type: "endGame", winner: endGameDto.winner });
+      if (endGameDto.isMars) {
+        this.$store.dispatch({ type: "setMars", isMars: true });
+        if (endGameDto.isTurkishMars) {
+          this.$store.dispatch({ type: "setTurkishMars", isTurkishMars: true });
+        }
+      }
     },
-    serverIsMars() {
-      this.$store.dispatch({ type: "setMars", isMars: true });
-    },
-    serverIsTurkishMars() {
-      this.$store.dispatch({ type: "setTurkishMars", isTurkishMars: true });
+    // serverIsMars() {
+    //   this.$store.dispatch({ type: "setMars", isMars: true });
+    // },
+    // serverIsTurkishMars() {
+    //   this.$store.dispatch({ type: "setTurkishMars", isTurkishMars: true });
+    // },
+    serverEndTurn() {
+      setTimeout(() => {
+        this.$store.commit("endTurn");
+      }, 1500);
     },
     serverRestartGame() {
       this.$store.dispatch({ type: "restartGame" });
@@ -96,28 +107,39 @@ export default {
     winner: function(newVal, oldVal) {
       if (newVal) {
         const room = 1;
-        const winner = true;
-        this.$socket.emit("clientEndGame", room, winner);
+        endGameDto = {
+          room,
+          winner: true
+        };
+        this.$socket.emit("clientEndGame", endGameDto);
         this.$store.dispatch("win");
       }
     },
     isMars: function(newVal) {
       if (newVal) {
         const room = 1;
-        this.$socket.emit("clientMars", room);
+        endGameDto = {
+          room,
+          isMars: true
+        };
+        this.$socket.emit("clientEndGame", endGameDto);
       }
     },
     isTurkishMars: function(newVal) {
       if (newVal) {
         const room = 1;
-        this.$socket.emit("clientTurkishMars", room);
+        endGameDto = {
+          room,
+          isTurkishMars: true
+        };
+        this.$socket.emit("clientEndGame", endGameDto);
       }
     },
     currentTurn: function(currentTurnColor) {
       if (currentTurnColor === this.loggedInUserColor) {
         this.$store.commit("clearSendMoveDtoInterval");
       } else {
-        if (lastMovesIds.length > 10) { 
+        if (this.lastMovesIds.length > 10) {
           this.$store.commit("emptyLastMovesIds");
         }
       }

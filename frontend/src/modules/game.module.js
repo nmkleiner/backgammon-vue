@@ -41,11 +41,6 @@ export default ({
     mutations: {
         setSendMoveDtoInterval(state, { socket, moveDto }) {
             moveDto.cells = state.cells
-            // moveDto.isMars = state.cells
-            // moveDto.isTurkishMars = state.cells
-            // moveDto.isEndTurn = state.cells
-            // moveDto.isEndGame = state.cells
-
             state.sendMoveDtoInterval = setInterval(() => {
                 socket.emit("clientSoldierMoved", moveDto)
             }, 200);
@@ -373,7 +368,7 @@ export default ({
         },
         logout({ commit }) {
             userService.logout();
-            console.log('baba')
+            console.log('ba')
             commit('logOutUser');
             return Promise.resolve();
         },
