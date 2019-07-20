@@ -26,6 +26,17 @@ export default {
     infoSection,
     msgCmp
   },
+  methods: {
+    setGameWinner(endGameDto) {
+      this.$store.dispatch({ type: "endGame", winner: endGameDto.winner });
+      if (endGameDto.isMars) {
+        this.$store.dispatch({ type: "setMars", isMars: true });
+        if (endGameDto.isTurkishMars) {
+          this.$store.dispatch({ type: "setTurkishMars", isTurkishMars: true });
+        }
+      }
+    }
+  },
   computed: {
     ...mapGetters([
       "cells",
@@ -64,9 +75,6 @@ export default {
     this.$socket.emit("clientGameJoined", room);
   },
   sockets: {
-    serverSoldierMoveReceived(moveReceivedDto) {
-      this.$store.commit("clearSendMoveDtoInterval");
-    },
     serverUserJoined() {
       const room = 1;
       this.$socket.emit("clientAlreadyHere", room);
@@ -87,7 +95,12 @@ export default {
         moveDto
       });
     },
-    serverGameEnded(endGameDto) {
+    serverSoldierMoveReceived(moveReceivedDto) {
+      this.$store.commit("clearSendMoveDtoInterval");
+    },
+    serverEndGame(endGameDto) {
+      const endGameReceivedDto = endGameDto;
+      this.$socket.emit("clientEndGameDtoReceived", endGameReceivedDto);
       if (this.endGameDtoIds.includes(endGameDto.id)) {
         return;
       }
@@ -95,20 +108,11 @@ export default {
         type: "pushEndGameDtoIdToEndGameDtoIds",
         endGameDtoId: endGameDto.id
       });
-      this.$store.dispatch({ type: "endGame", winner: endGameDto.winner });
-      if (endGameDto.isMars) {
-        this.$store.dispatch({ type: "setMars", isMars: true });
-        if (endGameDto.isTurkishMars) {
-          this.$store.dispatch({ type: "setTurkishMars", isTurkishMars: true });
-        }
-      }
+      this.setGameWinner(endGameDto);
     },
-    // serverIsMars() {
-    //   this.$store.dispatch({ type: 'setMars', isMars: true });
-    // },
-    // serverIsTurkishMars() {
-    //   this.$store.dispatch({ type: 'setTurkishMars', isTurkishMars: true });
-    // },
+    serverEndGameDtoReceived(endGameReceivedDto) {
+      this.$store.commit("clearEndGameDtoInterval");
+    },
     serverEndTurn() {
       setTimeout(() => {
         this.$store.commit("endTurn");
@@ -122,7 +126,7 @@ export default {
     winner: function(newVal, oldVal) {
       if (newVal) {
         const room = 1;
-        endGameDto = {
+        const endGameDto = {
           id: Date.now(),
           room,
           winner: true
@@ -138,7 +142,7 @@ export default {
     isMars: function(newVal) {
       if (newVal) {
         const room = 1;
-        endGameDto = {
+        const endGameDto = {
           id: Date.now(),
           room,
           isMars: true
@@ -153,7 +157,7 @@ export default {
     isTurkishMars: function(newVal) {
       if (newVal) {
         const room = 1;
-        endGameDto = {
+        const endGameDto = {
           id: Date.now(),
           room,
           isTurkishMars: true
@@ -166,9 +170,7 @@ export default {
       }
     },
     currentTurn: function(currentTurnColor) {
-      if (currentTurnColor === this.loggedInUserColor) {
-        this.$store.dispatch("clearSendSocketIntervals");
-      } else {
+      if (currentTurnColor !== this.loggedInUserColor) {
         if (this.lastMovesIds.length > 10) {
           this.$store.commit("emptyLastMovesIds");
         }

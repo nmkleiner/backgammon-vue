@@ -21,6 +21,8 @@ export default ({
         sendMoveDtoInterval: null,
         endGameDtoIds: [],
         sendEndGameDtoInterval: null,
+        throwDicesDtoIds: [],
+        sendThrowDicesDtoInterval: null,
     },
     getters: {
         cells: state => state.cells,
@@ -38,14 +40,34 @@ export default ({
         endGameDtoIds: state => state.endGameDtoIds,
         isLoggedInUser: state => !!state.loggedInUser,
         selectedSoldier: state => state.selectedSoldier,
+        throwDicesDtoIds: state => state.throwDicesDtoIds,
         noPossibleMoves: state => state.noPossibleMoves,
         loggedInUserColor: state => state.loggedInUser.color,
     },
     mutations: {
+        // connected this mutation, need to verify and connect the other 3 mutations
+        setThrowDicesDtoInterval(state, { socket, throwDicesDto }) {
+            state.sendThrowDicesDtoInterval = setInterval(() => {
+                socket.emit("clientThrowDices", throwDicesDto)
+            }, 500);
+        },
+        // 1
+        clearThrowDicesDtoInterval(state) {
+            clearInterval(state.sendThrowDicesDtoInterval);
+        },
+        // 2
+        pushThrowDicesToThrowDicesIds(state, { id }) {
+            state.throwDicesIds.push(id)
+        },
+        // 3
+        emptyThrowDicesIds(state) {
+            state.throwDicesIds.length = 0;
+        },
+        
         setEndGameDtoInterval(state, { socket, endGameDto }) {
             state.sendEndGameDtoInterval = setInterval(() => {
                 socket.emit("clientEndGame", endGameDto)
-            }, 200);
+            }, 1000);
         },
         clearEndGameDtoInterval(state) {
             clearInterval(state.sendEndGameDtoInterval);
@@ -118,7 +140,7 @@ export default ({
             // many in one cell
             // boardMap = { '22': { amount: 15, color: 'white' }, '4': { amount: 5, color: 'black' }, '2': { amount: 3, color: 'black' }, '3': { amount: 5, color: 'black' }, '1': { amount: 2, color: 'black' } }
             // endgame 
-            // boardMap = {'24': {amount: 1, color: 'white'},'4': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
+            boardMap = { '24': { amount: 1, color: 'white' }, '4': { amount: 5, color: 'black' }, '2': { amount: 3, color: 'black' }, '25': { amount: 14, color: 'white' }, '3': { amount: 5, color: 'black' }, '1': { amount: 2, color: 'black' } }
             // endgame with mars
             // boardMap = {'24': {amount: 1, color: 'white'},'6': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // eaten soldiers
@@ -245,7 +267,7 @@ export default ({
         },
         async throwDices({ commit, state, dispatch }) {
             dispatch("rollDices")
-            await setTimeout(() => {
+            return await setTimeout(() => {
                 commit('startTurn')
                 commit('setDicesNums')
                 commit('calcPossibleMoves')
@@ -345,7 +367,6 @@ export default ({
             if (state.currentTurn === state.loggedInUser.color) soundService.play("win");
         },
         endGame({ commit }, { winner }) {
-            commit({ type: '', endGameDtoId })
             commit({ type: 'endGame', winner });
         },
         setMars({ commit }, { isMars }) {
@@ -383,12 +404,9 @@ export default ({
         },
         logout({ commit }) {
             userService.logout();
-            console.log('babababa')
+            console.log('   baba')
             commit('logOutUser');
             return Promise.resolve();
-        },
-        clearSendSocketIntervals({ commit }) {
-            commit("clearEndGameDtoInterval");
         }
     }
 })

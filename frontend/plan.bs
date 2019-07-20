@@ -10,7 +10,7 @@ dices when double {num1:num num2:null doubleCount:4,3,2,1} => make num1 null whe
 
 possibleMoves [{soldierId: moves: [1,2,3,4]},{},...]
 
-
+throwDicesDto = {id: Date.now(), room, dices?, dice? }
 
 -connectivity issues might destroy the game in the middle
 -i decided to solve this for soldier moves by resending the move with an interval
@@ -49,7 +49,8 @@ clientStartDiceRes
 clientRestartGame
 assignMsg
 
-- send endGame robustcially like clientSoldierMoved with mars and turkish mars
+V - send endGame robustcially like clientSoldierMoved with mars and turkish mars
+
 - see what can be done with other sockets
 - intervals will be cleared at the same watch with one dispatch
 - more dtosIds will be saved in store and cleared at some point in watch

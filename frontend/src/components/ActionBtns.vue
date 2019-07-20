@@ -108,17 +108,29 @@
         },
         methods: {
             async throwDices() {
-                this.$store.dispatch("throwDices");
+                await this.$store.dispatch("throwDices");
                 const room = 1;
-                this.$socket.emit("clientRollDices", room);
-                this.$socket.emit("clientDicesRes", room, this.dices);
+                const throwDicesDto = {
+                    room,
+                    id: Date.now(),
+                    dices: this.dices
+                }
+                console.log("clientThrowDices", throwDicesDto)
+                // this.$socket.emit("clientThrowDices", throwDicesDto);
+                this.$store.commit({type: 'setThrowDicesDtoInterval', socket: this.socket, throwDicesDto});
             },
             async throwDice() {
-                const room = 1;
-                this.$socket.emit("clientRollDices", room);
-                let userColor = this.userColor === "white" ? "black" : "white";
+                const userColor = this.userColor === "white" ? "black" : "white";
                 await this.$store.dispatch({type: "diceRes", userColor});
-                this.$socket.emit("clientStartDiceRes", room, this.startDice.dice);
+                const room = 1;
+                const throwDicesDto = {
+                    room,
+                    id: Date.now(),
+                    dice: this.startDice.dice
+                }
+                console.log("clientThrowDice", throwDicesDto)
+                // this.$socket.emit("clientThrowDices", throwDicesDto);
+                this.$store.commit({type: 'setThrowDicesDtoInterval', socket: this.socket, throwDicesDto});
             },
             async restartGame() {
                 this.isRestarting = true;
