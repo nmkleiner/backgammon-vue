@@ -47,6 +47,7 @@ export default {
       "isTurkisMars",
       "endGameDtoIds",
       "noPossibleMoves",
+      "throwDicesDtoIds",
       "loggedInUserColor"
     ]),
     isWinner() {
@@ -120,6 +121,32 @@ export default {
     },
     serverRestartGame() {
       this.$store.dispatch({ type: "restartGame" });
+    },
+    serverThrowDices(throwDicesDto) {
+      console.log("serverThrowDices", throwDicesDto);
+      const throwDicesReceivedDto = throwDicesDto;
+      this.$socket.emit("clientThrowDicesReceived", throwDicesReceivedDto);
+      this.$store.commit({
+        type: "pushThrowDicesToThrowDicesIds",
+        id: throwDicesDto.id
+      });
+      this.$store.dispatch("rollDices");
+      setTimeout(async () => {
+        this.$store.commit("unrollDices");
+        if (throwDicesDto.dice) {
+          const { loggedInUserColor } = this;
+          await this.$store.dispatch({
+            type: "diceRes",
+            dice: throwDicesDto.dice,
+            loggedInUserColor
+          });
+        } else {
+          this.$store.commit({ type: "dicesRes", dices: throwDicesDto.dices });
+        }
+      }, 1000);
+    },
+    serverThrowDiceReceived(throwDicesReceivedDto) {
+      this.$store.commit("clearThrowDicesDtoInterval");
     }
   },
   watch: {
@@ -173,6 +200,9 @@ export default {
       if (currentTurnColor !== this.loggedInUserColor) {
         if (this.lastMovesIds.length > 10) {
           this.$store.commit("emptyLastMovesIds");
+        }
+        if (this.throwDicesDtoIds.length > 4) {
+          this.$store.commit("emptyThrowDicesIds");
         }
       }
     }

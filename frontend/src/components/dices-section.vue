@@ -32,37 +32,6 @@ export default {
     dice,
     soldier
   },
-  sockets: {
-    // serverDicesRolling() {
-    //   this.$store.dispatch("rollDices");
-    // },
-    // serverDicesUnrolling(dices) {
-    //   setTimeout(() => {
-    //     this.$store.commit("unrollDices");
-    //     this.$store.commit({ type: "dicesRes", dices });
-    //   }, 1000);
-    // },
-    // async serverDiceUnrolling(dice) {
-    //   await setTimeout(() => {
-    //     this.$store.commit("unrollDices");
-    //   }, 1000);
-    //   const { loggedInUserColor } = this;
-    //   await this.$store.dispatch({ type: "diceRes", dice, loggedInUserColor });
-    // },
-    serverThrowDices(throwDicesDto) {
-        console.log('serverThrowDices',throwDicesDto)
-        this.$store.dispatch("rollDices");
-        setTimeout(async () => {
-            this.$store.commit('unrollDices');
-            if (throwDicesDto.dice) {
-                const { loggedInUserColor } = this;
-                await this.$store.dispatch({ type: "diceRes", dice: throwDicesDto.dice, loggedInUserColor });
-            } else {
-                this.$store.commit({ type: "dicesRes", dices: throwDicesDto.dices});
-            }
-        },1000)
-    }
-  },
   data() {
     return {
       width: 12,

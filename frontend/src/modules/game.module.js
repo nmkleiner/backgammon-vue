@@ -47,23 +47,27 @@ export default ({
     mutations: {
         // connected this mutation, need to verify and connect the other 3 mutations
         setThrowDicesDtoInterval(state, { socket, throwDicesDto }) {
+            throwDicesDto.dices = state.dices;
             state.sendThrowDicesDtoInterval = setInterval(() => {
+                console.log('clientThrowDices 0', throwDicesDto.dices)
                 socket.emit("clientThrowDices", throwDicesDto)
-            }, 500);
+            }, 1000);
         },
         // 1
         clearThrowDicesDtoInterval(state) {
+            console.log('clearThrowDicesDtoInterval 1')
             clearInterval(state.sendThrowDicesDtoInterval);
         },
         // 2
         pushThrowDicesToThrowDicesIds(state, { id }) {
-            state.throwDicesIds.push(id)
+            console.log('clearThrowDicesDtoInterval 2')
+            state.throwDicesDtoIds.push(id);
         },
         // 3
         emptyThrowDicesIds(state) {
-            state.throwDicesIds.length = 0;
+            state.throwDicesDtoIds.length = 0;
         },
-        
+
         setEndGameDtoInterval(state, { socket, endGameDto }) {
             state.sendEndGameDtoInterval = setInterval(() => {
                 socket.emit("clientEndGame", endGameDto)
@@ -140,7 +144,7 @@ export default ({
             // many in one cell
             // boardMap = { '22': { amount: 15, color: 'white' }, '4': { amount: 5, color: 'black' }, '2': { amount: 3, color: 'black' }, '3': { amount: 5, color: 'black' }, '1': { amount: 2, color: 'black' } }
             // endgame 
-            boardMap = { '24': { amount: 1, color: 'white' }, '4': { amount: 5, color: 'black' }, '2': { amount: 3, color: 'black' }, '25': { amount: 14, color: 'white' }, '3': { amount: 5, color: 'black' }, '1': { amount: 2, color: 'black' } }
+            // boardMap = { '24': { amount: 1, color: 'white' }, '4': { amount: 5, color: 'black' }, '2': { amount: 3, color: 'black' }, '25': { amount: 14, color: 'white' }, '3': { amount: 5, color: 'black' }, '1': { amount: 2, color: 'black' } }
             // endgame with mars
             // boardMap = {'24': {amount: 1, color: 'white'},'6': {amount: 5, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // eaten soldiers
@@ -246,17 +250,17 @@ export default ({
         setNoPossibleMoves(state, payload) {
             state.noPossibleMoves = payload
         },
-        pushSoldier(state, { soldier, cell }) {
+        pushSoldier({ soldier, cell }) {
             cell.soldiers.push(soldier)
         },
     },
     actions: {
-        async rollDices({ state, commit }) {
+        async rollDices({ commit }) {
             commit('shakeDices')
             const interval = setInterval(() => {
                 commit('setDicesNums')
             }, 100)
-            setTimeout(() => {
+            await setTimeout(() => {
                 commit('unshakeDices')
                 commit('rollDices')
                 clearInterval(interval)
@@ -264,10 +268,11 @@ export default ({
                     commit('unrollDices')
                 }, second)
             }, second)
+            return Promise.resolve()
         },
         async throwDices({ commit, state, dispatch }) {
-            dispatch("rollDices")
-            return await setTimeout(() => {
+            await dispatch("rollDices")
+            await setTimeout(() => {
                 commit('startTurn')
                 commit('setDicesNums')
                 commit('calcPossibleMoves')
@@ -275,11 +280,12 @@ export default ({
                     setTimeout(() => {
                         commit('endTurn')
                         commit('setNoPossibleMoves', true)
-                        setTimeout(() => commit('setNoPossibleMoves', false), 1800)
+                        setTimeout(() => commit('setNoPossibleMoves', false), 1700)
                     }, 1500)
                 }
                 return state.dices
             }, 2 * second)
+            return Promise.resolve()
         },
         setBoard({ state, commit }, { moveDto }) {
             if (moveDto && moveDto.id) {
