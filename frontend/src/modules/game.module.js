@@ -6,23 +6,23 @@ const second = 1000;
 export default ({
     state: {
         cells: [],
-        selectedSoldier: null,
-        currentTurn: null,
-        dices: {num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false, shaking: false},
-        possibleMoves: [],
-        winner: false,//true/false
-        duringTurn: false,
-        loggedInUser: {userName: '', _id: '', pic: '', color: 'white'},
+        winner: false,
         isMars: false,
-        isTurkishMars: false,
-        score: {white: 0, black: 0},
-        noPossibleMoves: false,
         lastMovesIds: [],
-        sendMoveDtoInterval: null,
+        possibleMoves: [],
         endGameDtoIds: [],
-        sendEndGameDtoInterval: null,
+        duringTurn: false,
+        currentTurn: null,
         throwDicesDtoIds: [],
+        isTurkishMars: false,
+        selectedSoldier: null,
+        noPossibleMoves: false,
+        sendMoveDtoInterval: null,
+        score: {white: 0, black: 0},
+        sendEndGameDtoInterval: null,
         sendThrowDicesDtoInterval: null,
+        loggedInUser: {userName: '', _id: '', pic: '', color: 'white'},
+        dices: {num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false, shaking: false},
     },
     getters: {
         cells: state => state.cells,
@@ -44,7 +44,6 @@ export default ({
         loggedInUserColor: state => state.loggedInUser.color,
     },
     mutations: {
-        // connected this mutation, need to verify and connect the other 3 mutations
         setThrowDicesDtoInterval(state, {socket, throwDicesDto}) {
             state.sendThrowDicesDtoInterval = setInterval(() => {
                 if (state.dices.rolling) {
@@ -54,15 +53,12 @@ export default ({
                 socket.emit("clientThrowDices", throwDicesDto);
             }, 1000);
         },
-        // 1
         clearThrowDicesDtoInterval(state) {
             clearInterval(state.sendThrowDicesDtoInterval);
         },
-        // 2
         pushThrowDicesToThrowDicesIds(state, {id}) {
             state.throwDicesDtoIds.push(id);
         },
-        // 3
         emptyThrowDicesIds(state) {
             state.throwDicesDtoIds.length = 0;
         },
@@ -149,7 +145,17 @@ export default ({
             // eaten soldiers
             // boardMap = {'26': {amount: 2, color: 'white'},'27': {amount: 2, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // no possible moves
-            // boardMap = {'26': {amount: 2, color: 'white'},'4': {amount: 2, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 2, color: 'black'},'5': {amount: 2, color: 'black'},'6': {amount: 2, color: 'black'},'15': {amount: 2, color: 'black'},'1': {amount: 2, color: 'black'}}
+            boardMap = {
+                '26': {amount: 2, color: 'white'},
+                '4': {amount: 2, color: 'black'},
+                '2': {amount: 3, color: 'black'},
+                '25': {amount: 14, color: 'white'},
+                '3': {amount: 2, color: 'black'},
+                '5': {amount: 2, color: 'black'},
+                '6': {amount: 2, color: 'black'},
+                '15': {amount: 2, color: 'black'},
+                '1': {amount: 2, color: 'black'}
+            }
             // no possible moves & exiting, bug from hell!!!
             // boardMap = {'24': { amount: 1, color: 'white' },'2': { amount: 4, color: 'white' },'0': { amount: 8, color: 'black' },'25': { amount: 10, color: 'white' },'3': { amount: 5, color: 'black' },'1': { amount: 2, color: 'black' }}
 
@@ -198,7 +204,7 @@ export default ({
         endTurn(state) {
             state.duringTurn = false;
             state.dices = gameService.nullDices(state.dices);
-            state.currentTurn = gameService.passTurn(state.currentTurn);
+            state.currentTurn = gameService.passTurn(state.currentTurn,state.loggedInUserColor);
         },
         setDuringTurn(state) {
             state.duringTurn = false
@@ -249,7 +255,8 @@ export default ({
         setNoPossibleMoves(state, payload) {
             state.noPossibleMoves = payload;
         },
-        pushSoldier({soldier, cell}) {
+
+        pushSoldier(state, {soldier, cell}) {
             cell.soldiers.push(soldier);
         },
     },
@@ -265,8 +272,8 @@ export default ({
                 clearInterval(interval);
                 setTimeout(() => {
                     commit('unrollDices');
-                }, second*0.7)
-            }, second*0.7);
+                }, second)
+            }, second);
             return Promise.resolve();
         },
         async throwDices({commit, state, dispatch}) {
@@ -275,10 +282,13 @@ export default ({
                 commit('startTurn');
                 commit('setDicesNums');
                 commit('calcPossibleMoves');
+                console.log('$$$ 1', state.possibleMoves);
                 if (!state.possibleMoves.length) {
+                    console.log('$$$ 2');
                     setTimeout(() => {
                         commit('endTurn');
                         commit('setNoPossibleMoves', true);
+                        console.log('$$$ 2',state.noPossibleMoves,state.currentTurn);
                         setTimeout(() => commit('setNoPossibleMoves', false), 1700);
                     }, 1500)
                 }
@@ -343,6 +353,7 @@ export default ({
                 const eatenSoldier = targetCell.soldiers.pop();
                 eatenSoldier.isEaten = true;
                 const middleCell = gameService.getMiddleCell(eatenSoldier.color, state.cells);
+                console.log(middleCell);
                 commit({type: 'pushSoldier', cell: middleCell, soldier: eatenSoldier});
                 commit('updateCells')
             }
@@ -413,7 +424,7 @@ export default ({
         },
         logout({commit}) {
             userService.logout();
-            console.log('babababa');
+            console.log('ba');
             commit('logOutUser');
             return Promise.resolve();
         }

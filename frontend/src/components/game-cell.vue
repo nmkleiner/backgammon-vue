@@ -119,7 +119,9 @@ export default {
       } else return false;
     },
     isIndicatorOn() {
-      return !this.exit && this.isPossibleMoveInCell;
+      const { soldiers } = this.cell;
+      const color = soldiers.length ? soldiers[0].color : '';
+      return color === this.loggedInUserColor && !this.exit && this.isPossibleMoveInCell;
     }
   }
 };

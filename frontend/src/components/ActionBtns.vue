@@ -95,15 +95,16 @@
                 return !(this.playersConnected === 2);
             },
             ...mapGetters([
+                'dices',
                 'winner',
-                'playersConnected',
-                'startDice',
                 'isGameOn',
                 'isRolling',
-                'loggedInUserColor',
-                'currentTurn',
+                'startDice',
                 'duringTurn',
-                'dices',
+                'currentTurn',
+                'noPossibleMoves',
+                'playersConnected',
+                'loggedInUserColor',
             ])
         },
         methods: {

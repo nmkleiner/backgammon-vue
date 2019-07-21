@@ -124,6 +124,8 @@ export default {
     serverThrowDices(throwDicesDto) {
       const throwDicesReceivedDto = throwDicesDto;
       this.$socket.emit("clientThrowDicesReceived", throwDicesReceivedDto);
+      if (this.throwDicesDtoIds.includes(throwDicesDto.id)) {return;}
+
       this.$store.commit({
         type: "pushThrowDicesToThrowDicesIds",
         id: throwDicesDto.id,
@@ -143,7 +145,7 @@ export default {
         }
       }, 1000);
     },
-    serverThrowDiceReceived(throwDicesReceivedDto) {
+    serverThrowDicesReceived(throwDicesReceivedDto) {
       this.$store.commit("clearThrowDicesDtoInterval");
     }
   },
