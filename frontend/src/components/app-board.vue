@@ -11,10 +11,10 @@
   </section>
 </template>
 <script>
-  import gameBoard from "./game-board";
-  import {mapGetters} from "vuex";
+import gameBoard from "./game-board";
+import { mapGetters } from "vuex";
 
-  const infoSection = () => import("./info-section");
+const infoSection = () => import("./info-section");
 const soldier = () => import("./soldier");
 const msgCmp = () => import("./msg-cmp");
 
@@ -88,11 +88,11 @@ export default {
     serverSoldierMoved(moveDto) {
       this.$socket.emit("clientSoldierMoveReceived", {
         id: moveDto.id,
-        room: moveDto.room,
+        room: moveDto.room
       });
       this.$store.dispatch({
         type: "setBoard",
-        moveDto,
+        moveDto
       });
     },
     serverSoldierMoveReceived(moveReceivedDto) {
@@ -106,7 +106,7 @@ export default {
       }
       this.$store.commit({
         type: "pushEndGameDtoIdToEndGameDtoIds",
-        endGameDtoId: endGameDto.id,
+        endGameDtoId: endGameDto.id
       });
       this.setGameWinner(endGameDto);
     },
@@ -122,13 +122,18 @@ export default {
       this.$store.dispatch({ type: "restartGame" });
     },
     serverThrowDices(throwDicesDto) {
+      if (this.loggedInUserColor === throwDicesDto.color) {
+        return;
+      }
       const throwDicesReceivedDto = throwDicesDto;
       this.$socket.emit("clientThrowDicesReceived", throwDicesReceivedDto);
-      if (this.throwDicesDtoIds.includes(throwDicesDto.id)) {return;}
+      if (this.throwDicesDtoIds.includes(throwDicesDto.id)) {
+        return;
+      }
 
       this.$store.commit({
         type: "pushThrowDicesToThrowDicesIds",
-        id: throwDicesDto.id,
+        id: throwDicesDto.id
       });
       this.$store.dispatch("rollDices");
       setTimeout(async () => {

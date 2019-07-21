@@ -50,6 +50,7 @@ export default ({
                     return;
                 }
                 throwDicesDto.dices = state.dices;
+                throwDicesDto.from = state.loggedInUser;
                 socket.emit("clientThrowDices", throwDicesDto);
             }, 1000);
         },
@@ -424,7 +425,7 @@ export default ({
         },
         logout({commit}) {
             userService.logout();
-            console.log('ba');
+            console.log('baba');
             commit('logOutUser');
             return Promise.resolve();
         }

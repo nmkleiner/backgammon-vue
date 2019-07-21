@@ -122,8 +122,8 @@ function isPossibleMove(targetCellId, selectedSoldier) {
     return (selectedSoldier.possibleMoves.find(move => move === targetCellId) !== undefined);
 }
 
-function passTurn(currentTurn, loggedInUserColor) {
-    return (loggedInUserColor === 'white') ? 'black' : 'white';
+function passTurn(currentTurn) {
+    return (currentTurn === 'white') ? 'black' : 'white';
 }
 
 function checkIsEating(targetCell, currentTurn) {
