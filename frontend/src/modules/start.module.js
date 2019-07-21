@@ -16,8 +16,8 @@ export default ({
             state.isGameOn = true
         },
         setStartDice(state, {color}) {
-            const res = startGameService.setStartDice(state.startDice.dice)
-            state.startDice.dice = res
+            const res = startGameService.setStartDice(state.startDice.dice);
+            state.startDice.dice = res;
             state.startDice[color] = res
         },
         setStartDiceTo(state, {dice, color}) {
@@ -36,7 +36,7 @@ export default ({
     },
     actions: {
         diceRes({commit, rootState}, {dice}) {
-            commit({type: 'rollDices', isStartDice: true})
+            commit({type: 'rollDices', isStartDice: true});
             if (dice) {//diceRes called from socket
                 const color = (rootState.gameModule.loggedInUser.color === 'white') ? 'black' : 'white';
                 commit({type: 'setStartDiceTo', color, dice});
@@ -47,10 +47,10 @@ export default ({
             }
             setTimeout(() => {
                 commit("unrollDices");
-            }, 1000);
+            }, 700);
         },
         setTwoPlayersConnected({commit}) {
-            commit('setTwoPlayersConnected')
+            commit('setTwoPlayersConnected');
         },
         changeMyColor({commit}) {
             commit('changeMyColor');

@@ -123,7 +123,6 @@ export default {
       this.$store.dispatch({ type: "restartGame" });
     },
     serverThrowDices(throwDicesDto) {
-      console.log("serverThrowDices", throwDicesDto);
       const throwDicesReceivedDto = throwDicesDto;
       this.$socket.emit("clientThrowDicesReceived", throwDicesReceivedDto);
       this.$store.commit({
