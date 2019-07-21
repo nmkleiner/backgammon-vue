@@ -36,16 +36,11 @@ sent only once (
 )
 sent robust (
     clientSoldierMoved
+    clientEndGame&Mars&TurkishMars
+    clientRollDices&DicesRes&DiceRes
 )
-can be sent with endGame (
-    clientEndGame
-    clientMars
-    clientTurkishMars
-)
+
 clientEndTurn
-clientRollDices
-clientDicesRes
-clientStartDiceRes
 clientRestartGame
 assignMsg
 

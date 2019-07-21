@@ -283,13 +283,10 @@ export default ({
                 commit('startTurn');
                 commit('setDicesNums');
                 commit('calcPossibleMoves');
-                console.log('$$$ 1', state.possibleMoves);
                 if (!state.possibleMoves.length) {
-                    console.log('$$$ 2');
                     setTimeout(() => {
                         commit('endTurn');
                         commit('setNoPossibleMoves', true);
-                        console.log('$$$ 2',state.noPossibleMoves,state.currentTurn);
                         setTimeout(() => commit('setNoPossibleMoves', false), 1700);
                     }, 1500)
                 }
@@ -354,7 +351,6 @@ export default ({
                 const eatenSoldier = targetCell.soldiers.pop();
                 eatenSoldier.isEaten = true;
                 const middleCell = gameService.getMiddleCell(eatenSoldier.color, state.cells);
-                console.log(middleCell);
                 commit({type: 'pushSoldier', cell: middleCell, soldier: eatenSoldier});
                 commit('updateCells')
             }
