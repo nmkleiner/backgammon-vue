@@ -79,7 +79,7 @@ export default {
         }
         const startingColor =
           this.startDice.white > this.startDice.black ? "white" : "black";
-        this.$store.commit({ type: "setcurrentTurn", startingColor });
+        this.$store.commit({ type: "setCurrentTurn", startingColor });
         setTimeout(() => {
           this.$store.commit("gameOn");
         }, 2000);
@@ -93,7 +93,7 @@ export default {
         }
         const startingColor =
           this.startDice.white > this.startDice.black ? "white" : "black";
-        this.$store.commit({ type: "setcurrentTurn", startingColor });
+        this.$store.commit({ type: "setCurrentTurn", startingColor });
         setTimeout(() => {
           this.$store.commit("gameOn");
         }, 2000);

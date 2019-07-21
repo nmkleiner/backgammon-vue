@@ -1,4 +1,4 @@
-import startGameService from '@/services/startGame.service.js'
+import startGameService from '../services/startGame.service.js'
 
 export default ({
     state: {

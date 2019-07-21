@@ -8,7 +8,6 @@ export default {
   login,
   logout,
   getLoggedInUser,
-  getById,
   signUpUser,
   getPicUrl,
   firebaseLogin,
@@ -19,7 +18,7 @@ export default {
 };
 
 async function login({ userName, password }) {
-  const res = await axios.put(`${BASE_URL}/login`, { userName, password })
+  const res = await axios.put(`${BASE_URL}/login`, { userName, password });
   sessionStorage.loggedInUser = JSON.stringify(res.data);
   return res.data;
 }
@@ -35,22 +34,15 @@ function getLoggedInUser() {
   return Promise.resolve(JSON.parse(sessionStorage.loggedInUser));
 }
 
-function getById(id) {
-  if (id) {
-    axios.get(`${BASE_URL}/player/${id}`);
-    return axios.get(`${BASE_URL}/player/${id}`).then(res => res.data);
-  }
-}
-
 function signUpUser(user) {
   return axios.post(`${BASE_URL}/signup`, user);
 }
-const CLOUDINARY_URL = ' https://api.cloudinary.com/v1_1/do6zqbr29/upload'
-const CLOUDINARY_UPLOAD_PRESET = 'enr75skp'
+const CLOUDINARY_URL = ' https://api.cloudinary.com/v1_1/do6zqbr29/upload';
+const CLOUDINARY_UPLOAD_PRESET = 'enr75skp';
 async function getPicUrl(file) {
-  const data = new FormData()
-  data.append('file', file)
-  data.append('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+  const data = new FormData();
+  data.append('file', file);
+  data.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
 
   const res = await axios({
     url: CLOUDINARY_URL,
@@ -59,7 +51,7 @@ async function getPicUrl(file) {
       'Content-Type': 'application/x-www-form-urlencoded'
     },
     data
-  })
+  });
   return Promise.resolve(res.data.secure_url)
 }
 

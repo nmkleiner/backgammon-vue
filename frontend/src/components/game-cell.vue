@@ -13,7 +13,6 @@
     <div v-if="middle" class="middle-line"></div>
     <div v-if="!middle" :class="cellClass"></div>
     <div v-if="isIndicatorOn" class="indicator animated half-flash faster infinite"></div>
-    <!-- @dblclick="onSoldierDblClick(soldier)" -->
     <transition-group name="scale" appear mode="out-in">
       <soldier
         @mouseout.native="onSoldierOut()"
@@ -31,7 +30,6 @@
 
 <script>
 const soldier = () => import("./soldier.vue");
-import utilService from "../services/util.service";
 export default {
   props: {
     cell: Object,
@@ -74,7 +72,7 @@ export default {
         targetCell: this.cell,
       };
 
-      this.$store.commit({type: 'setSendMoveDtoInterval', socket: this.$socket, moveDto})
+      this.$store.commit({type: 'setSendMoveDtoInterval', socket: this.$socket, moveDto});
       this.$store.commit("unselectSoldiers");
     },
     onSoldierHover(soldier) {
@@ -119,7 +117,6 @@ export default {
       if (soldiers[soldiers.length - 1]) {
         return !!soldiers[soldiers.length - 1].possibleMoves.length;
       } else return false;
-      // return true
     },
     isIndicatorOn() {
       return !this.exit && this.isPossibleMoveInCell;

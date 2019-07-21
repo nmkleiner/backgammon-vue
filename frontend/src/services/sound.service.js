@@ -10,7 +10,7 @@ const sounds = {
     msg: 'wav',
     yourTurn: 'wav',
     win: 'wav'
-}
+};
 
 function load() {
     for (let key in sounds) {

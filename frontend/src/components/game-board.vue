@@ -58,12 +58,6 @@ export default {
     userColor() {
       return this.$store.getters.loggedInUserColor;
     },
-    mars() {
-      return this.$store.getters.isMars;
-    },
-    turkishMars() {
-      return this.$store.getters.isTurkishMars;
-    },
     choosingColors() {
       return this.$store.getters.choosingColors;
     }

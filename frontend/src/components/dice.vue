@@ -7,7 +7,7 @@
             <div :class="{show: displayDots.includes(7)}" class="dot"></div>
         </div>
         <div class="dotsColumn">
-            <div v-for="idx in 3" :key="idx" :class="{show: displayDots.includes(0+idx*2)}" class="dot"></div>
+            <div v-for="idx in 3" :key="idx" :class="{show: displayDots.includes(idx*2)}" class="dot"></div>
         </div>
     </div>
 </template>
@@ -36,17 +36,17 @@
             displayDots() {
                 switch (this.num) {
                     case 1:
-                        return [7]
+                        return [7];
                     case 2:
-                        return [1, 6]
+                        return [1, 6];
                     case 3:
-                        return [1, 6, 7]
+                        return [1, 6, 7];
                     case 4:
-                        return [1, 5, 2, 6]
+                        return [1, 5, 2, 6];
                     case 5:
-                        return [1, 5, 2, 6, 7]
+                        return [1, 5, 2, 6, 7];
                     case 6:
-                        return [1, 2, 3, 4, 5, 6]
+                        return [1, 2, 3, 4, 5, 6];
                 }
             }
         }
@@ -120,7 +120,6 @@
 
     @keyframes spin {
         100% {
-            transform: rotate(360deg);
             transform: rotate(360deg);
         }
     }

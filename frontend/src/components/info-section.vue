@@ -19,16 +19,16 @@ export default {
     
     computed: {
         currentTurn() {
-            return this.$store.getters.currentTurn
+            return this.$store.getters.currentTurn;
         },
         userColor() {
-            return this.$store.getters.loggedInUserColor
+            return this.$store.getters.loggedInUserColor;
         },
         score() {
-            return this.$store.getters.score
+            return this.$store.getters.score;
         },
         showScore() {
-            return this.score.white || this.score.black
+            return this.score.white || this.score.black;
         }
     }
 }

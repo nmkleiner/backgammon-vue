@@ -11,12 +11,12 @@
   </section>
 </template>
 <script>
-import gameBoard from "./game-board";
-import { mapGetters } from "vuex";
-const infoSection = () => import("./info-section");
+  import gameBoard from "./game-board";
+  import {mapGetters} from "vuex";
+
+  const infoSection = () => import("./info-section");
 const soldier = () => import("./soldier");
 const msgCmp = () => import("./msg-cmp");
-const ioClient = () => import("socket.io-client");
 
 export default {
   name: "appBoard",
@@ -67,7 +67,6 @@ export default {
       if (this.winner && this.isMars)
         return this.isWinner ? "you won! mars!" : "you lost! mars!";
       if (this.winner) return this.isWinner ? "you won!" : "you lost!";
-      // return 'you lost!\n turkish mars'
     }
   },
   created() {
@@ -89,11 +88,11 @@ export default {
     serverSoldierMoved(moveDto) {
       this.$socket.emit("clientSoldierMoveReceived", {
         id: moveDto.id,
-        room: moveDto.room
+        room: moveDto.room,
       });
       this.$store.dispatch({
         type: "setBoard",
-        moveDto
+        moveDto,
       });
     },
     serverSoldierMoveReceived(moveReceivedDto) {
@@ -107,7 +106,7 @@ export default {
       }
       this.$store.commit({
         type: "pushEndGameDtoIdToEndGameDtoIds",
-        endGameDtoId: endGameDto.id
+        endGameDtoId: endGameDto.id,
       });
       this.setGameWinner(endGameDto);
     },
@@ -127,7 +126,7 @@ export default {
       this.$socket.emit("clientThrowDicesReceived", throwDicesReceivedDto);
       this.$store.commit({
         type: "pushThrowDicesToThrowDicesIds",
-        id: throwDicesDto.id
+        id: throwDicesDto.id,
       });
       this.$store.dispatch("rollDices");
       setTimeout(async () => {

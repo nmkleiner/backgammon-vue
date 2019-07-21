@@ -38,7 +38,6 @@ export default ({
         loggedInUser: state => state.loggedInUser,
         isTurkishMars: state => state.isTurkishMars,
         endGameDtoIds: state => state.endGameDtoIds,
-        isLoggedInUser: state => !!state.loggedInUser,
         selectedSoldier: state => state.selectedSoldier,
         noPossibleMoves: state => state.noPossibleMoves,
         throwDicesDtoIds: state => state.throwDicesDtoIds,
@@ -239,7 +238,7 @@ export default ({
             state.dices.num1ToShow = dices.num1ToShow;
             state.dices.num2ToShow = dices.num2ToShow;
         },
-        setcurrentTurn(state, {startingColor}) {
+        setCurrentTurn(state, {startingColor}) {
             state.currentTurn = startingColor;
         },
         updateScore(state) {
