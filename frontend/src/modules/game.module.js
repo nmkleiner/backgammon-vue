@@ -146,17 +146,7 @@ export default ({
             // eaten soldiers
             // boardMap = {'26': {amount: 2, color: 'white'},'27': {amount: 2, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // no possible moves
-            boardMap = {
-                '26': {amount: 2, color: 'white'},
-                '4': {amount: 2, color: 'black'},
-                '2': {amount: 3, color: 'black'},
-                '25': {amount: 14, color: 'white'},
-                '3': {amount: 2, color: 'black'},
-                '5': {amount: 2, color: 'black'},
-                '6': {amount: 2, color: 'black'},
-                '15': {amount: 2, color: 'black'},
-                '1': {amount: 2, color: 'black'}
-            }
+            // boardMap = {'26': {amount: 2, color: 'white'},'4': {amount: 2, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 2, color: 'black'},'5': {amount: 2, color: 'black'},'6': {amount: 2, color: 'black'},'15': {amount: 2, color: 'black'},'1': {amount: 2, color: 'black'}}
             // no possible moves & exiting, bug from hell!!!
             // boardMap = {'24': { amount: 1, color: 'white' },'2': { amount: 4, color: 'white' },'0': { amount: 8, color: 'black' },'25': { amount: 10, color: 'white' },'3': { amount: 5, color: 'black' },'1': { amount: 2, color: 'black' }}
 
