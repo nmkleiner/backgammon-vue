@@ -12,10 +12,11 @@
 </template>
 <script>
 import gameBoard from "./game-board";
+import { mapGetters } from "vuex";
+
 const infoSection = () => import("./info-section");
 const soldier = () => import("./soldier");
 const msgCmp = () => import("./msg-cmp");
-const ioClient = () => import("socket.io-client");
 
 export default {
   name: "appBoard",
@@ -25,31 +26,32 @@ export default {
     infoSection,
     msgCmp
   },
-  methods: {},
+  methods: {
+    setGameWinner(endGameDto) {
+      this.$store.dispatch({ type: "endGame", winner: endGameDto.winner });
+      if (endGameDto.isMars) {
+        this.$store.dispatch({ type: "setMars", isMars: true });
+        if (endGameDto.isTurkishMars) {
+          this.$store.dispatch({ type: "setTurkishMars", isTurkishMars: true });
+        }
+      }
+    }
+  },
   computed: {
-    cells() {
-      return this.$store.getters.cells;
-    },
-    currTurn() {
-      return this.$store.getters.currTurn;
-    },
+    ...mapGetters([
+      "cells",
+      "winner",
+      "isMars",
+      "currentTurn",
+      "lastMovesIds",
+      "isTurkisMars",
+      "endGameDtoIds",
+      "noPossibleMoves",
+      "throwDicesDtoIds",
+      "loggedInUserColor"
+    ]),
     isWinner() {
-      return this.winner === this.userColor;
-    },
-    userColor() {
-      return this.$store.getters.loggedInUserColor;
-    },
-    winner() {
-      return this.$store.getters.winner;
-    },
-    mars() {
-      return this.$store.getters.isMars;
-    },
-    turkishMars() {
-      return this.$store.getters.isTurkishMars;
-    },
-    noPossibleMoves() {
-      return this.$store.getters.noPossibleMoves;
+      return this.winner === this.loggedInUserColor;
     },
     showMsg() {
       return this.winner || this.noPossibleMoves;
@@ -58,14 +60,13 @@ export default {
     msg() {
       if (!this.showMsg) return;
       if (this.noPossibleMoves) return "No Possible Moves";
-      if (this.winner && this.turkishMars)
+      if (this.winner && this.isTurkishMars)
         return this.isWinner
           ? "you won! turkish mars!"
           : "you lost! turkish mars!";
-      if (this.winner && this.mars)
+      if (this.winner && this.isMars)
         return this.isWinner ? "you won! mars!" : "you lost! mars!";
       if (this.winner) return this.isWinner ? "you won!" : "you lost!";
-      // return "you lost!\n turkish mars"
     }
   },
   created() {
@@ -84,47 +85,130 @@ export default {
       this.$store.dispatch("changeMyColor");
       this.$store.dispatch("setTwoPlayersConnected");
     },
-    serverSoldierMoved({ soldierId, targetCell, cells, isEating }) {
+    serverSoldierMoved(moveDto) {
+      this.$socket.emit("clientSoldierMoveReceived", {
+        id: moveDto.id,
+        room: moveDto.room
+      });
       this.$store.dispatch({
         type: "setBoard",
-        soldierId,
-        targetCell,
-        cells,
-        isEating
+        moveDto
       });
     },
-    serverGameEnded(winner) {
-      this.$store.dispatch({ type: "endGame", winner });
+    serverSoldierMoveReceived(moveReceivedDto) {
+      this.$store.commit("clearSendMoveDtoInterval");
     },
-    serverIsMars() {
-      this.$store.dispatch({ type: "setMars", isMars: true });
+    serverEndGame(endGameDto) {
+      const endGameReceivedDto = endGameDto;
+      this.$socket.emit("clientEndGameDtoReceived", endGameReceivedDto);
+      if (this.endGameDtoIds.includes(endGameDto.id)) {
+        return;
+      }
+      this.$store.commit({
+        type: "pushEndGameDtoIdToEndGameDtoIds",
+        endGameDtoId: endGameDto.id
+      });
+      this.setGameWinner(endGameDto);
     },
-    serverIsTurkishMars() {
-      this.$store.dispatch({ type: "setTurkishMars", isTurkishMars: true });
+    serverEndGameDtoReceived(endGameReceivedDto) {
+      this.$store.commit("clearEndGameDtoInterval");
+    },
+    serverEndTurn() {
+      setTimeout(() => {
+        this.$store.commit("endTurn");
+      }, 1500);
     },
     serverRestartGame() {
       this.$store.dispatch({ type: "restartGame" });
+    },
+    serverThrowDices(throwDicesDto) {
+      if (this.loggedInUserColor === throwDicesDto.color) {
+        return;
+      }
+      const throwDicesReceivedDto = throwDicesDto;
+      this.$socket.emit("clientThrowDicesReceived", throwDicesReceivedDto);
+      if (this.throwDicesDtoIds.includes(throwDicesDto.id)) {
+        return;
+      }
+
+      this.$store.commit({
+        type: "pushThrowDicesToThrowDicesIds",
+        id: throwDicesDto.id
+      });
+      this.$store.dispatch("rollDices");
+      setTimeout(async () => {
+        this.$store.commit("unrollDices");
+        if (throwDicesDto.dice) {
+          const { loggedInUserColor } = this;
+          await this.$store.dispatch({
+            type: "diceRes",
+            dice: throwDicesDto.dice,
+            loggedInUserColor
+          });
+        } else {
+          this.$store.commit({ type: "dicesRes", dices: throwDicesDto.dices });
+        }
+      }, 1000);
+    },
+    serverThrowDicesReceived(throwDicesReceivedDto) {
+      this.$store.commit("clearThrowDicesDtoInterval");
     }
   },
   watch: {
     winner: function(newVal, oldVal) {
       if (newVal) {
         const room = 1;
-        const winner = true;
-        this.$socket.emit("clientEndGame", room, winner);
+        const endGameDto = {
+          id: Date.now(),
+          room,
+          winner: true
+        };
+        this.$store.commit({
+          type: "setEndGameDtoInterval",
+          socket: this.$socket,
+          endGameDto
+        });
         this.$store.dispatch("win");
       }
     },
-    mars: function(newVal) {
+    isMars: function(newVal) {
       if (newVal) {
         const room = 1;
-        this.$socket.emit("clientMars", room);
+        const endGameDto = {
+          id: Date.now(),
+          room,
+          isMars: true
+        };
+        this.$store.commit({
+          type: "setEndGameDtoInterval",
+          socket: this.$socket,
+          endGameDto
+        });
       }
     },
-    turkishMars: function(newVal) {
+    isTurkishMars: function(newVal) {
       if (newVal) {
         const room = 1;
-        this.$socket.emit("clientTurkishMars", room);
+        const endGameDto = {
+          id: Date.now(),
+          room,
+          isTurkishMars: true
+        };
+        this.$store.commit({
+          type: "setEndGameDtoInterval",
+          socket: this.$socket,
+          endGameDto
+        });
+      }
+    },
+    currentTurn: function(currentTurnColor) {
+      if (currentTurnColor !== this.loggedInUserColor) {
+        if (this.lastMovesIds.length > 10) {
+          this.$store.commit("emptyLastMovesIds");
+        }
+        if (this.throwDicesDtoIds.length > 4) {
+          this.$store.commit("emptyThrowDicesIds");
+        }
       }
     }
   }

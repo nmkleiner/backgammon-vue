@@ -18,11 +18,10 @@
 </template>
 
 <script>
-    import userService from '../services/user.service.js';
 
     export default {
         props: {
-            isSignupOpen: Boolean
+            isSignupOpen: Boolean,
         },
         data() {
             return {
@@ -37,9 +36,9 @@
         },
         methods: {
             async submitNewUser() {
-                await this.$store.dispatch({type: "signUpUser", newUser: this.newUser})
-                await this.$store.dispatch({type: 'login', loginData: this.newUser})
-                this.$emit('onCloseSignup')
+                await this.$store.dispatch({type: "signUpUser", newUser: this.newUser});
+                await this.$store.dispatch({type: 'login', loginData: this.newUser});
+                this.$emit('onCloseSignup');
             },
             getFile(ev) {
                 this.newUser.file = ev.target.files[0]

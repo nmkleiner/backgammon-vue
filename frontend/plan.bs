@@ -10,28 +10,72 @@ dices when double {num1:num num2:null doubleCount:4,3,2,1} => make num1 null whe
 
 possibleMoves [{soldierId: moves: [1,2,3,4]},{},...]
 
+throwDicesDto = {id: Date.now(), room, dices?, dice? }
+
+-connectivity issues might destroy the game in the middle
+-i decided to solve this for soldier moves by resending the move with an interval
+example:
+-white player interval sends moveDto until it's white player's turn again
+-both players have lastMovesIds array, when move is received its id is pushed to array
+-when move is received if it's id already exists in array, move will not be executed
+-moves ids are timestamps therefore are 100% unique
+-no real need to empty movesIds array but will empty it in watch if length grows over 10
 
 
-TODO: 
--session: save usercolor in sessionstorage
-or find better solution (why did i wanted that?)
-in case someone refreshes, or disconnects and reconnects take the current game state from other player
+-next problem is, other things that are sent on socket might have connectivity issues 
+and will also destroy the game
+-possible solution is to get rid of some of the things sent on the socket and 
+use the moves for more situations like endTurn and endGame etc.
+-will need to think about each case and send more data with moveDto 
 
-V-fix play again btn size in mobile
-V-animation for indicators
-V-middle indicators
+-steps:
+- map all sockets
+sent only once (
+    clientGameJoined
+    clientAlreadyHere
+)
+sent robust (
+    clientSoldierMoved
+    clientEndGame&Mars&TurkishMars
+    clientRollDices&DicesRes&DiceRes
+)
 
-V-btn-wrapper => cmp
-V-add restart btn that shows when admin is connected
-V-restart btn funcionality 
+clientEndTurn
+clientRestartGame
+assignMsg
+
+V - send endGame robustcially like clientSoldierMoved with mars and turkish mars
+
+- see what can be done with other sockets
+- intervals will be cleared at the same watch with one dispatch
+- more dtosIds will be saved in store and cleared at some point in watch
 
 
-4-btns and links with v-for in array from data- GAVE UP
 
-1-too many soldier in cell make moving immpossible
-V-research when it happens
-V-add flex wrap back
-4-above 5 in cell put soldiers above each other
 
--restart button will dispatch action strongRestart that will restart also the startgame module state
--nothing shows in info section
+
+
+
+****resend 1st player's move to 2nd player in case move wasn't delivered correctly
+-how to implement?
+game-cell
+V - 2 - create random function in sender that will sometimes not send the move
+game-cell
+V - 4 - use interval to resend move to 2nd player, 
+gameModule
+V - 5 - kill interval when it's 1st player's turn again
+appboard && game-cell && gameModule
+V - I don't want to watch at gamecell because it means 28 watchers
+V -> interval need to exist in store
+V -> don't have $socket in store 
+V -> send $socket to store then emit from store
+V -> interval will be mutated to start and to kill
+V -> watch on currentTurn will be in appboard
+V - 6 - 2nd player will not use sent move if he already got it 
+V - moves will have unique ids, they can be timestamps, 100% unique
+V - last moves will be saved in gamemodule on every move that is received
+V - last moves will be emptied when 2nd player's turn again
+- because i'm not sure that turn will end at same time for both players i empty movesids
+only when its length is bigger than 4 giving me some space
+V - 8 - remove random function
+

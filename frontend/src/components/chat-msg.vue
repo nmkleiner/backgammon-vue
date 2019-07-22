@@ -4,9 +4,9 @@
     :class="{msgOut: props.nickname === props.msg.from, msgIn: props.nickname !== props.msg.from}"
   >
     <div class="img-wrapper">
-      <img v-if="props.msg.pic" :src="props.msg.pic">
-      <img v-else src="../../public/img/user.jpg">
-      <soldier :color="props.msg.color"></soldier>
+      <img v-if="props.msg.pic" :src="props.msg.pic" alt="user profile">
+      <img v-else src="../../public/img/user.jpg" alt="user profile">
+      <Soldier :color="props.msg.color"></Soldier>
     </div>
     <span class="chat-user-name">{{props.msg.from}}:</span>
     <br>
@@ -15,8 +15,12 @@
 </template>
 
 <script>
+  import Soldier from './soldier'
 export default {
-  props: {
+    components: {
+      Soldier
+    },
+    props: {
     msg: Object,
     nickname: String
   }
@@ -52,7 +56,7 @@ export default {
 
 .msgOut {
   background-color: lighten(#25d366, 10%);
-  margin: 5px 50px 0px 5px;
+  margin: 5px 50px 0 5px;
   &::after {
     content: " ";
     position: absolute;
@@ -70,9 +74,9 @@ export default {
 
 .msgIn {
   background-color: darken(white, 3%);
-  margin: 5px 5px 0px 50vw;
+  margin: 5px 5px 0 50vw;
   @media (min-width: 850px) {
-    margin: 5px 5px 0px 50px;
+    margin: 5px 5px 0 50px;
   }
   &:after {
     content: " ";

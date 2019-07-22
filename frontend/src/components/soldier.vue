@@ -71,7 +71,6 @@ export default {
   height: 24px;
   width: 24px;
   border-radius: 50%;
-  z-index: 0;
   &.black {
     background-color: black;
     border: 2px solid white;

@@ -82,8 +82,8 @@ export default {
   created() {
     setTimeout(() => (this.loading = false), 1200);
 
-    this.gProvider = userService.getGProvider()
-    this.fProvider = userService.getFProvider()
+    this.gProvider = userService.getGProvider();
+    this.fProvider = userService.getFProvider();
     userService.firebaseOnAuthStateChanged(this.$store,this.$router)
   }
 };

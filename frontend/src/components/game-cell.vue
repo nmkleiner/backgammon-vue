@@ -13,7 +13,6 @@
     <div v-if="middle" class="middle-line"></div>
     <div v-if="!middle" :class="cellClass"></div>
     <div v-if="isIndicatorOn" class="indicator animated half-flash faster infinite"></div>
-    <!-- @dblclick="onSoldierDblClick(soldier)" -->
     <transition-group name="scale" appear mode="out-in">
       <soldier
         @mouseout.native="onSoldierOut()"
@@ -31,7 +30,6 @@
 
 <script>
 const soldier = () => import("./soldier.vue");
-
 export default {
   props: {
     cell: Object,
@@ -64,27 +62,17 @@ export default {
         ev.stopPropagation();
       }
     },
-    // async onSoldierDblClick(soldier) {
-    //     this.$store.dispatch({type: 'selectSoldier', soldier})
-    //     const targetCellIdx = this.loggedInUserColor === "white" ? 25 : 0;
-    //     let {soldierDidMove, isEating} = await this.$store.dispatch({
-    //         type: "moveSoldier",
-    //         targetCell: this.cells.find(cell => cell.id === targetCellIdx)
-    //     });
-    //     if (soldierDidMove) {
-    //         this.afterSoldierMove(soldier, false);
-    //     }
-    // },
     afterSoldierMove(soldier, isEating) {
       const room = 1;
-      const cells = this.cells;
-      this.$socket.emit("clientSoldierMoved", {
+      const moveDto = {
+        id: Date.now(),
+        room,
+        isEating,
         soldierId: soldier.id,
         targetCell: this.cell,
-        cells,
-        isEating,
-        room
-      });
+      };
+
+      this.$store.commit({type: 'setSendMoveDtoInterval', socket: this.$socket, moveDto});
       this.$store.commit("unselectSoldiers");
     },
     onSoldierHover(soldier) {
@@ -107,6 +95,9 @@ export default {
     loggedInUserColor() {
       return this.$store.getters.loggedInUserColor;
     },
+    currentTurn() {
+      return this.$store.getters.currentTurn;
+    },
     cells() {
       return this.$store.getters.cells;
     },
@@ -126,10 +117,11 @@ export default {
       if (soldiers[soldiers.length - 1]) {
         return !!soldiers[soldiers.length - 1].possibleMoves.length;
       } else return false;
-      // return true
     },
     isIndicatorOn() {
-      return !this.exit && this.isPossibleMoveInCell;
+      const { soldiers } = this.cell;
+      const color = soldiers.length ? soldiers[0].color : '';
+      return color === this.loggedInUserColor && !this.exit && this.isPossibleMoveInCell;
     }
   }
 };

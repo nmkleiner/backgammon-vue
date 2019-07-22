@@ -1,7 +1,8 @@
 <template>
     <div class="action-btns" :class="{'hidden': loading}">
         <Button
-                v-for="button in buttons"
+                v-for="(button,idx) in buttons"
+                :key="idx"
                 :button="button"
         ></Button>
     </div>
@@ -9,12 +10,12 @@
 
 <script>
     import soundService from "../services/sound.service";
-    import {mapGetters} from 'vuex'
+    import {mapGetters} from 'vuex';
     import Button from "./Button";
 
     export default {
         components: {
-            Button
+            Button,
         },
         data() {
             return {
@@ -66,7 +67,7 @@
                     this.isGameOn &&
                     !this.duringTurn &&
                     !this.rolling &&
-                    this.currTurn === this.loggedInUserColor
+                    this.currentTurn === this.loggedInUserColor
                 );
             },
             showPlayAgainBtn() {
@@ -94,30 +95,38 @@
                 return !(this.playersConnected === 2);
             },
             ...mapGetters([
+                'dices',
                 'winner',
-                'playersConnected',
-                'startDice',
                 'isGameOn',
                 'isRolling',
-                'loggedInUserColor',
-                'currTurn',
+                'startDice',
                 'duringTurn',
-                'dices',
+                'currentTurn',
+                'noPossibleMoves',
+                'playersConnected',
+                'loggedInUserColor',
             ])
         },
         methods: {
             async throwDices() {
-                this.$store.dispatch("throwDices");
+                await this.$store.dispatch("throwDices");
                 const room = 1;
-                this.$socket.emit("clientRollDices", room);
-                this.$socket.emit("clientDicesRes", room, this.dices);
+                const throwDicesDto = {
+                    room,
+                    id: Date.now(),
+                };
+                this.$store.commit({type: 'setThrowDicesDtoInterval', socket: this.$socket, throwDicesDto});
             },
             async throwDice() {
-                const room = 1;
-                this.$socket.emit("clientRollDices", room);
-                let userColor = this.userColor === "white" ? "black" : "white";
+                const userColor = this.userColor === "white" ? "black" : "white";
                 await this.$store.dispatch({type: "diceRes", userColor});
-                this.$socket.emit("clientStartDiceRes", room, this.startDice.dice);
+                const room = 1;
+                const throwDicesDto = {
+                    room,
+                    id: Date.now(),
+                    dice: this.startDice.dice
+                };
+                this.$store.commit({type: 'setThrowDicesDtoInterval', socket: this.$socket, throwDicesDto});
             },
             async restartGame() {
                 this.isRestarting = true;
