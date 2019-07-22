@@ -114,17 +114,21 @@
                 const throwDicesDto = {
                     room,
                     id: Date.now(),
+                    dice: null,
+                    from: this.loggedInUserColor
                 };
                 this.$store.commit({type: 'setThrowDicesDtoInterval', socket: this.$socket, throwDicesDto});
             },
             async throwDice() {
-                const userColor = this.userColor === "white" ? "black" : "white";
+                const userColor = this.loggedInUserColor === "white" ? "black" : "white";
                 await this.$store.dispatch({type: "diceRes", userColor});
                 const room = 1;
                 const throwDicesDto = {
                     room,
                     id: Date.now(),
-                    dice: this.startDice.dice
+                    dice: this.startDice.dice,
+                    dices: null,
+                    from: this.loggedInUserColor
                 };
                 this.$store.commit({type: 'setThrowDicesDtoInterval', socket: this.$socket, throwDicesDto});
             },
