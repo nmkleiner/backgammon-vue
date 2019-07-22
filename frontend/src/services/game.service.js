@@ -352,8 +352,6 @@ function isMars(cells, currentTurn) {
     return (currentTurn === 'white') ?
         (!cells[whiteOutCellId].soldiers.length) :
         (!cells[blackOutCellId].soldiers.length)
-        (!cells[blackOutCellId].soldiers.length)
-        (!cells[blackOutCellId].soldiers.length)
 }
 
 function isTurkishMars(cells, currentTurn) {
