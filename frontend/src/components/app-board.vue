@@ -129,10 +129,10 @@
                 const throwDicesReceivedDto = throwDicesDto;
                 console.log("clientThrowDicesReceived", throwDicesReceivedDto);
                 this.$socket.emit("clientThrowDicesReceived", throwDicesReceivedDto);
+
                 if (this.throwDicesDtoIds.includes(throwDicesDto.id)) {
                     return;
                 }
-
                 this.$store.commit({
                     type: "pushThrowDicesToThrowDicesIds",
                     id: throwDicesDto.id

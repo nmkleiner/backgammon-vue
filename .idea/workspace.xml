@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="603e3187-5315-470c-8e2c-f09a2f75f322" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/ActionBtns.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/ActionBtns.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/services/interval.service.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/plan.bs" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/plan.bs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/app-board.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/app-board.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/modules/game.module.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/modules/game.module.js" afterDir="false" />
     </list>
@@ -18,6 +20,15 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/frontend/src/components/app-board.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="236">
+              <caret line="134" column="17" selection-start-line="134" selection-start-column="17" selection-end-line="134" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/src/components/ActionBtns.vue">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="227">
@@ -29,14 +40,32 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/frontend/src/modules/game.module.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="249">
-              <caret line="50" column="13" lean-forward="true" selection-start-line="50" selection-start-column="13" selection-end-line="50" selection-end-column="13" />
+            <state relative-caret-position="179">
+              <caret line="413" column="38" lean-forward="true" selection-start-line="413" selection-start-column="38" selection-end-line="413" selection-end-column="38" />
               <folding>
                 <element signature="e#0#54#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/frontend/src/services/interval.service.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="120">
+              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/frontend/plan.bs">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="246">
+              <caret line="26" column="45" selection-start-line="26" selection-start-column="45" selection-end-line="26" selection-end-column="45" />
             </state>
           </provider>
         </entry>
@@ -47,14 +76,12 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Vue Single File Component" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>//</find>
-      <find>action-btns</find>
-      <find>game-cell</find>
       <find>indi</find>
       <find>envelope</find>
       <find>msg-</find>
@@ -73,10 +100,23 @@
       <find>baba</find>
       <find>.from</find>
       <find>serverThrowDicesReceived</find>
-      <find>clearThrowDicesDtoInterval</find>
       <find>setThrowDicesDtoInterval</find>
+      <find>console.log</find>
+      <find>- 1</find>
+      <find>clearInterval</find>
+      <find>pushEndGameDtoIdToEndGameDtoIds</find>
+      <find>throwDicesDtoIds</find>
+      <find>endGameDtoIds</find>
+      <find>clearThrowDicesDtoInterval</find>
+      <find>pushThrowDicesToThrowDicesIds</find>
+      <find>clear</find>
       <find>userColor</find>
+      <find>bab</find>
     </findStrings>
+    <replaceStrings>
+      <replace>intervalService.strongClearInterval</replace>
+      <replace>sendThrowDicesDtoIntervals</replace>
+    </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -94,9 +134,11 @@
         <option value="$PROJECT_DIR$/frontend/src/modules/message.module.js" />
         <option value="$PROJECT_DIR$/frontend/src/components/chat-cmp.vue" />
         <option value="$PROJECT_DIR$/frontend/src/components/aside-btn.vue" />
-        <option value="$PROJECT_DIR$/frontend/src/components/app-board.vue" />
         <option value="$PROJECT_DIR$/frontend/src/components/ActionBtns.vue" />
+        <option value="$PROJECT_DIR$/frontend/src/components/app-board.vue" />
         <option value="$PROJECT_DIR$/frontend/src/modules/game.module.js" />
+        <option value="$PROJECT_DIR$/frontend/src/services/interval.service.js" />
+        <option value="$PROJECT_DIR$/frontend/plan.bs" />
       </list>
     </option>
   </component>
@@ -137,7 +179,7 @@
               <item name="backgammon-vue" type="462c0819:PsiDirectoryNode" />
               <item name="frontend" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="components" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -181,7 +223,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="16299000" />
+    <option name="totallyTimeSpent" value="19669000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1920" height="977" extended-state="0" />
@@ -287,10 +329,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/components/msgNotification.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="480">
+          <caret line="32" column="31" selection-start-line="32" selection-start-column="31" selection-end-line="32" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/components/app-board.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="214">
-          <caret line="156" column="62" selection-start-line="156" selection-start-column="36" selection-end-line="156" selection-end-column="62" />
+        <state relative-caret-position="236">
+          <caret line="134" column="17" selection-start-line="134" selection-start-column="17" selection-end-line="134" selection-end-column="17" />
         </state>
       </provider>
     </entry>
@@ -304,20 +353,27 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/frontend/src/components/msgNotification.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="32" column="31" selection-start-line="32" selection-start-column="31" selection-end-line="32" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/frontend/src/modules/game.module.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="249">
-          <caret line="50" column="13" lean-forward="true" selection-start-line="50" selection-start-column="13" selection-end-line="50" selection-end-column="13" />
+        <state relative-caret-position="179">
+          <caret line="413" column="38" lean-forward="true" selection-start-line="413" selection-start-column="38" selection-end-line="413" selection-end-column="38" />
           <folding>
             <element signature="e#0#54#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/src/services/interval.service.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/frontend/plan.bs">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="246">
+          <caret line="26" column="45" selection-start-line="26" selection-start-column="45" selection-end-line="26" selection-end-column="45" />
         </state>
       </provider>
     </entry>

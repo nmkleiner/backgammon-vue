@@ -22,11 +22,9 @@ example:
 -no real need to empty movesIds array but will empty it in watch if length grows over 10
 
 
--next problem is, other things that are sent on socket might have connectivity issues 
-and will also destroy the game
--possible solution is to get rid of some of the things sent on the socket and 
-use the moves for more situations like endTurn and endGame etc.
--will need to think about each case and send more data with moveDto 
+-next problem is that sometimes a new interval is set before the previous interval is cleared.
+to solve this i will have to replace the state.blablaInterval to  state.blablaIntervals, an object that will hold intervals based on Dto.id.
+intervals will be set and cleared with dto.id
 
 -steps:
 - map all sockets

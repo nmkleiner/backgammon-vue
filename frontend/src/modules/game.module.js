@@ -1,6 +1,7 @@
 import gameService from '../services/game.service.js';
 import userService from '../services/user.service.js';
 import soundService from '../services/sound.service.js';
+import intervalService from '../services/interval.service.js';
 
 const second = 1000;
 export default ({
@@ -45,10 +46,13 @@ export default ({
     },
     mutations: {
         setThrowDicesDtoInterval(state, {socket, throwDicesDto}) {
-            console.log("setThrowDicesDtoInterval", throwDicesDto);
+            console.log("setThrowDicesDtoInterval1", throwDicesDto);
             if (!throwDicesDto.dice) {
                 throwDicesDto.dices = state.dices;
             }
+            console.log("setThrowDicesDtoInterval2", throwDicesDto);
+            console.log("setThrowDicesDtoInterval3", throwDicesDto);
+
             state.sendThrowDicesDtoInterval = setInterval(() => {
                 if (state.dices.rolling) {
                     return;
@@ -59,7 +63,7 @@ export default ({
         },
         clearThrowDicesDtoInterval(state) {
             console.log('clearThrowDicesDtoInterval');
-            clearInterval(state.sendThrowDicesDtoInterval);
+            intervalService.strongClearInterval(state.sendThrowDicesDtoInterval);
         },
         pushThrowDicesToThrowDicesIds(state, {id}) {
             state.throwDicesDtoIds.push(id);
@@ -75,7 +79,7 @@ export default ({
             }, 1000);
         },
         clearEndGameDtoInterval(state) {
-            clearInterval(state.sendEndGameDtoInterval);
+            intervalService.strongClearInterval(state.sendEndGameDtoInterval);
         },
         pushEndGameDtoIdToEndGameDtoIds(state, {endGameDtoId}) {
             state.endGameDtoIds.push(endGameDtoId);
@@ -88,7 +92,7 @@ export default ({
             }, 500);
         },
         clearSendMoveDtoInterval(state) {
-            clearInterval(state.sendMoveDtoInterval);
+            intervalService.strongClearInterval(state.sendMoveDtoInterval);
         },
         pushLastMoveToLastMovesIds(state, {id}) {
             state.lastMovesIds.push(id);
@@ -152,7 +156,7 @@ export default ({
             // eaten soldiers
             // boardMap = {'26': {amount: 2, color: 'white'},'27': {amount: 2, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 5, color: 'black'},'1': {amount: 2, color: 'black'}}
             // no possible moves
-            boardMap = {'26': {amount: 2, color: 'white'},'4': {amount: 2, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 2, color: 'black'},'5': {amount: 2, color: 'black'},'6': {amount: 2, color: 'black'},'15': {amount: 2, color: 'black'},'1': {amount: 2, color: 'black'}}
+            // boardMap = {'26': {amount: 2, color: 'white'},'4': {amount: 2, color: 'black'},'2': {amount: 3, color: 'black'},'25': {amount: 14, color: 'white'},'3': {amount: 2, color: 'black'},'5': {amount: 2, color: 'black'},'6': {amount: 2, color: 'black'},'15': {amount: 2, color: 'black'},'1': {amount: 2, color: 'black'}}
             // no possible moves & exiting, bug from hell!!!
             // boardMap = {'24': { amount: 1, color: 'white' },'2': { amount: 4, color: 'white' },'0': { amount: 8, color: 'black' },'25': { amount: 10, color: 'white' },'3': { amount: 5, color: 'black' },'1': { amount: 2, color: 'black' }}
 
@@ -201,7 +205,7 @@ export default ({
         endTurn(state) {
             state.duringTurn = false;
             state.dices = gameService.nullDices(state.dices);
-            state.currentTurn = gameService.passTurn(state.currentTurn,state.loggedInUserColor);
+            state.currentTurn = gameService.passTurn(state.currentTurn, state.loggedInUserColor);
         },
         setDuringTurn(state) {
             state.duringTurn = false
@@ -417,7 +421,7 @@ export default ({
         },
         logout({commit}) {
             userService.logout();
-            console.log('baba');
+            console.log('bababa');
             commit('logOutUser');
             return Promise.resolve();
         }
