@@ -21,7 +21,7 @@ export default ({
         sendMoveDtoInterval: null,
         score: {white: 0, black: 0},
         sendEndGameDtoInterval: null,
-        sendThrowDicesDtoInterval: null,
+        sendThrowDicesDtoIntervals: {},
         loggedInUser: {userName: '', _id: '', pic: '', color: 'white'},
         dices: {num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false, shaking: false},
     },
@@ -50,10 +50,8 @@ export default ({
             if (!throwDicesDto.dice) {
                 throwDicesDto.dices = state.dices;
             }
-            console.log("setThrowDicesDtoInterval2", throwDicesDto);
-            console.log("setThrowDicesDtoInterval3", throwDicesDto);
 
-            state.sendThrowDicesDtoInterval = setInterval(() => {
+            state.sendThrowDicesDtoIntervals[`${throwDicesDto.id}`] = setInterval(() => {
                 if (state.dices.rolling) {
                     return;
                 }
@@ -61,9 +59,11 @@ export default ({
                 socket.emit("clientThrowDices", throwDicesDto);
             }, 1000);
         },
-        clearThrowDicesDtoInterval(state) {
-            console.log('clearThrowDicesDtoInterval');
-            intervalService.strongClearInterval(state.sendThrowDicesDtoInterval);
+        clearThrowDicesDtoInterval(state, {throwDicesReceivedDto}) {
+            console.log('clearThrowDicesDtoInterval', state.sendThrowDicesDtoIntervals, throwDicesReceivedDto.id);
+            // intervalService.strongClearInterval(state.sendThrowDicesDtoIntervals[`${throwDicesReceivedDto.id}`]);
+            clearInterval(state.sendThrowDicesDtoIntervals[`${throwDicesReceivedDto.id}`]);
+            delete state.sendThrowDicesDtoIntervals[`${throwDicesReceivedDto.id}`]
         },
         pushThrowDicesToThrowDicesIds(state, {id}) {
             state.throwDicesDtoIds.push(id);
@@ -119,7 +119,7 @@ export default ({
         selectSoldier(state, {soldierId}) {
             const soldier = gameService.getSoldierById(state.cells, soldierId);
             const soldiers = gameService.getAllSoldiers(state.cells);
-            if (soldier.color !== state.currentTurn ||
+            if (soldier && soldier.color !== state.currentTurn ||
                 !soldier.isLastInCell ||
                 gameService.hasEatenSoldiers(state.currentTurn, soldiers) && !soldier.isEaten) return;
 
@@ -421,7 +421,7 @@ export default ({
         },
         logout({commit}) {
             userService.logout();
-            console.log('bababa');
+            console.log('babababa');
             commit('logOutUser');
             return Promise.resolve();
         }

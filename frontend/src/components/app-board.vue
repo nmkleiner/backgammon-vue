@@ -154,7 +154,7 @@
             },
             serverThrowDicesReceived(throwDicesReceivedDto) {
                 console.log('serverThrowDicesReceived');
-                this.$store.commit("clearThrowDicesDtoInterval");
+                this.$store.commit({type: "clearThrowDicesDtoInterval", throwDicesReceivedDto});
             }
         },
         watch: {

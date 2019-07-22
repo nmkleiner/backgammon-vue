@@ -4,5 +4,5 @@ export default {
 
 function strongClearInterval(interval) {
     clearInterval(interval);
-    interval = null;
+    // interval = null;
 }
