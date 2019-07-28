@@ -6,6 +6,7 @@ import intervalService from '../services/interval.service.js';
 const second = 1000;
 export default ({
     state: {
+        room: 1,
         cells: [],
         winner: false,
         isMars: false,
@@ -26,6 +27,7 @@ export default ({
         dices: {num1: 6, num2: 6, num1ToShow: 6, num2ToShow: 6, doubleCount: 0, rolling: false, shaking: false},
     },
     getters: {
+        room: state => state.room,
         cells: state => state.cells,
         score: state => state.score,
         dices: state => state.dices,

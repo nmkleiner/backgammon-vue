@@ -39,6 +39,7 @@
         },
         computed: {
             ...mapGetters([
+                "room",
                 "cells",
                 "winner",
                 "isMars",
@@ -71,13 +72,13 @@
         },
         created() {
             this.$store.dispatch({type: "setBoard"});
-            const room = 1;
-            this.$socket.emit("clientGameJoined", room);
+
+            this.$socket.emit("clientGameJoined", this.room);
         },
         sockets: {
             serverUserJoined() {
-                const room = 1;
-                this.$socket.emit("clientAlreadyHere", room);
+
+                this.$socket.emit("clientAlreadyHere", this.room);
                 this.$store.dispatch("setTwoPlayersConnected");
             },
             serverSomeoneAlreadyHere() {
@@ -160,10 +161,10 @@
         watch: {
             winner: function (newVal, oldVal) {
                 if (newVal) {
-                    const room = 1;
+
                     const endGameDto = {
                         id: Date.now(),
-                        room,
+                        room: this.room,
                         winner: true
                     };
                     this.$store.commit({
@@ -176,10 +177,10 @@
             },
             isMars: function (newVal) {
                 if (newVal) {
-                    const room = 1;
+
                     const endGameDto = {
                         id: Date.now(),
-                        room,
+                        room: this.room,
                         isMars: true
                     };
                     this.$store.commit({
@@ -191,10 +192,10 @@
             },
             isTurkishMars: function (newVal) {
                 if (newVal) {
-                    const room = 1;
+
                     const endGameDto = {
                         id: Date.now(),
-                        room,
+                        room: this.room,
                         isTurkishMars: true
                     };
                     this.$store.commit({

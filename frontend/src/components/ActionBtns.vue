@@ -95,6 +95,7 @@
                 return !(this.playersConnected === 2);
             },
             ...mapGetters([
+                "room",
                 'dices',
                 'winner',
                 'isGameOn',
@@ -110,9 +111,9 @@
         methods: {
             async throwDices() {
                 await this.$store.dispatch("throwDices");
-                const room = 1;
+
                 const throwDicesDto = {
-                    room,
+                    room: this.room,
                     id: Date.now(),
                     dice: null,
                     from: this.loggedInUserColor
@@ -122,9 +123,9 @@
             async throwDice() {
                 const userColor = this.loggedInUserColor === "white" ? "black" : "white";
                 await this.$store.dispatch({type: "diceRes", userColor});
-                const room = 1;
+
                 const throwDicesDto = {
-                    room,
+                    room: this.room,
                     id: Date.now(),
                     dice: this.startDice.dice,
                     dices: null,
@@ -137,8 +138,8 @@
                 setTimeout(() => {
                     this.isRestarting = false;
                     this.$store.dispatch("restartGame");
-                    const room = 1;
-                    this.$socket.emit("clientRestartGame", room);
+
+                    this.$socket.emit("clientRestartGame", this.room);
                 }, 1500);
             }
         },

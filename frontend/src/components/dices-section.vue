@@ -48,7 +48,8 @@
                 "isGameOn",
                 "startDice",
                 "winner",
-                "currentTurn"
+                "currentTurn",
+                "room"
             ]),
             sectionStyle() {
                 return {
@@ -66,8 +67,8 @@
         watch: {
             duringTurn: function (newVal) {
                 if (newVal === false) {
-                    const room = 1;
-                    this.$socket.emit("clientEndTurn", room);
+
+                    this.$socket.emit("clientEndTurn", this.room);
                     this.restartDicesPosition()
                 }
             },

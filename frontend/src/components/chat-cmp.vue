@@ -57,7 +57,7 @@
                         color: this.loggedInUser.color,
                         pic: this.loggedInUser.pic
                     },
-                    room: 1
+                    room: this.room
                 });
                 this.newMsg = msgService.createEmptyMsg(this.nickname);
                 this.pushMsgToHistory(this.newMsg);
@@ -76,14 +76,15 @@
         async created() {
             await this.$store.dispatch("getLoggedInUser");
             this.newMsg = msgService.createEmptyMsg(this.nickname);
-            const room = 1;
-            this.$socket.emit("chatJoined", room);
+
+            this.$socket.emit("chatJoined", this.room);
             setTimeout(() => (this.loading = false), 1200);
         },
         computed: {
-            loggedInUser() {
-                return this.$store.getters.loggedInUser;
-            },
+            ...mapGetters([
+                "room",
+                'loggedInUser',
+            ]),
             nickname() {
                 return this.loggedInUser.userName ? this.loggedInUser.userName : "guest";
             },
