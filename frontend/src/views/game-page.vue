@@ -34,12 +34,16 @@
             appIcons() {
                 return [
                     {
-                        app: `whatsapp://send?text=https://backgammon-app.herokuapp.com/game/${this.room}?isFromLink=true`,
+                        app: `whatsapp://send?text=${this.whatsappMessage}`,
                         img: require('../assets/imgs/icons/whatsapp-icon.png')
                     },
                     {app: 'fb-messenger://', img: require('../assets/imgs/icons/messenger-icon.png')},
                 ]
+            },
+            whatsappMessage() {
+                return 'Hey buddy! Click the link to join me for a game of backgammon. https://backgammon-app.herokuapp.com/game/${this.room}?isFromLink=true'
             }
+
         },
         created() {
             this.room = this.$route.params.room;
