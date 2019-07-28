@@ -1,12 +1,12 @@
-@import "./reset";
+@import "./reset.css";
 @import "./base";
-@import '_helpers';
-@import '_fonts';
-@import '_game-board';
-@import 'transitions';
-@import '_animate';
-@import '_scrollbar';
-@import '_custom-inputs';
+@import "./helpers";
+@import "./fonts";
+@import "./game-board";
+@import "./transitions";
+@import "./animate.css";
+@import "./scrollbar";
+@import "./custom-inputs";
 
 
 
