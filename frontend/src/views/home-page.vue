@@ -11,10 +11,6 @@
     import utilService from '../services/util.service'
 
     export default {
-        components: {
-            appBoard,
-            asideCmp
-        },
         methods: {
             getARoom() {
                 const room = utilService.makeid(8);
