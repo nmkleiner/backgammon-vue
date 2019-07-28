@@ -51,7 +51,6 @@ export default ({
             state.room = room;
         },
         setThrowDicesDtoInterval(state, {socket, throwDicesDto}) {
-            console.log("setThrowDicesDtoInterval1", throwDicesDto);
             if (!throwDicesDto.dice) {
                 throwDicesDto.dices = state.dices;
             }
@@ -60,12 +59,10 @@ export default ({
                 if (state.dices.rolling) {
                     return;
                 }
-                console.log("clientThrowDices", throwDicesDto);
                 socket.emit("clientThrowDices", throwDicesDto);
             }, 1000);
         },
         clearThrowDicesDtoInterval(state, {throwDicesReceivedDto}) {
-            console.log('clearThrowDicesDtoInterval', state.sendThrowDicesDtoIntervals, throwDicesReceivedDto.id);
             // intervalService.strongClearInterval(state.sendThrowDicesDtoIntervals[`${throwDicesReceivedDto.id}`]);
             clearInterval(state.sendThrowDicesDtoIntervals[`${throwDicesReceivedDto.id}`]);
             delete state.sendThrowDicesDtoIntervals[`${throwDicesReceivedDto.id}`]
@@ -79,7 +76,6 @@ export default ({
 
         setEndGameDtoInterval(state, {socket, endGameDto}) {
             state.sendEndGameDtoInterval = setInterval(() => {
-                console.log("clientEndGame", endGameDto);
                 socket.emit("clientEndGame", endGameDto);
             }, 1000);
         },
@@ -92,7 +88,6 @@ export default ({
         setSendMoveDtoInterval(state, {socket, moveDto}) {
             moveDto.cells = state.cells;
             state.sendMoveDtoInterval = setInterval(() => {
-                console.log("clientSoldierMoved", moveDto);
                 socket.emit("clientSoldierMoved", moveDto)
             }, 500);
         },

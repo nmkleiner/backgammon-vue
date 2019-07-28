@@ -87,7 +87,6 @@
             },
             serverSoldierMoved(moveDto) {
                 const moveRecievedDto = moveDto;
-                console.log("clientSoldierMoveReceived", moveRecievedDto);
                 this.$socket.emit("clientSoldierMoveReceived", moveRecievedDto);
                 this.$store.dispatch({
                     type: "setBoard",
@@ -95,12 +94,10 @@
                 });
             },
             serverSoldierMoveReceived(moveReceivedDto) {
-                console.log('clearSendMoveDtoInterval', moveReceivedDto);
                 this.$store.commit("clearSendMoveDtoInterval");
             },
             serverEndGame(endGameDto) {
                 const endGameReceivedDto = endGameDto;
-                console.log("clientEndGameDtoReceived", endGameReceivedDto);
                 this.$socket.emit("clientEndGameDtoReceived", endGameReceivedDto);
                 if (this.endGameDtoIds.includes(endGameDto.id)) {
                     return;
@@ -112,7 +109,6 @@
                 this.setGameWinner(endGameDto);
             },
             serverEndGameDtoReceived(endGameReceivedDto) {
-                console.log('clearEndGameDtoInterval', endGameReceivedDto);
                 this.$store.commit("clearEndGameDtoInterval");
             },
             serverEndTurn() {
@@ -128,7 +124,6 @@
                     return;
                 }
                 const throwDicesReceivedDto = throwDicesDto;
-                console.log("clientThrowDicesReceived", throwDicesReceivedDto);
                 this.$socket.emit("clientThrowDicesReceived", throwDicesReceivedDto);
 
                 if (this.throwDicesDtoIds.includes(throwDicesDto.id)) {
@@ -154,7 +149,6 @@
                 }, 1000);
             },
             serverThrowDicesReceived(throwDicesReceivedDto) {
-                console.log('serverThrowDicesReceived');
                 this.$store.commit({type: "clearThrowDicesDtoInterval", throwDicesReceivedDto});
             }
         },

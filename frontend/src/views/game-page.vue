@@ -47,7 +47,6 @@
         },
         created() {
             this.room = this.$route.params.room;
-            console.log(this.room, this.appIcons[0].app);
             this.$store.commit({type: 'setRoom', room: this.room});
         },
         mounted() {
