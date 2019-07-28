@@ -13,7 +13,6 @@
         },
         methods: {
             openApp() {
-                console.log(this.appIcon.app);
                 window.open(this.appIcon.app);
             }
         },

@@ -6,7 +6,7 @@
             <div class="innerWrapper">
                 <div class="title" v-text="'Link copied to clipboard. Send to friend via:'"></div>
                 <div class="iconsContainer">
-                    <AppIcon v-for="appIcon in appIcons" :appIcon="appIcon"></AppIcon>
+                    <AppIcon v-for="(appIcon,key) in appIcons" :key="key" :appIcon="appIcon"></AppIcon>
                 </div>
             </div>
         </modal>
