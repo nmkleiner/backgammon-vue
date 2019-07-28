@@ -47,6 +47,9 @@ export default ({
         loggedInUserColor: state => state.loggedInUser.color,
     },
     mutations: {
+        setRoom(state, {room}) {
+            state.room = room;
+        },
         setThrowDicesDtoInterval(state, {socket, throwDicesDto}) {
             console.log("setThrowDicesDtoInterval1", throwDicesDto);
             if (!throwDicesDto.dice) {

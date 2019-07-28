@@ -10,9 +10,12 @@ import VueSocketIO from 'vue-socket.io';
 import Vuex from 'vuex';
 // import './registerServiceWorker'
 import './assets/scss/main.scss';
+import VModal from 'vue-js-modal'
+
 
 const socketURL = (process.env.NODE_ENV === "development")? 'http://localhost:3000' : "/";
 
+Vue.use(VModal);
 Vue.use(Vuex);
 Vue.use(ElementUI);
 Vue.use(new VueSocketIO({

@@ -1,7 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import VueRouter from 'vue-router';
-const homePage = () => import('./views/home-page.vue');
+import homePage from './views/home-page.vue';
+const gamePage = () => import('./views/game-page.vue');
 const loginCmp = () => import('./components/login-cmp');
 const signupCmp = () => import('./components/signup-cmp');
 const chatCmp = () => import('./components/chat-cmp');
@@ -15,13 +16,18 @@ const router = new VueRouter({
   routes: [
     {
       path: '/',
-      name: 'homepage',
+      name: 'homePage',
       component: homePage
     },
     {
+      path: '/game/:room',
+      name: 'gamePage',
+      component: gamePage
+    },
+    {
       path: '/chat',
-      name: 'homepage',
-      component: homePage,
+      name: 'gamePage',
+      component: gamePage,
       children: [
         {path: '/login', component: loginCmp},
         {path: '/signup', component: signupCmp},
