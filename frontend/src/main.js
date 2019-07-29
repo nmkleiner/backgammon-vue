@@ -7,7 +7,7 @@ import * as firebase from 'firebase';
 import VueSocketIO from 'vue-socket.io';
 import Vuex from 'vuex';
 // import './registerServiceWorker'
-require('@/assets/scss/main.scss');
+// require('@/assets/scss/main.scss');
 import VModal from 'vue-js-modal'
 
 
