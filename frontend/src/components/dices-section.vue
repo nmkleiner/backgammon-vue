@@ -113,14 +113,3 @@ export default {
   }
 };
 </script>
-<style lang="scss" scoped>
-.dices-section {
-  background-color: transparent;
-  display: flex;
-  width: 12vw;
-  .two-dices-wrapper {
-    width: 100%;
-  }
-}
-</style>
-

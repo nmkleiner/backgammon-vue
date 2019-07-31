@@ -25,15 +25,3 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-
-.slide-leave-active,
-.slide-enter-active {
-  transition: 1s;
-}
-
-.slide-enter,
-.slide-leave-to {
-  transform: translateX(100%);
-}
-</style>
